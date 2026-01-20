@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { FORTUNES, BLOOD_TYPE_WORK_ADVICE } from './fortunes';
 import { getCurrentMicroseason } from './microseasons';
+import { generateMirrorInsight } from '../utils/mirrorInsightGenerator';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const DiaryContext = createContext();
 
@@ -22,6 +24,7 @@ const MOCK_AI_OBSERVATIONS = [
 ];
 
 export const DiaryProvider = ({ children }) => {
+    const { language } = useLanguage();
     const [entries, setEntries] = useState([]);
     // New Feature State
     const [userProfile, setUserProfile] = useState({ bloodType: null });
@@ -155,29 +158,42 @@ export const DiaryProvider = ({ children }) => {
     };
 
 
-    const addEntry = (content) => {
+    const addEntry = (content, type = 'entry') => {
         const newEntry = {
             id: crypto.randomUUID(),
-            type: 'entry',
+            type,
             content,
             timestamp: new Date().toISOString(),
             lastModified: new Date().toISOString(),
-            isEncrypted: true,
+            isEncrypted: type === 'entry', // Only encrypt user entries
         };
         setEntries(prev => [newEntry, ...prev]);
 
-        // Trigger AI Reflection
-        setTimeout(() => {
-            const analysis = analyzeContent(content);
-            const newReflection = {
-                id: crypto.randomUUID(),
-                type: 'ai_reflection',
-                entryId: newEntry.id, // Link to the entry
-                timestamp: new Date().toISOString(), // Same time or slightly after
-                ...analysis
-            };
-            setAiReflections(prev => [newReflection, ...prev]);
-        }, 1500); // 1.5s delay to simulate "thinking"
+        // Trigger AI Reflection only for user entries
+        // if (type === 'entry') { ... removed ... }
+    };
+
+    // Auto-generate AI Entry for today
+    const generateAutoAIEntry = () => {
+        const todayStr = new Date().toDateString();
+        // Check if an AI entry already exists for today
+        const hasAIEntry = entries.some(e =>
+            e.type === 'ai_entry' &&
+            new Date(e.timestamp).toDateString() === todayStr
+        );
+
+        if (!hasAIEntry) {
+            // Generate insight
+            const recentEntries = entries.slice(0, 7);
+            const recentWalks = []; // Mock
+            // Use translation or hardcoded logic? pass language
+            const insight = generateMirrorInsight(recentEntries, recentWalks, language);
+
+            if (insight) {
+                // Post as AI Entry
+                addEntry(insight.text, 'ai_entry');
+            }
+        }
     };
 
     const updateEntry = (id, content) => {
@@ -244,9 +260,9 @@ export const DiaryProvider = ({ children }) => {
     };
 
     const getCombinedTimeline = () => {
-        // Merge entries, AI observations (static), fortunes, AI reflections, and Weekly Reviews
+        // Merge entries, AI observations (static), fortunes, AI reflections (removed), and Weekly Reviews
         const fortunesWithType = fortuneHistory.map(f => ({ ...f, type: 'fortune' }));
-        const allItems = [...entries, ...MOCK_AI_OBSERVATIONS, ...fortunesWithType, ...aiReflections, ...weeklyReviews];
+        const allItems = [...entries, ...MOCK_AI_OBSERVATIONS, ...fortunesWithType, ...weeklyReviews];
         return allItems.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     };
 
@@ -267,7 +283,10 @@ export const DiaryProvider = ({ children }) => {
             isLoading,
             aiReflections,
             weeklyReviews,
-            generateWeeklyReview
+            aiReflections,
+            weeklyReviews,
+            generateWeeklyReview,
+            generateAutoAIEntry
         }}>
             {children}
         </DiaryContext.Provider>

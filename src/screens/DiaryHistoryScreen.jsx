@@ -1,16 +1,19 @@
+
 import React, { useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ChevronLeft, Grid, BookOpen, Lock, Share2, Scroll } from 'lucide-react';
+import { ChevronLeft, Grid, BookOpen, Share2, Lock, Scroll, Sparkles } from 'lucide-react';
 import { useDiary } from '../data/DiaryContext';
 import { getCurrentMicroseason } from '../data/microseasons';
 import { motion, AnimatePresence } from 'framer-motion';
 import FortuneCard from '../components/FortuneCard';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getImagePath } from '../utils/imagePath';
+
 
 const DiaryHistoryScreen = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t, formatDate } = useLanguage();
+    const { t, formatDate, language } = useLanguage();
     const { getCombinedTimeline } = useDiary();
     const [viewMode, setViewMode] = useState('list'); // 'list' | 'book'
 
@@ -57,15 +60,15 @@ const DiaryHistoryScreen = () => {
                 <div className="flex bg-gray-100 rounded-lg p-1">
                     <button
                         onClick={() => setViewMode('list')}
-                        className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'
-                            }`}
+                        className={`p - 1.5 rounded - md transition - all ${viewMode === 'list' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'
+                            } `}
                     >
                         <Grid size={18} />
                     </button>
                     <button
                         onClick={() => setViewMode('book')}
-                        className={`p-1.5 rounded-md transition-all ${viewMode === 'book' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'
-                            }`}
+                        className={`p - 1.5 rounded - md transition - all ${viewMode === 'book' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'
+                            } `}
                     >
                         <BookOpen size={18} />
                     </button>
@@ -127,6 +130,33 @@ const VerticalFeedView = ({ groups, t }) => {
                                         </p>
                                         <div className="transform origin-left scale-95">
                                             <FortuneCard fortune={item} isTied={item.isTied} />
+                                        </div>
+                                    </div>
+                                );
+                            }
+
+                            if (item.type === 'ai_entry') {
+                                return (
+                                    <div key={item.id} className="relative group">
+                                        <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-purple-400 border-2 border-white" />
+
+                                        {/* Time Header */}
+                                        <p className="text-gray-600 text-sm mb-1 font-mono">
+                                            {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+
+                                        {/* Content Box */}
+                                        <div className="bg-gradient-to-br from-indigo-50/80 to-purple-50/80 border border-purple-100 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                                            <div className="flex items-center gap-2 mb-2 text-purple-600">
+                                                <div className="w-6 h-6 rounded-full overflow-hidden border border-purple-200 bg-white">
+                                                    <img src={getImagePath('/images/companion_avatar.png')}
+                                                        alt="Companion" className="w-full h-full object-cover" />
+                                                </div>
+                                                <span className="text-[10px] font-bold uppercase tracking-wider">The Mirror</span>
+                                            </div>
+                                            <p className="text-gray-800 font-medium italic font-serif leading-relaxed mb-1">
+                                                "{item.content}"
+                                            </p>
                                         </div>
                                     </div>
                                 );
@@ -199,7 +229,7 @@ const HorizontalBookView = ({ groups, initialTargetDate, t }) => {
                         </div>
 
                         {/* Book Content */}
-                        <div className="flex-1 p-6 overflow-y-auto space-y-6 bg-[linear-gradient(to_bottom,transparent_23px,#E5E7EB_24px)] bg-[size:100%_24px]">
+                        <div className="flex-1 p-6 overflow-y-auto space-y-6">
                             {/* Season Context */}
                             <div className="text-center py-4 border-b border-gray-100 mb-2">
                                 <p className="text-sm font-bold text-gray-900">{group.microseason?.name_ja}</p>
@@ -217,6 +247,28 @@ const HorizontalBookView = ({ groups, initialTargetDate, t }) => {
                                                 </span>
                                             </div>
                                             <FortuneCard fortune={item} isTied={item.isTied} />
+                                        </div>
+                                    );
+                                }
+
+                                if (item.type === 'ai_entry') {
+                                    return (
+                                        <div key={item.id} className="py-2">
+                                            <div className="bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border border-purple-100 rounded-lg p-4 relative">
+                                                <div className="flex items-center gap-2 mb-2 text-purple-600/80">
+                                                    <div className="w-5 h-5 rounded-full overflow-hidden border border-purple-200 bg-white">
+                                                        <img src={getImagePath('/images/companion_avatar.png')}
+                                                            alt="Companion" className="w-full h-full object-cover" />
+                                                    </div>
+                                                    <span className="text-[9px] font-bold uppercase tracking-wider">The Mirror</span>
+                                                </div>
+                                                <p className="text-gray-800 text-[15px] font-serif italic leading-relaxed">
+                                                    "{item.content}"
+                                                </p>
+                                                <p className="text-right text-[10px] text-purple-300 mt-2 font-sans">
+                                                    {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </p>
+                                            </div>
                                         </div>
                                     );
                                 }

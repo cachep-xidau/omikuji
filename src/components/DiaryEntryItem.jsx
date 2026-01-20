@@ -2,14 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Sparkles, Trash2, Scroll } from 'lucide-react';
 import FortuneCard from './FortuneCard';
-import ReflectionCard from './ReflectionCard';
 import WeeklyReviewCard from './WeeklyReviewCard';
+import { getImagePath } from '../utils/imagePath';
 
 const DiaryEntryItem = ({ item, onDelete, onSelect }) => {
     const isAI = item.type === 'observation';
     const isFortune = item.type === 'fortune';
     const isReflection = item.type === 'ai_reflection';
     const isReview = item.type === 'weekly_review';
+    const isAIEntry = item.type === 'ai_entry';
 
     const formattedTime = new Date(item.timestamp).toLocaleTimeString([], {
         hour: '2-digit',
@@ -29,18 +30,7 @@ const DiaryEntryItem = ({ item, onDelete, onSelect }) => {
         );
     }
 
-    if (isReflection) {
-        return (
-            <motion.div
-                layout
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-8 pl-8 pr-2"
-            >
-                <ReflectionCard data={item} />
-            </motion.div>
-        );
-    }
+
 
     if (isFortune) {
         return (
@@ -58,6 +48,49 @@ const DiaryEntryItem = ({ item, onDelete, onSelect }) => {
                 </div>
                 <div className="w-full">
                     <FortuneCard fortune={item} isTied={item.isTied} />
+                </div>
+            </motion.div>
+        );
+    }
+
+    if (isAIEntry) {
+        return (
+            <motion.div
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8 px-2"
+            >
+                {/* Time Header (Outside) */}
+                <div className="flex justify-between items-start mb-2">
+                    <div className="flex items-center gap-2">
+                        <span className="text-[13px] font-medium text-gray-500">
+                            {formattedTime}
+                        </span>
+                        {/* Only show lock if encrypted (AI entries likely not, but good to have logic) */}
+                        {item.isEncrypted && <Lock size={12} className="text-gray-300" />}
+                    </div>
+                </div>
+
+                {/* Content Box */}
+                <div className="p-5 rounded-xl bg-gradient-to-br from-indigo-50/80 to-purple-50/80 border border-purple-100 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-100/40 to-transparent rounded-full blur-2xl -z-10" />
+
+                    <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-full shadow-sm overflow-hidden border border-purple-200">
+                            <img
+                                src={getImagePath('/images/companion_avatar.png')}
+                                alt="Companion"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <span className="text-[11px] font-bold text-purple-600 uppercase tracking-wider">
+                            The Mirror • AI Journaling
+                        </span>
+                    </div>
+                    <p className="text-gray-800 font-medium leading-relaxed font-serif italic mb-1">
+                        "{item.content}"
+                    </p>
                 </div>
             </motion.div>
         );

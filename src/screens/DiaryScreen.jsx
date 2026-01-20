@@ -12,17 +12,20 @@ import StatusBar from '../components/StatusBar';
 import LanguageToggle from '../components/LanguageToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
+import { generateSuggestion } from '../utils/suggestionGenerator';
 
 const DiaryScreen = () => {
     const navigate = useNavigate();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const {
         addEntry,
         getCombinedTimeline,
         userProfile,
         updateUserProfile,
         getTodaysFortune,
-        generateWeeklyReview
+        generateWeeklyReview,
+        generateAutoAIEntry,
+        isLoading
     } = useDiary();
 
     // Speech Recognition
@@ -44,6 +47,8 @@ const DiaryScreen = () => {
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [inputContent, setInputContent] = useState('');
+    const [aiSuggestion, setAiSuggestion] = useState(null);
+
 
     // Check for missing profile on mount
     useEffect(() => {
@@ -56,6 +61,24 @@ const DiaryScreen = () => {
         }
     }, [userProfile]);
 
+    // Auto-generate AI Entry
+    useEffect(() => {
+        if (!isLoading) {
+            generateAutoAIEntry();
+        }
+    }, [isLoading, generateAutoAIEntry]);
+
+    // Generate AI suggestion when date or profile changes
+    useEffect(() => {
+        const suggestion = generateSuggestion(
+            selectedDate,
+            userProfile?.bloodType,
+            'sunny', // TODO: Get real weather data
+            false // TODO: Check if user walked today
+        );
+        setAiSuggestion(suggestion);
+    }, [selectedDate, userProfile]);
+
     const microseason = getCurrentMicroseason(selectedDate);
     const timelineItems = getCombinedTimeline();
     const todaysFortune = getTodaysFortune();
@@ -64,6 +87,7 @@ const DiaryScreen = () => {
         const itemDate = new Date(item.timestamp);
         return itemDate.toDateString() === selectedDate.toDateString();
     });
+
 
     // Handle transcript updates - update live during recording
     useEffect(() => {
@@ -97,6 +121,8 @@ const DiaryScreen = () => {
             startRecording();
         }
     };
+
+
 
     const handleSend = () => {
         if (!inputContent.trim()) return;
@@ -248,6 +274,7 @@ const DiaryScreen = () => {
                         {/* Action Bar */}
                         <div className="flex items-center justify-between pt-2 mt-2 border-t border-gray-200/50">
                             <div className="flex gap-2">
+
                                 <button
                                     onClick={handleMicClick}
                                     disabled={!isSupported}
@@ -296,6 +323,8 @@ const DiaryScreen = () => {
                     </div>
 
                     <div className="space-y-4">
+
+
                         {filteredItems.length === 0 ? (
                             <div className="text-center py-10 opacity-40">
                                 <p className="text-sm text-gray-400 font-medium">{t('timeline.noActivity')}</p>

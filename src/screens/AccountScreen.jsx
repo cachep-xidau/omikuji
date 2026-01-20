@@ -3,10 +3,13 @@ import { Search, Bell, HelpCircle, User, Heart, ShieldCheck, Lock, Scan, Globe, 
 import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
 import SettingsItem from '../components/SettingsItem';
+
 import { getImagePath } from '../utils/imagePath';
+import { useSubscription } from '../contexts/SubscriptionContext';
 
 const AccountScreen = () => {
     const [faceIdEnabled, setFaceIdEnabled] = useState(true);
+    const { status, daysRemaining, expireTrial, resetTrial } = useSubscription();
 
     return (
         <div className="relative h-full bg-white flex flex-col">
@@ -38,7 +41,24 @@ const AccountScreen = () => {
                     </div>
                     <div className="flex-1">
                         <h2 className="text-lg font-semibold text-gray-900">Miley Lien</h2>
-                        <p className="text-sm text-gray-500">miley.lien@example.com</p>
+                        <div className="flex items-center gap-2">
+                            <p className="text-sm text-gray-500">miley.lien@example.com</p>
+                        </div>
+                        {/* Subscription Badge */}
+                        <div className="mt-1 flex gap-2">
+                            {status === 'trial' && (
+                                <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full">
+                                    {daysRemaining} Days Free Trial
+                                </span>
+                            )}
+                            {status === 'active' && (
+                                <span className="text-[10px] font-bold px-2 py-0.5 bg-purple-100 text-purple-600 rounded-full flex items-center gap-1">
+                                    <ShieldCheck size={10} />
+                                    Premium Plus
+                                </span>
+                            )}
+
+                        </div>
                     </div>
                     <div className="w-[72px] h-[78px] flex items-center justify-center">
                         <img src={getImagePath('/images/eyes-logo.png')} alt="Eyes Logo" className="w-full h-full object-contain" />
@@ -100,6 +120,25 @@ const AccountScreen = () => {
                         Sign out
                     </button>
                     <p className="text-xs text-gray-400">VERSION V1.10.1(1)</p>
+
+                    {/* Developer Options */}
+                    <div className="mt-4 pt-4 border-t border-gray-100 w-full px-4">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase text-center mb-2">Developer / Prototype</p>
+                        <div className="flex gap-2 justify-center">
+                            <button
+                                onClick={expireTrial}
+                                className="text-[10px] px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100"
+                            >
+                                Force Expire Trial
+                            </button>
+                            <button
+                                onClick={resetTrial}
+                                className="text-[10px] px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100"
+                            >
+                                Reset Trial
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

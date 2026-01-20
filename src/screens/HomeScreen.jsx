@@ -5,8 +5,20 @@ import NavBar from '../components/NavBar';
 import { Sun, Plus } from 'lucide-react';
 import { missions, suggestedActivities } from '../data/mockData';
 import { getImagePath } from '../utils/imagePath';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSubscription } from '../contexts/SubscriptionContext';
 
 const HomeScreen = () => {
+  const navigate = useNavigate();
+  const { status, hasSkipped } = useSubscription();
+
+  useEffect(() => {
+    if (status === 'expired' && !hasSkipped) {
+      navigate('/paywall');
+    }
+  }, [status, hasSkipped, navigate]);
+
   return (
     <div className="relative h-full bg-white flex flex-col">
       {/* Scrollable Content */}

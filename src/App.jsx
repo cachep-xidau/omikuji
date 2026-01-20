@@ -13,33 +13,39 @@ import DiaryHistoryScreen from './screens/DiaryHistoryScreen';
 
 import { DiaryProvider } from './data/DiaryContext';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { SubscriptionProvider } from './contexts/SubscriptionContext';
 import DiaryEntryScreen from './screens/DiaryEntryScreen';
+import PaywallScreen from './screens/PaywallScreen';
 
 function App() {
   return (
     <LanguageProvider>
-      <DiaryProvider>
-        <Router basename="/omikuji">
-          <IPhoneFrame>
-            <AnimatePresence mode="wait">
-              <Routes>
-                <Route path="/" element={<HomeScreen />} />
-                <Route path="/start" element={<StartScreen />} />
-                <Route path="/achieve" element={<AchieveScreen />} />
-                <Route path="/account" element={<AccountScreen />} />
-                <Route path="/diary-loading" element={<DiaryLoadingScreen />} />
-                <Route path="/diary" element={<DiaryScreen />} />
-                <Route path="/diary/new" element={<DiaryEntryScreen />} />
-                <Route path="/diary/history" element={<DiaryHistoryScreen />} />
-                <Route path="/diary/entry/:id" element={<DiaryEntryScreen />} />
+      <SubscriptionProvider>
+        <DiaryProvider>
+          <Router basename="/omikuji">
+            <IPhoneFrame>
+              <AnimatePresence mode="wait">
+                <Routes>
+                  <Route path="/" element={<HomeScreen />} />
+                  <Route path="/start" element={<StartScreen />} />
+                  <Route path="/achieve" element={<AchieveScreen />} />
+                  <Route path="/account" element={<AccountScreen />} />
+                  <Route path="/diary-loading" element={<DiaryLoadingScreen />} />
+                  <Route path="/diary" element={<DiaryScreen />} />
+                  <Route path="/diary/new" element={<DiaryEntryScreen />} />
+                  <Route path="/diary/history" element={<DiaryHistoryScreen />} />
+                  <Route path="/diary/history" element={<DiaryHistoryScreen />} />
+                  <Route path="/diary/entry/:id" element={<DiaryEntryScreen />} />
+                  <Route path="/paywall" element={<PaywallScreen />} />
 
-                {/* Placeholder routes */}
-                <Route path="/discover" element={<DiscoverScreen />} />
-              </Routes>
-            </AnimatePresence>
-          </IPhoneFrame>
-        </Router>
-      </DiaryProvider>
+                  {/* Placeholder routes */}
+                  <Route path="/discover" element={<DiscoverScreen />} />
+                </Routes>
+              </AnimatePresence>
+            </IPhoneFrame>
+          </Router>
+        </DiaryProvider>
+      </SubscriptionProvider>
     </LanguageProvider>
   );
 }
