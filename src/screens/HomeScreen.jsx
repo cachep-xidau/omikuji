@@ -4,6 +4,7 @@ import MissionCard from '../components/MissionCard';
 import NavBar from '../components/NavBar';
 import { Sun, Plus } from 'lucide-react';
 import { missions, suggestedActivities } from '../data/mockData';
+import { getImagePath } from '../utils/imagePath';
 
 const HomeScreen = () => {
   return (
@@ -63,9 +64,9 @@ const HomeScreen = () => {
                 >
                   <span className="text-base font-semibold text-black">{mission.title}</span>
                   <div className="flex gap-1">
-                    <img src="/images/difficulty-icon.png" alt="Difficulty" className="w-[18px] h-[18px] object-contain" />
-                    <img src="/images/difficulty-icon.png" alt="Difficulty" className="w-[18px] h-[18px] object-contain opacity-30" />
-                    <img src="/images/difficulty-icon.png" alt="Difficulty" className="w-[18px] h-[18px] object-contain opacity-30" />
+                    <img src={getImagePath('/images/difficulty-icon.png')} alt="Difficulty" className="w-[18px] h-[18px] object-contain" />
+                    <img src={getImagePath('/images/difficulty-icon.png')} alt="Difficulty" className="w-[18px] h-[18px] object-contain opacity-30" />
+                    <img src={getImagePath('/images/difficulty-icon.png')} alt="Difficulty" className="w-[18px] h-[18px] object-contain opacity-30" />
                   </div>
                 </div>
               ))}

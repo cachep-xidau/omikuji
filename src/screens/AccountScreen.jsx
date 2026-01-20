@@ -3,6 +3,7 @@ import { Search, Bell, HelpCircle, User, Heart, ShieldCheck, Lock, Scan, Globe, 
 import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
 import SettingsItem from '../components/SettingsItem';
+import { getImagePath } from '../utils/imagePath';
 
 const AccountScreen = () => {
     const [faceIdEnabled, setFaceIdEnabled] = useState(true);
@@ -40,18 +41,18 @@ const AccountScreen = () => {
                         <p className="text-sm text-gray-500">miley.lien@example.com</p>
                     </div>
                     <div className="w-[72px] h-[78px] flex items-center justify-center">
-                        <img src="/images/eyes-logo.png" alt="Eyes Logo" className="w-full h-full object-contain" />
+                        <img src={getImagePath('/images/eyes-logo.png')} alt="Eyes Logo" className="w-full h-full object-contain" />
                     </div>
                 </div>
 
                 {/* Feature Cards */}
                 <div className="px-6 py-4 grid grid-cols-2 gap-3 bg-white">
                     <button className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-[8px] px-5 h-[74px] flex items-center gap-3 shadow-none hover:bg-gray-200 transition-colors w-full">
-                        <img src="/images/my-activity-icon.png" alt="Activity" className="w-[32px] h-[32px] object-contain" />
+                        <img src={getImagePath('/images/my-activity-icon.png')} alt="Activity" className="w-[32px] h-[32px] object-contain" />
                         <span className="font-medium text-[16px] text-gray-900 leading-tight text-left">My activity</span>
                     </button>
                     <button className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-[8px] px-5 h-[74px] flex items-center gap-3 shadow-none hover:bg-gray-200 transition-colors w-full">
-                        <img src="/images/my-library-icon.png" alt="Library" className="w-[32px] h-[32px] object-contain" />
+                        <img src={getImagePath('/images/my-library-icon.png')} alt="Library" className="w-[32px] h-[32px] object-contain" />
                         <span className="font-medium text-[16px] text-gray-900 leading-tight text-left">My library</span>
                     </button>
                 </div>

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Smile, PersonStanding, AudioWaveform, X, ChevronRight } from 'lucide-react';
 import StatusBar from '../components/StatusBar';
+import { getImagePath } from '../utils/imagePath';
 
 const StartScreen = ({ userState = 'have-avatar' }) => {
     const navigate = useNavigate();
@@ -46,7 +47,7 @@ const StartScreen = ({ userState = 'have-avatar' }) => {
                                     key={action.id}
                                     className="w-[214px] h-[64px] rounded-[60px] bg-white text-gray-900 shadow-xl flex items-center pl-[12px] gap-3 transition-transform hover:scale-105"
                                 >
-                                    <img src="/images/create-avatar-start-icon.png" alt="Create" className="w-[32px] h-[32px] object-contain" />
+                                    <img src={getImagePath('/images/create-avatar-start-icon.png')} alt="Create" className="w-[32px] h-[32px] object-contain" />
                                     <span className="font-bold text-[18px]">{action.label}</span>
                                 </button>
                             );
@@ -58,7 +59,7 @@ const StartScreen = ({ userState = 'have-avatar' }) => {
                                     key={action.id}
                                     className="w-[195px] h-[64px] rounded-[60px] bg-white text-gray-900 shadow-xl flex items-center pl-[8px] gap-3 transition-transform hover:scale-105"
                                 >
-                                    <img src="/images/walk-start-icon.png" alt="Walk" className="w-[32px] h-[32px] object-contain" />
+                                    <img src={getImagePath('/images/walk-start-icon.png')} alt="Walk" className="w-[32px] h-[32px] object-contain" />
                                     <span className="font-bold text-[18px]">{action.label}</span>
                                 </button>
                             );

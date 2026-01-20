@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
+import { getImagePath } from '../utils/imagePath';
 
 const GachaCard = ({ type = 'regular', count = 0 }) => {
     const isRegular = type === 'regular';
@@ -9,13 +10,13 @@ const GachaCard = ({ type = 'regular', count = 0 }) => {
             {/* 3D Sphere Icon */}
             {isRegular ? (
                 <img
-                    src="/images/gacha-regular.png"
+                    src={getImagePath('/images/gacha-regular.png')}
                     alt="Regular Ticket"
                     className="w-[52px] h-[52px] object-contain mb-2"
                 />
             ) : (
                 <img
-                    src="/images/gacha-premium.png"
+                    src={getImagePath('/images/gacha-premium.png')}
                     alt="Premium Ticket"
                     className="w-[52px] h-[52px] object-contain mb-2"
                 />

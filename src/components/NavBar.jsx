@@ -1,14 +1,15 @@
 import { Star, Images, Sparkles, Medal, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { getImagePath } from '../utils/imagePath';
 
 const NavBar = () => {
   const location = useLocation();
 
   const navItems = [
     { path: '/', icon: Star, label: 'Today' },
-    { path: '/discover', iconImg: '/images/discover-icon.png', label: 'Discover' },
-    { path: '/start', iconImg: '/images/start-icon.png', label: 'Start', isCenter: true },
-    { path: '/achieve', iconImg: '/images/achieve-icon.png', label: 'Achieve' },
+    { path: '/discover', iconImg: getImagePath('/images/discover-icon.png'), label: 'Discover' },
+    { path: '/start', iconImg: getImagePath('/images/start-icon.png'), label: 'Start', isCenter: true },
+    { path: '/achieve', iconImg: getImagePath('/images/achieve-icon.png'), label: 'Achieve' },
     { path: '/account', icon: User, label: 'Account' },
   ];
 
