@@ -19,7 +19,7 @@ function App() {
   return (
     <LanguageProvider>
       <DiaryProvider>
-        <Router>
+        <Router basename="/omikuji">
           <IPhoneFrame>
             <AnimatePresence mode="wait">
               <Routes>
