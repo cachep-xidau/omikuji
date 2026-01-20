@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
+import { getImagePath } from '../utils/imagePath';
 
 const DiscoverScreen = () => {
     const [activeTab, setActiveTab] = useState('vortex');
@@ -36,7 +37,7 @@ const DiscoverScreen = () => {
             id: 1,
             name: 'Sakura Aoyama',
             description: 'Gentle, refined, slightly shy but warm and easy to connect with.',
-            image: '/sakura-avatar.png',
+            image: getImagePath('/sakura-avatar.png'),
         },
         {
             id: 2,

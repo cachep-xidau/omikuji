@@ -18,7 +18,7 @@ const StartScreen = ({ userState = 'have-avatar' }) => {
             <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
-                    backgroundImage: `url('/start-bg.png')`,
+                    backgroundImage: `url('${getImagePath('/start-bg.png')}')`,
                 }}
             >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
