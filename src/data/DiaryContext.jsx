@@ -283,8 +283,7 @@ export const DiaryProvider = ({ children }) => {
             isLoading,
             aiReflections,
             weeklyReviews,
-            aiReflections,
-            weeklyReviews,
+
             generateWeeklyReview,
             generateAutoAIEntry
         }}>

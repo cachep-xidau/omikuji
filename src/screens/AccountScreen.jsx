@@ -36,8 +36,8 @@ const AccountScreen = () => {
 
                 {/* Profile Section */}
                 <div className="bg-white px-6 py-6 flex items-center gap-4 border-b border-gray-100">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center">
-                        <span className="text-white text-2xl font-bold">M</span>
+                    <div className="w-16 h-16 rounded-full overflow-hidden border border-gray-200">
+                        <img src={getImagePath('/images/user_avatar.jpg')} alt="User" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1">
                         <h2 className="text-lg font-semibold text-gray-900">Miley Lien</h2>
@@ -46,11 +46,7 @@ const AccountScreen = () => {
                         </div>
                         {/* Subscription Badge */}
                         <div className="mt-1 flex gap-2">
-                            {status === 'trial' && (
-                                <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full">
-                                    {daysRemaining} Days Free Trial
-                                </span>
-                            )}
+
                             {status === 'active' && (
                                 <span className="text-[10px] font-bold px-2 py-0.5 bg-purple-100 text-purple-600 rounded-full flex items-center gap-1">
                                     <ShieldCheck size={10} />
