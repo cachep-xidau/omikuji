@@ -11,6 +11,7 @@ import FortuneDrawModal from '../components/FortuneDrawModal';
 import StatusBar from '../components/StatusBar';
 import LanguageToggle from '../components/LanguageToggle';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 const DiaryScreen = () => {
     const navigate = useNavigate();
@@ -24,9 +25,22 @@ const DiaryScreen = () => {
         generateWeeklyReview
     } = useDiary();
 
+    // Speech Recognition
+    const {
+        transcript,
+        interimTranscript,
+        isRecording,
+        isSupported,
+        error: speechError,
+        startRecording,
+        stopRecording,
+        resetTranscript
+    } = useSpeechRecognition();
+
     // Feature Modals
     const [showBloodType, setShowBloodType] = useState(false);
     const [showFortuneDraw, setShowFortuneDraw] = useState(false);
+    const [showError, setShowError] = useState(false);
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [inputContent, setInputContent] = useState('');
@@ -50,6 +64,39 @@ const DiaryScreen = () => {
         const itemDate = new Date(item.timestamp);
         return itemDate.toDateString() === selectedDate.toDateString();
     });
+
+    // Handle transcript updates - update live during recording
+    useEffect(() => {
+        if (transcript) {
+            setInputContent(transcript + (interimTranscript ? ' ' + interimTranscript : ''));
+        }
+    }, [transcript, interimTranscript]);
+
+    // Clear transcript when recording stops
+    useEffect(() => {
+        if (!isRecording && transcript) {
+            // Keep the final transcript in the input
+            setInputContent(transcript);
+            // Don't reset transcript here, let user decide
+        }
+    }, [isRecording, transcript]);
+
+    // Handle speech errors
+    useEffect(() => {
+        if (speechError) {
+            setShowError(true);
+            const timer = setTimeout(() => setShowError(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [speechError]);
+
+    const handleMicClick = () => {
+        if (isRecording) {
+            stopRecording();
+        } else {
+            startRecording();
+        }
+    };
 
     const handleSend = () => {
         if (!inputContent.trim()) return;
@@ -93,6 +140,17 @@ const DiaryScreen = () => {
                         isOpen={showFortuneDraw}
                         onClose={() => setShowFortuneDraw(false)}
                     />
+                )}
+                {/* Error Toast */}
+                {showError && speechError && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg text-sm max-w-[90%]"
+                    >
+                        {speechError}
+                    </motion.div>
                 )}
             </AnimatePresence>
 
@@ -190,8 +248,21 @@ const DiaryScreen = () => {
                         {/* Action Bar */}
                         <div className="flex items-center justify-between pt-2 mt-2 border-t border-gray-200/50">
                             <div className="flex gap-2">
-                                <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200/50 rounded-full transition-colors">
+                                <button
+                                    onClick={handleMicClick}
+                                    disabled={!isSupported}
+                                    className={`p-2 rounded-full transition-all duration-200 relative ${isRecording
+                                        ? 'bg-red-500 text-white animate-pulse'
+                                        : isSupported
+                                            ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-200/50'
+                                            : 'text-gray-300 cursor-not-allowed'
+                                        }`}
+                                    title={!isSupported ? 'Speech recognition not supported in this browser' : isRecording ? 'Stop recording' : 'Start recording'}
+                                >
                                     <Mic size={20} strokeWidth={2} />
+                                    {isRecording && (
+                                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping" />
+                                    )}
                                 </button>
                                 <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200/50 rounded-full transition-colors">
                                     <ImageIcon size={20} strokeWidth={2} />
