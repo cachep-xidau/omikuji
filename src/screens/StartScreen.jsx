@@ -30,14 +30,14 @@ const StartScreen = ({ userState = 'have-avatar' }) => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 h-full flex flex-col justify-end px-6 pb-24">
+            <div className="relative z-10 h-full flex flex-col justify-end pl-2 pr-6 pb-24">
                 {/* Title */}
-                <h1 className="text-white text-4xl font-semibold leading-tight mb-8">
+                <h1 className="text-white text-4xl font-semibold leading-tight mb-8 translate-y-[-48px] pl-6">
                     Start with what<br />inspires you ✨
                 </h1>
 
                 {/* Action Cards */}
-                <div className="flex flex-col items-start gap-4">
+                <div className="flex flex-col items-start gap-0 translate-y-[-48px]">
                     {actions.map((action) => {
                         const Icon = action.icon;
 
@@ -45,10 +45,9 @@ const StartScreen = ({ userState = 'have-avatar' }) => {
                             return (
                                 <button
                                     key={action.id}
-                                    className="w-[214px] h-[64px] rounded-[60px] bg-white text-gray-900 shadow-xl flex items-center pl-[12px] gap-3 transition-transform hover:scale-105"
+                                    className="transition-transform hover:scale-105"
                                 >
-                                    <img src={getImagePath('/images/create-avatar-start-icon.png')} alt="Create" className="w-[32px] h-[32px] object-contain" />
-                                    <span className="font-bold text-[18px]">{action.label}</span>
+                                    <img src={getImagePath('/images/create-avatar-button.png')} alt="Create Avatar" className="w-[214px] h-[64px] object-contain" />
                                 </button>
                             );
                         }
@@ -57,10 +56,9 @@ const StartScreen = ({ userState = 'have-avatar' }) => {
                             return (
                                 <button
                                     key={action.id}
-                                    className="w-[195px] h-[64px] rounded-[60px] bg-white text-gray-900 shadow-xl flex items-center pl-[8px] gap-3 transition-transform hover:scale-105"
+                                    className="transition-transform hover:scale-105"
                                 >
-                                    <img src={getImagePath('/images/walk-start-icon.png')} alt="Walk" className="w-[32px] h-[32px] object-contain" />
-                                    <span className="font-bold text-[18px]">{action.label}</span>
+                                    <img src={getImagePath('/images/walk-button.png')} alt="Walk" className="w-[195px] h-[64px] object-contain" />
                                 </button>
                             );
                         }
@@ -70,10 +68,9 @@ const StartScreen = ({ userState = 'have-avatar' }) => {
                                 <button
                                     key={action.id}
                                     onClick={() => navigate('/diary-loading')}
-                                    className="w-[163px] h-[64px] rounded-[60px] bg-white text-gray-900 shadow-xl flex items-center pl-[12px] gap-3 transition-transform hover:scale-105"
+                                    className="transition-transform hover:scale-105"
                                 >
-                                    <Icon size={24} strokeWidth={2} />
-                                    <span className="font-bold text-[18px]">{action.label}</span>
+                                    <img src={getImagePath('/images/diary-button.png')} alt="Diary" className="w-[163px] h-[64px] object-contain" />
                                 </button>
                             );
                         }
