@@ -34,7 +34,7 @@ const DiaryLoadingScreen = () => {
             {/* Main Character Image */}
             <div className="absolute inset-0 z-0 flex items-center justify-center pt-20">
                 <img
-                    src={getImagePath('/images/sakura_loading.png')}
+                    src={getImagePath('/images/sakura_loading.webp')}
                     alt="Loading..."
                     className="h-full w-full object-cover object-top"
                 />
