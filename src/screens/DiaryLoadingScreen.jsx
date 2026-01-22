@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StatusBar from '../components/StatusBar';
+import { getImagePath } from '../utils/imagePath';
 
 const DiaryLoadingScreen = () => {
     const navigate = useNavigate();
@@ -27,21 +28,35 @@ const DiaryLoadingScreen = () => {
     }, [navigate]);
 
     return (
-        <div className="bg-white h-full relative flex flex-col">
+        <div className="h-full w-full relative bg-white flex flex-col items-center overflow-hidden">
             <StatusBar />
 
-            <div className="flex-1 flex flex-col items-center justify-center px-8 gap-6 w-full">
-                <h2 className="text-2xl font-bold text-gray-900">Loading Diary</h2>
+            {/* Main Character Image */}
+            <div className="absolute inset-0 z-0 flex items-center justify-center pt-20">
+                <img
+                    src={getImagePath('/images/sakura_loading.png')}
+                    alt="Loading..."
+                    className="h-full w-full object-cover object-top"
+                />
+            </div>
 
-                {/* Progress Bar Container */}
-                <div className="w-full max-w-[240px] h-[6px] bg-gray-100 rounded-full overflow-hidden">
+            {/* Bottom Loading Indicator */}
+            <div className="absolute bottom-12 w-full px-8 z-10 flex flex-col items-center gap-3">
+                <span className="text-sm font-medium text-gray-500 uppercase tracking-widest">
+                    Loading Diary...
+                </span>
+
+                {/* Progress Bar */}
+                <div className="w-full max-w-[200px] h-[4px] bg-gray-200 rounded-full overflow-hidden">
                     <div
-                        className="h-full bg-black rounded-full transition-all duration-75 ease-linear"
+                        className="h-full bg-rose-400 rounded-full transition-all duration-75 ease-linear"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
 
-                <span className="text-sm font-medium text-gray-400">{Math.round(progress)}%</span>
+                <span className="text-xs font-mono text-gray-400">
+                    {Math.round(progress)}%
+                </span>
             </div>
         </div>
     );
