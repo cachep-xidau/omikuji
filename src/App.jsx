@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import IPhoneFrame from './components/IPhoneFrame';
 import HomeScreen from './screens/HomeScreen';
@@ -22,7 +22,7 @@ function App() {
     <LanguageProvider>
       <SubscriptionProvider>
         <DiaryProvider>
-          <Router basename="/omikuji">
+          <Router>
             <IPhoneFrame>
               <AnimatePresence mode="wait">
                 <Routes>
