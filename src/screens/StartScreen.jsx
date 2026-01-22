@@ -15,12 +15,18 @@ const StartScreen = ({ userState = 'have-avatar' }) => {
     return (
         <div className="relative h-full w-full overflow-hidden">
             {/* Background Image */}
-            <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                    backgroundImage: `url('${getImagePath('/start-bg.png')}')`,
-                }}
-            >
+            {/* Background Video */}
+            <div className="absolute inset-0 bg-black">
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover opacity-90"
+                >
+                    <source src={getImagePath('/videos/sakura_bg.mp4')} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
             </div>
 

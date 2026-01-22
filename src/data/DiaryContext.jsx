@@ -243,6 +243,11 @@ export const DiaryProvider = ({ children }) => {
         };
 
         setFortuneHistory(prev => [newDraw, ...prev]);
+
+        // Automatically generate AI Analysis for this fortune
+        const aiAnalysis = `I sense a ${newDraw.level} energy surrounding you. As the proverb says: "${newDraw.proverb_en}". ${newDraw.bloodTypeWorkAdvice}`;
+        addEntry(aiAnalysis, 'ai_entry');
+
         return newDraw;
     };
 
