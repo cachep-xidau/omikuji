@@ -14,8 +14,8 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className="absolute bottom-0 left-0 right-0 bg-white border-t border-[#E8E8E8] shadow-[0_-4px_20px_rgba(0,0,0,0.02)] px-4 pt-[12px] pb-[34px] h-[90px] z-40">
-      <div className="flex justify-around items-center h-full items-start">
+    <nav className="absolute bottom-0 left-0 right-0 bg-white border-t border-[#E8E8E8] shadow-[0_-4px_20px_rgba(0,0,0,0.02)] z-40 pb-[env(safe-area-inset-bottom)]">
+      <div className="grid grid-cols-5 items-end h-[86px] w-full max-w-[430px] mx-auto pb-[20px]">
         {navItems.map(({ path, icon: Icon, iconImg, label, isCenter }) => {
           const isActive = location.pathname === path;
 
@@ -24,13 +24,13 @@ const NavBar = () => {
               <Link
                 key={path}
                 to={path}
-                className="flex flex-col items-center gap-1 -mt-[30px]"
+                className="flex flex-col items-center justify-end h-full w-full pb-1"
               >
-                <div className="w-[60px] h-[60px] rounded-full bg-[#181818] flex items-center justify-center shadow-lg">
+                <div className="w-[52px] h-[52px] rounded-full bg-[#181818] flex items-center justify-center shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95 mb-0.5 p-[12px]">
                   {Icon ? (
-                    <Icon size={24} className="text-white" fill="white" />
+                    <Icon size={28} className="text-white" fill="white" strokeWidth={2} />
                   ) : (
-                    <img src={iconImg} alt={label} className="w-[54px] h-[54px] object-contain" />
+                    <img src={iconImg} alt={label} className="w-[28px] h-[28px] object-contain" />
                   )}
                 </div>
               </Link>
@@ -41,20 +41,20 @@ const NavBar = () => {
             <Link
               key={path}
               to={path}
-              className={`flex flex-col items-center gap-1 transition-colors ${isActive ? 'text-[#EE3424]' : 'text-[#969696]'
+              className={`flex flex-col items-center justify-end gap-[6px] h-full pb-1 transition-colors ${isActive ? 'text-[#EE3424]' : 'text-[#969696]'
                 }`}
             >
               {Icon ? (
-                <Icon size={22} className={isActive ? "stroke-[#EE3424]" : "stroke-[#969696]"} />
+                <Icon size={24} className={isActive ? "stroke-[#EE3424]" : "stroke-[#969696]"} strokeWidth={isActive ? 2.5 : 2} />
               ) : (
                 <img
                   src={iconImg}
                   alt={label}
-                  className={`w-[22px] h-[22px] object-contain ${!isActive && 'opacity-60 grayscale'}`}
+                  className={`w-[24px] h-[24px] object-contain ${!isActive && 'opacity-60 grayscale'}`}
                   style={{ filter: !isActive ? 'grayscale(100%) opacity(0.6)' : 'none' }}
                 />
               )}
-              <span className="text-[11px] font-medium leading-none">{label}</span>
+              <span className="text-[10px] font-medium leading-none tracking-tight">{label}</span>
             </Link>
           );
         })}
