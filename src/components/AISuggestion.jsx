@@ -117,8 +117,12 @@ const AISuggestion = ({ suggestion }) => {
                             onClick={handleUnlock}
                             className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all active:scale-95 mb-4"
                         >
-                            {language === 'ja' ? 'プレミアムサブスクリプション ￥800/月' : 'Unlock Premium subscription $4.99/mo'}
+                            {language === 'ja' ? '￥800 で購入' : 'Unlock Lifetime $4.99'}
                         </button>
+
+                        <p className="text-xs text-gray-400">
+                            {language === 'ja' ? '一回払いの買い切りプランです' : 'One-time payment. No subscription.'}
+                        </p>
                     </div>
                 </div>
             )}
