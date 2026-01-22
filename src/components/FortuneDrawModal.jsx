@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles } from 'lucide-react';
 import FortuneCard from './FortuneCard';
+import AISuggestion from './AISuggestion';
 import { useDiary } from '../data/DiaryContext';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -97,20 +98,27 @@ const FortuneDrawModal = ({ isOpen, onClose }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="w-full max-w-sm relative"
+                        className="w-full max-w-sm relative max-h-[85vh] overflow-y-auto hide-scrollbar p-1"
                     >
                         {/* Close Button (Floating) */}
                         <button
                             onClick={onClose}
-                            className="absolute -top-12 right-0 p-2 text-white/80 hover:bg-white/10 rounded-full"
+                            className="sticky top-2 ml-auto block z-10 p-2 bg-black/20 text-white backdrop-blur-md rounded-full hover:bg-black/30 mb-2"
                         >
-                            <X size={24} />
+                            <X size={20} />
                         </button>
 
                         <FortuneCard fortune={result} />
 
+                        {/* AI Suggestion Section (Outside Card) */}
+                        {result.ai_advice && (
+                            <div className="mt-4">
+                                <AISuggestion suggestion={result.ai_advice} />
+                            </div>
+                        )}
+
                         {/* Actions */}
-                        <div className="mt-4 flex gap-3">
+                        <div className="mt-4 flex gap-3 pb-4">
                             <button
                                 onClick={onClose}
                                 className="flex-1 bg-white text-gray-900 py-3 rounded-xl font-bold shadow-lg hover:bg-gray-50"

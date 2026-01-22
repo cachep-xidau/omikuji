@@ -1,6 +1,7 @@
 import React from 'react';
 import { Share2, Sparkles } from 'lucide-react';
 
+
 const FortuneCard = ({ fortune, isTied = false }) => {
     if (!fortune) return null;
 

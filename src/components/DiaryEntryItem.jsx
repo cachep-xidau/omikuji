@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Sparkles, Trash2, Scroll } from 'lucide-react';
 import FortuneCard from './FortuneCard';
+import AISuggestion from './AISuggestion';
 import WeeklyReviewCard from './WeeklyReviewCard';
 import { getImagePath } from '../utils/imagePath';
 
@@ -49,6 +50,11 @@ const DiaryEntryItem = ({ item, onDelete, onSelect }) => {
                 <div className="w-full">
                     <FortuneCard fortune={item} isTied={item.isTied} />
                 </div>
+                {item.ai_advice && (
+                    <div className="mt-4">
+                        <AISuggestion suggestion={item.ai_advice} />
+                    </div>
+                )}
             </motion.div>
         );
     }
