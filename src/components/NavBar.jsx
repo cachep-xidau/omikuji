@@ -26,11 +26,11 @@ const NavBar = () => {
                 to={path}
                 className="flex flex-col items-center justify-end h-full w-full pb-1"
               >
-                <div className="w-[52px] h-[52px] rounded-full bg-[#181818] flex items-center justify-center shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95 mb-0.5 p-[12px]">
+                <div className="w-[52px] h-[52px] rounded-full bg-[#181818] flex items-center justify-center shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95 mb-0.5 p-[4px]">
                   {Icon ? (
-                    <Icon size={28} className="text-white" fill="white" strokeWidth={2} />
+                    <Icon size={44} className="text-white" fill="white" strokeWidth={1.5} />
                   ) : (
-                    <img src={iconImg} alt={label} className="w-[28px] h-[28px] object-contain" />
+                    <img src={iconImg} alt={label} className="w-[44px] h-[44px] object-contain" />
                   )}
                 </div>
               </Link>
