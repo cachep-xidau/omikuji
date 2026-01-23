@@ -40,6 +40,9 @@ const DiaryLoadingScreen = () => {
                 />
             </div>
 
+            {/* White Overlay */}
+            <div className="absolute inset-0 z-0 bg-white opacity-30 pointer-events-none" />
+
             {/* Bottom Loading Indicator */}
             <div className="absolute bottom-12 w-full px-8 z-10 flex flex-col items-center gap-3">
                 <span className="text-sm font-medium text-gray-500 uppercase tracking-widest">
