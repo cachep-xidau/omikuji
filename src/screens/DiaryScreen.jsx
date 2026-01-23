@@ -131,26 +131,8 @@ const DiaryScreen = () => {
     };
 
     return (
-        <div className="h-full flex flex-col relative bg-white overflow-hidden">
-            <div className="absolute top-0 w-full z-50">
-                <StatusBar />
-            </div>
-
-            {/* Navigation Header */}
-            <div className="absolute top-12 left-0 w-full px-6 z-40 flex justify-between items-center">
-                <button
-                    onClick={() => navigate('/')}
-                    className="flex items-center text-black hover:opacity-70 transition-opacity gap-1"
-                >
-                    <ChevronLeft size={32} strokeWidth={2.5} className="-ml-2" />
-                    <span className="text-2xl font-bold tracking-tight">{t('nav.diary')}</span>
-                </button>
-
-                {/* Language Toggle */}
-                <LanguageToggle />
-            </div>
-
-            {/* Feature Modals */}
+        <div className="h-full flex flex-col bg-white overflow-hidden relative">
+            {/* Feature Modals - Keep absolute/overlay */}
             <AnimatePresence>
                 {showBloodType && (
                     <BloodTypeSelection
@@ -180,78 +162,96 @@ const DiaryScreen = () => {
                 )}
             </AnimatePresence>
 
-            <div className="flex-1 flex flex-col pt-[100px] pb-24 px-6 relative z-10">
-                {/* --- HEADER SECTION --- */}
-                <div className="mb-8 space-y-5">
-                    {/* Calendar */}
-                    <div className="border-b border-gray-200 pb-3">
-                        <WeeklyCalendar selectedDate={selectedDate} onDateSelect={setSelectedDate} />
-                    </div>
+            {/* --- FIXED HEAD SECTION --- */}
+            <div className="flex-none bg-white z-10 shadow-sm">
+                <StatusBar />
 
-                    {/* COMBINED CULTURAL CONTEXT CARD */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 border border-amber-100 rounded-2xl px-5 py-3 relative overflow-hidden"
+                {/* Navigation Header */}
+                <div className="px-6 pt-12 pb-2 flex justify-between items-center">
+                    <button
+                        onClick={() => navigate('/')}
+                        className="flex items-center text-black hover:opacity-70 transition-opacity gap-1"
                     >
-                        {/* Decorative Background */}
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/50 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
+                        <ChevronLeft size={32} strokeWidth={2.5} className="-ml-2" />
+                        <span className="text-2xl font-bold tracking-tight">{t('nav.diary')}</span>
+                    </button>
 
-                        {/* Microseason Section */}
-                        <div className="relative z-10 pb-4">
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <h2 className="text-2xl font-bold text-gray-900 leading-tight">
-                                        {microseason.name_ja} <span className="text-base font-normal text-gray-800 ml-1">- {microseason.name_romaji}</span>
-                                    </h2>
-                                </div>
-                                <div className="text-4xl opacity-80">{microseason.icon || '🌸'}</div>
-                            </div>
-                            <p className="text-base text-gray-800 leading-relaxed italic mt-3">
-                                "{microseason.quote}"
-                            </p>
-                        </div>
-
-                        {/* Fortune Section */}
-                        <motion.button
-                            onClick={() => setShowFortuneDraw(true)}
-                            className="w-full text-left relative z-10"
-                            whileTap={{ scale: 0.98 }}
-                        >
-                            {todaysFortune ? (
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <div
-                                            className="inline-block px-3 py-1 rounded-full text-base font-bold mb-2"
-                                            style={{ backgroundColor: todaysFortune.color + '30', color: todaysFortune.color === '#FFD700' ? '#B8860B' : todaysFortune.color }}
-                                        >
-                                            {todaysFortune.level}
-                                        </div>
-                                        <p className="text-base text-gray-800 font-serif italic line-clamp-1">
-                                            {todaysFortune.proverb_jp}
-                                        </p>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="flex items-center justify-between bg-gradient-to-r from-amber-500 to-orange-500 -mx-5 -mb-3 px-5 py-5 rounded-b-2xl text-white">
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <Scroll size={20} className="text-yellow-100" />
-                                            <span className="font-bold text-lg">{t('fortune.draw')}</span>
-                                        </div>
-                                        <p className="text-base opacity-100 font-medium">
-                                            {t('fortune.guidance')}
-                                        </p>
-                                    </div>
-
-                                </div>
-                            )}
-                        </motion.button>
-                    </motion.div>
+                    {/* Language Toggle */}
+                    <LanguageToggle />
                 </div>
 
+                {/* Calendar - Fixed at top */}
+                <div className="px-6 pb-2">
+                    <WeeklyCalendar selectedDate={selectedDate} onDateSelect={setSelectedDate} />
+                </div>
+            </div>
+
+            {/* --- SCROLLABLE CONTENT SECTION --- */}
+            <div className="flex-1 overflow-y-auto px-6 pb-24 pt-4 space-y-6">
+
+                {/* COMBINED CULTURAL CONTEXT CARD (Fortune) */}
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 border border-amber-100 rounded-2xl px-5 py-3 relative overflow-hidden"
+                >
+                    {/* Decorative Background */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/50 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
+
+                    {/* Microseason Section */}
+                    <div className="relative z-10 pb-4">
+                        <div className="flex items-start justify-between">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900 leading-tight">
+                                    {microseason.name_ja} <span className="text-base font-normal text-gray-800 ml-1">- {microseason.name_romaji}</span>
+                                </h2>
+                            </div>
+                            <div className="text-4xl opacity-80">{microseason.icon || '🌸'}</div>
+                        </div>
+                        <p className="text-base text-gray-800 leading-relaxed italic mt-3">
+                            "{microseason.quote}"
+                        </p>
+                    </div>
+
+                    {/* Fortune Section */}
+                    <motion.button
+                        onClick={() => setShowFortuneDraw(true)}
+                        className="w-full text-left relative z-10"
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        {todaysFortune ? (
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div
+                                        className="inline-block px-3 py-1 rounded-full text-base font-bold mb-2"
+                                        style={{ backgroundColor: todaysFortune.color + '30', color: todaysFortune.color === '#FFD700' ? '#B8860B' : todaysFortune.color }}
+                                    >
+                                        {todaysFortune.level}
+                                    </div>
+                                    <p className="text-base text-gray-800 font-serif italic line-clamp-1">
+                                        {todaysFortune.proverb_jp}
+                                    </p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-between bg-gradient-to-r from-amber-500 to-orange-500 -mx-5 -mb-3 px-5 py-5 rounded-b-2xl text-white">
+                                <div>
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <Scroll size={20} className="text-yellow-100" />
+                                        <span className="font-bold text-lg">{t('fortune.draw')}</span>
+                                    </div>
+                                    <p className="text-base opacity-100 font-medium">
+                                        {t('fortune.guidance')}
+                                    </p>
+                                </div>
+
+                            </div>
+                        )}
+                    </motion.button>
+                </motion.div>
+
                 {/* --- INPUT SECTION (Account Style) --- */}
-                <div className="mb-6 relative group">
+                <div className="relative group">
                     <div className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-[12px] p-4 transition-colors focus-within:bg-white focus-within:border-gray-300">
                         <textarea
                             value={inputContent}
@@ -300,8 +300,8 @@ const DiaryScreen = () => {
                 </div>
 
                 {/* Timeline (Context) */}
-                <div className="h-[320px] overflow-y-auto scrollbar-hide -mx-6 px-6 pb-12">
-                    <div className="bg-white border-y border-gray-100 py-4 mb-4 flex justify-between items-center">
+                <div className="pb-12">
+                    <div className="bg-white border-y border-gray-100 py-4 mb-4 flex justify-between items-center sticky top-0 z-10">
                         <h3 className="text-base font-bold text-gray-800 uppercase tracking-wide">{t('timeline.previous')}</h3>
                         <button
                             onClick={() => navigate('/diary/history')}
@@ -312,8 +312,6 @@ const DiaryScreen = () => {
                     </div>
 
                     <div className="space-y-4">
-
-
                         {filteredItems.length === 0 ? (
                             <div className="text-center py-10 opacity-40">
                                 <p className="text-sm text-gray-400 font-medium">{t('timeline.noActivity')}</p>
@@ -339,7 +337,7 @@ const DiaryScreen = () => {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 
