@@ -301,7 +301,7 @@ const DiaryScreen = () => {
 
                 {/* Timeline (Context) */}
                 <div className="pb-12">
-                    <div className="bg-white border-y border-gray-100 py-4 mb-4 flex justify-between items-center sticky top-0 z-10">
+                    <div className="bg-white border-y border-gray-100 py-4 mb-4 flex justify-between items-center">
                         <h3 className="text-base font-bold text-gray-800 uppercase tracking-wide">{t('timeline.previous')}</h3>
                         <button
                             onClick={() => navigate('/diary/history')}
