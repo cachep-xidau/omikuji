@@ -40,7 +40,7 @@ const PaceGauge = ({ value, unit }) => {
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-3xl font-bold text-black">{value}</span>
-                <span className="text-xs text-gray-500">{unit}</span>
+                <span className="text-sm text-gray-700">{unit}</span>
             </div>
         </div>
     );
@@ -68,14 +68,14 @@ const WeeklySnapshot = () => {
             {/* Header */}
             <div className="flex justify-between items-start mb-[30px]">
                 <h3 className="text-xl font-bold text-black">Your Weekly Snapshot</h3>
-                <button className="flex items-center gap-1 text-gray-500 text-sm">
+                <button className="flex items-center gap-1 text-gray-700 text-sm">
                     <span>Setting</span>
                     <Settings size={16} />
                 </button>
             </div>
 
             {/* Date Range */}
-            <p className="text-sm text-gray-500 mb-[30px]">{weeklyData.dateRange}</p>
+            <p className="text-sm text-gray-700 mb-[30px]">{weeklyData.dateRange}</p>
 
             {/* User Tip / Alert */}
             <div className="bg-[#F5F5F5] rounded-xl p-[19px] mb-[30px] flex items-start gap-3 border border-[#E5E7EB]">
@@ -85,26 +85,26 @@ const WeeklySnapshot = () => {
 
             {/* Pace Gauge */}
             <div className="mb-[30px]">
-                <p className="text-sm text-gray-500 text-center mb-2">Avg. pace</p>
+                <p className="text-sm text-gray-700 text-center mb-2">Avg. pace</p>
                 <PaceGauge value={weeklyData.avgPace} unit={weeklyData.paceUnit} />
             </div>
 
             {/* Secondary Metrics Row */}
             <div className="grid grid-cols-3 gap-3 mb-[30px]">
                 <div className="p-3 text-center">
-                    <Footprints size={18} className="mx-auto text-gray-500 mb-1" />
+                    <Footprints size={18} className="mx-auto text-gray-700 mb-1" />
                     <p className="text-lg font-semibold text-black">{weeklyData.steps}</p>
-                    <p className="text-xs text-gray-500">Steps</p>
+                    <p className="text-sm text-gray-700">Steps</p>
                 </div>
                 <div className="p-3 text-center">
-                    <MapPin size={18} className="mx-auto text-gray-500 mb-1" />
+                    <MapPin size={18} className="mx-auto text-gray-700 mb-1" />
                     <p className="text-lg font-semibold text-black">{weeklyData.distance}</p>
-                    <p className="text-xs text-gray-500">Km</p>
+                    <p className="text-sm text-gray-700">Km</p>
                 </div>
                 <div className="p-3 text-center">
-                    <Flame size={18} className="mx-auto text-gray-500 mb-1" />
+                    <Flame size={18} className="mx-auto text-gray-700 mb-1" />
                     <p className="text-lg font-semibold text-black">{weeklyData.calories}</p>
-                    <p className="text-xs text-gray-500">Kcal</p>
+                    <p className="text-sm text-gray-700">Kcal</p>
                 </div>
             </div>
 
@@ -113,21 +113,21 @@ const WeeklySnapshot = () => {
                 {/* Sleep Card */}
                 <div className="bg-white rounded-xl px-3 py-4 border border-[#E5E7EB]">
                     <div className="flex items-center gap-2 mb-4">
-                        <Moon size={16} className="text-gray-500" />
-                        <span className="text-sm text-gray-600">Avg. Time in Bed</span>
+                        <Moon size={16} className="text-gray-700" />
+                        <span className="text-sm text-gray-700">Avg. Time in Bed</span>
                     </div>
                     <MiniBarChart data={weeklyData.sleepData} highlightIndices={[2, 5]} />
-                    <p className="text-xl font-semibold text-black mt-4">{weeklyData.avgSleep} <span className="text-sm font-normal text-gray-500">hr</span></p>
+                    <p className="text-xl font-semibold text-black mt-4">{weeklyData.avgSleep} <span className="text-sm font-normal text-gray-700">hr</span></p>
                 </div>
 
                 {/* Heart Rate Card */}
                 <div className="bg-white rounded-xl px-3 py-4 border border-[#E5E7EB]">
                     <div className="flex items-center gap-2 mb-4">
-                        <Heart size={16} className="text-gray-500" />
-                        <span className="text-sm text-gray-600">Avg. Heart Rate</span>
+                        <Heart size={16} className="text-gray-700" />
+                        <span className="text-sm text-gray-700">Avg. Heart Rate</span>
                     </div>
                     <MiniBarChart data={weeklyData.heartRateData} highlightIndices={[1, 4]} />
-                    <p className="text-xl font-semibold text-black mt-4">{weeklyData.avgHeartRate} <span className="text-sm font-normal text-gray-500">bpm</span></p>
+                    <p className="text-xl font-semibold text-black mt-4">{weeklyData.avgHeartRate} <span className="text-sm font-normal text-gray-700">bpm</span></p>
                 </div>
             </div>
         </section>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mic, Send, Image as ImageIcon, Sparkles, Wind, Scroll, ChevronLeft } from 'lucide-react';
+import { Mic, Send, Image as ImageIcon, Wind, Scroll, ChevronLeft } from 'lucide-react';
 import { useDiary } from '../data/DiaryContext';
 import WeeklyCalendar from '../components/WeeklyCalendar';
 import DiaryEntryItem from '../components/DiaryEntryItem';
@@ -182,83 +182,72 @@ const DiaryScreen = () => {
 
             <div className="flex-1 flex flex-col pt-[100px] pb-24 px-6 relative z-10">
                 {/* --- HEADER SECTION --- */}
-                <div className="mb-6 space-y-3">
+                <div className="mb-8 space-y-5">
                     {/* Calendar */}
-                    <div className="border-b border-gray-100 pb-2">
+                    <div className="border-b border-gray-200 pb-3">
                         <WeeklyCalendar selectedDate={selectedDate} onDateSelect={setSelectedDate} />
                     </div>
 
-                    {/* TWO COLUMN WIDGETS */}
-                    <div className="grid grid-cols-2 gap-3">
-                        {/* 1. Microseason Card (Compact) */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="bg-white border border-gray-100 rounded-xl p-4 relative overflow-hidden h-full flex flex-col justify-between"
-                        >
-                            <div className="relative z-10">
-                                <h2 className="text-[17px] font-bold text-gray-900 leading-tight">{microseason.name_ja}</h2>
-                                <p className="text-sm text-gray-500 font-medium">{microseason.name_romaji}</p>
-                            </div>
-                            <div className="relative z-10 mt-2">
-                                <p className="text-xs text-gray-600 leading-snug italic line-clamp-2">
-                                    "{microseason.quote}"
-                                </p>
-                            </div>
-                        </motion.div>
+                    {/* COMBINED CULTURAL CONTEXT CARD */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 border border-amber-100 rounded-2xl px-5 py-3 relative overflow-hidden"
+                    >
+                        {/* Decorative Background */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/50 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
 
-                        {/* 2. Fortune Widget (Interactable) */}
+                        {/* Microseason Section */}
+                        <div className="relative z-10 pb-4">
+                            <div className="flex items-start justify-between">
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-900 leading-tight">
+                                        {microseason.name_ja} <span className="text-base font-normal text-gray-800 ml-1">- {microseason.name_romaji}</span>
+                                    </h2>
+                                </div>
+                                <div className="text-4xl opacity-80">{microseason.icon || '🌸'}</div>
+                            </div>
+                            <p className="text-base text-gray-800 leading-relaxed italic mt-3">
+                                "{microseason.quote}"
+                            </p>
+                        </div>
+
+                        {/* Fortune Section */}
                         <motion.button
                             onClick={() => setShowFortuneDraw(true)}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className={`rounded-xl p-4 relative overflow-hidden h-full flex flex-col justify-between text-left transition-all ${todaysFortune
-                                ? 'bg-[#FFFDF5] border border-[#E8E4D0]'
-                                : 'bg-gray-900 border border-gray-900 text-white shadow-lg shadow-gray-200'
-                                }`}
+                            className="w-full text-left relative z-10"
+                            whileTap={{ scale: 0.98 }}
                         >
                             {todaysFortune ? (
-                                <>
-                                    <div className="flex justify-between items-start">
-                                        <span className="text-[10px] uppercase font-bold tracking-widest text-gray-400">
-                                            {t('fortune.today')}
-                                        </span>
-                                        {todaysFortune.isTied && <span className="text-[10px]">{t('fortune.tied')}</span>}
-                                    </div>
+                                <div className="flex items-center justify-between">
                                     <div>
                                         <div
-                                            className="inline-block px-2 py-0.5 rounded text-[10px] items-center gap-1 font-bold mb-1"
-                                            style={{ backgroundColor: todaysFortune.color + '20', color: todaysFortune.color === '#FFD700' ? '#B8860B' : todaysFortune.color }}
+                                            className="inline-block px-3 py-1 rounded-full text-base font-bold mb-2"
+                                            style={{ backgroundColor: todaysFortune.color + '30', color: todaysFortune.color === '#FFD700' ? '#B8860B' : todaysFortune.color }}
                                         >
                                             {todaysFortune.level}
                                         </div>
-                                        <p className="text-xs text-gray-600 line-clamp-1 font-serif italic">
+                                        <p className="text-base text-gray-800 font-serif italic line-clamp-1">
                                             {todaysFortune.proverb_jp}
                                         </p>
                                     </div>
-                                </>
+                                </div>
                             ) : (
-                                <>
-                                    <div className="absolute top-0 right-0 p-3 opacity-10 text-white">
-                                        <Sparkles size={40} />
-                                    </div>
-                                    <span className="text-[10px] uppercase font-bold tracking-widest opacity-70">
-                                        {t('fortune.daily')}
-                                    </span>
+                                <div className="flex items-center justify-between bg-gradient-to-r from-amber-500 to-orange-500 -mx-5 -mb-3 px-5 py-5 rounded-b-2xl text-white">
                                     <div>
                                         <div className="flex items-center gap-2 mb-1">
-                                            <Scroll size={16} className="text-yellow-400" />
-                                            <span className="font-bold text-sm">{t('fortune.draw')}</span>
+                                            <Scroll size={20} className="text-yellow-100" />
+                                            <span className="font-bold text-lg">{t('fortune.draw')}</span>
                                         </div>
-                                        <p className="text-[10px] opacity-70 leading-tight">
+                                        <p className="text-base opacity-100 font-medium">
                                             {t('fortune.guidance')}
                                         </p>
                                     </div>
-                                </>
+
+                                </div>
                             )}
                         </motion.button>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* --- INPUT SECTION (Account Style) --- */}
@@ -268,7 +257,7 @@ const DiaryScreen = () => {
                             value={inputContent}
                             onChange={(e) => setInputContent(e.target.value)}
                             placeholder={t('input.placeholder')}
-                            className="w-full bg-transparent text-gray-900 text-[16px] leading-relaxed placeholder:text-gray-400 resize-none focus:outline-none min-h-[100px]"
+                            className="w-full bg-transparent text-gray-900 text-lg leading-relaxed placeholder:text-gray-500 resize-none focus:outline-none min-h-[120px]"
                         />
 
                         {/* Action Bar */}
@@ -278,33 +267,33 @@ const DiaryScreen = () => {
                                 <button
                                     onClick={handleMicClick}
                                     disabled={!isSupported}
-                                    className={`p-2 rounded-full transition-all duration-200 relative ${isRecording
+                                    className={`p-3 rounded-full transition-all duration-200 relative ${isRecording
                                         ? 'bg-red-500 text-white animate-pulse'
                                         : isSupported
-                                            ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-200/50'
-                                            : 'text-gray-300 cursor-not-allowed'
+                                            ? 'text-gray-700 hover:text-gray-900 hover:bg-gray-200/50'
+                                            : 'text-gray-400 cursor-not-allowed'
                                         }`}
                                     title={!isSupported ? 'Speech recognition not supported in this browser' : isRecording ? 'Stop recording' : 'Start recording'}
                                 >
-                                    <Mic size={20} strokeWidth={2} />
+                                    <Mic size={22} strokeWidth={2} />
                                     {isRecording && (
                                         <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full animate-ping" />
                                     )}
                                 </button>
-                                <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200/50 rounded-full transition-colors">
-                                    <ImageIcon size={20} strokeWidth={2} />
+                                <button className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-200/50 rounded-full transition-colors">
+                                    <ImageIcon size={22} strokeWidth={2} />
                                 </button>
                             </div>
 
                             <button
                                 onClick={handleSend}
                                 disabled={!inputContent.trim()}
-                                className={`p-2 rounded-full transition-all duration-200 ${inputContent.trim()
+                                className={`p-3 rounded-full transition-all duration-200 ${inputContent.trim()
                                     ? 'bg-gray-900 text-white shadow-md hover:bg-black'
-                                    : 'bg-gray-200 text-gray-400'
+                                    : 'bg-gray-200 text-gray-500'
                                     }`}
                             >
-                                <Send size={18} />
+                                <Send size={20} />
                             </button>
                         </div>
                     </div>
@@ -312,11 +301,11 @@ const DiaryScreen = () => {
 
                 {/* Timeline (Context) */}
                 <div className="h-[320px] overflow-y-auto scrollbar-hide -mx-6 px-6 pb-12">
-                    <div className="bg-white border-y border-gray-100 py-3 mb-4 flex justify-between items-center">
-                        <h3 className="text-sm font-semibold text-gray-500 uppercase">{t('timeline.previous')}</h3>
+                    <div className="bg-white border-y border-gray-100 py-4 mb-4 flex justify-between items-center">
+                        <h3 className="text-base font-bold text-gray-800 uppercase tracking-wide">{t('timeline.previous')}</h3>
                         <button
                             onClick={() => navigate('/diary/history')}
-                            className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                            className="text-base font-semibold text-blue-700 hover:text-blue-800 transition-colors"
                         >
                             {t('timeline.viewAll')}
                         </button>

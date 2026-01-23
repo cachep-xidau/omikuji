@@ -55,7 +55,7 @@ const DiaryHistoryScreen = () => {
                     <ChevronLeft size={24} className="text-gray-900" />
                 </button>
 
-                <h1 className="text-lg font-bold text-gray-900">{t('history.archive')}</h1>
+                <h1 className="text-xl font-bold text-gray-900">{t('history.archive')}</h1>
 
                 <div className="flex bg-gray-100 rounded-lg p-1">
                     <button
@@ -110,10 +110,10 @@ const VerticalFeedView = ({ groups, t }) => {
                 <div key={group.date.toISOString()}>
                     <div className="sticky top-0 bg-white/95 backdrop-blur-sm py-3 z-10 border-b border-gray-100 mb-4">
                         <div className="flex justify-between items-baseline">
-                            <h3 className="text-lg font-bold text-gray-900">
+                            <h3 className="text-xl font-bold text-gray-900">
                                 {formatDate(group.date, 'full')}
                             </h3>
-                            <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+                            <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
                                 {group.microseason?.name_en || 'Season'}
                             </span>
                         </div>
@@ -125,7 +125,7 @@ const VerticalFeedView = ({ groups, t }) => {
                                 return (
                                     <div key={item.id} className="relative group">
                                         <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-yellow-400 border-2 border-white" />
-                                        <p className="text-gray-400 text-xs mb-2 font-bold uppercase tracking-widest pl-1">
+                                        <p className="text-gray-600 text-sm mb-2 font-bold uppercase tracking-widest pl-1">
                                             {t('history.dailyDrawing')}
                                         </p>
                                         <div className="transform origin-left scale-95">
@@ -141,7 +141,7 @@ const VerticalFeedView = ({ groups, t }) => {
                                         <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-purple-400 border-2 border-white" />
 
                                         {/* Time Header */}
-                                        <p className="text-gray-600 text-sm mb-1 font-mono">
+                                        <p className="text-gray-600 text-base mb-1 font-mono">
                                             {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </p>
 
@@ -154,7 +154,7 @@ const VerticalFeedView = ({ groups, t }) => {
                                                 </div>
                                                 <span className="text-[10px] font-bold uppercase tracking-wider">The Mirror</span>
                                             </div>
-                                            <p className="text-gray-800 font-medium italic font-serif leading-relaxed mb-1">
+                                            <p className="text-gray-900 text-lg font-medium italic font-serif leading-relaxed mb-1">
                                                 "{item.content}"
                                             </p>
                                         </div>
@@ -165,10 +165,10 @@ const VerticalFeedView = ({ groups, t }) => {
                             return (
                                 <div key={item.id} className="relative group">
                                     <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-gray-200 border-2 border-white" />
-                                    <p className="text-gray-600 text-sm mb-1 font-mono">
+                                    <p className="text-gray-600 text-base mb-1 font-mono">
                                         {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </p>
-                                    <div className="bg-gray-50 rounded-xl p-4 text-gray-800 text-[15px] leading-relaxed">
+                                    <div className="bg-gray-50 rounded-xl p-4 text-gray-900 text-lg leading-relaxed">
                                         {item.content}
                                     </div>
                                 </div>

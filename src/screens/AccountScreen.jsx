@@ -42,7 +42,7 @@ const AccountScreen = () => {
                     <div className="flex-1">
                         <h2 className="text-lg font-semibold text-gray-900">Miley Lien</h2>
                         <div className="flex items-center gap-2">
-                            <p className="text-sm text-gray-500">miley.lien@example.com</p>
+                            <p className="text-sm text-gray-700">miley.lien@example.com</p>
                         </div>
                         {/* Subscription Badge */}
                         <div className="mt-1 flex gap-2">
@@ -78,7 +78,7 @@ const AccountScreen = () => {
                     {/* Account Section */}
                     <div className="bg-white border-y border-gray-100">
                         <div className="px-6 py-3">
-                            <h3 className="text-sm font-semibold text-gray-500 uppercase">Account</h3>
+                            <h3 className="text-sm font-semibold text-gray-700 uppercase">Account</h3>
                         </div>
                         <SettingsItem icon={User} label="My account" />
                         <SettingsItem icon={Heart} label="Health connect" />
@@ -92,7 +92,7 @@ const AccountScreen = () => {
                     {/* Help Section */}
                     <div className="bg-white border-y border-gray-100 mt-4">
                         <div className="px-6 py-3">
-                            <h3 className="text-sm font-semibold text-gray-500 uppercase">Help</h3>
+                            <h3 className="text-sm font-semibold text-gray-700 uppercase">Help</h3>
                         </div>
                         <SettingsItem icon={MessageCircle} label="Virtual assistant" />
                         <SettingsItem icon={HelpCircle} label="Help center" />
@@ -103,7 +103,7 @@ const AccountScreen = () => {
                     {/* Legal Section */}
                     <div className="bg-white border-y border-gray-100 mt-4">
                         <div className="px-6 py-3">
-                            <h3 className="text-sm font-semibold text-gray-500 uppercase">Legal</h3>
+                            <h3 className="text-sm font-semibold text-gray-700 uppercase">Legal</h3>
                         </div>
                         <SettingsItem icon={FileText} label="Privacy policy" />
                     </div>
@@ -115,7 +115,7 @@ const AccountScreen = () => {
                         <LogOut size={18} />
                         Sign out
                     </button>
-                    <p className="text-xs text-gray-400">VERSION V1.10.1(1)</p>
+                    <p className="text-sm text-gray-600">VERSION V1.10.1(1)</p>
 
                     {/* Developer Options */}
                     <div className="mt-4 pt-4 border-t border-gray-100 w-full px-4">

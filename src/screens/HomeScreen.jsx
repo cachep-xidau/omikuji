@@ -33,9 +33,9 @@ const HomeScreen = () => {
             </div>
             <div>
               <p className="text-sm font-semibold text-black">
-                Sunny, 28°C <span className="font-normal text-gray-500">(feel like 30°C)</span>
+                Sunny, 28°C <span className="font-normal text-gray-700">(feel like 30°C)</span>
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-sm text-gray-700">
                 Air quality: <span className="text-green-600">Good</span> (AQI 45)
               </p>
             </div>
@@ -53,7 +53,7 @@ const HomeScreen = () => {
             {/* Header */}
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-xl font-bold text-black">Today</h3>
-              <div className="flex items-center gap-1.5 text-gray-500">
+              <div className="flex items-center gap-1.5 text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />
@@ -63,7 +63,7 @@ const HomeScreen = () => {
             </div>
 
             {/* Description */}
-            <p className="text-sm text-gray-500 mb-5">
+            <p className="text-sm text-gray-700 mb-5">
               Daily missions are auto-generated everyday. Finish one to unlock exciting rewards.
             </p>
 
@@ -102,9 +102,9 @@ const HomeScreen = () => {
               <div key={activity.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div>
                   <p className="text-sm font-medium text-black">{activity.title}</p>
-                  <p className="text-xs text-gray-500">{activity.category}</p>
+                  <p className="text-sm text-gray-700">{activity.category}</p>
                 </div>
-                <span className="text-xs text-gray-400">{activity.duration}</span>
+                <span className="text-sm text-gray-600">{activity.duration}</span>
               </div>
             ))}
           </div>

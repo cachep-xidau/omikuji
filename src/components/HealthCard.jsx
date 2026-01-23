@@ -10,7 +10,7 @@ const HealthCard = ({ icon: Icon, title, value, unit, status = 'Mid' }) => {
         {unit && <span className="text-sm text-gray-400">{unit}</span>}
       </div>
       <div className="mt-1">
-        <span className="text-xs text-gray-500">{status}</span>
+        <span className="text-sm text-gray-700">{status}</span>
       </div>
     </div>
   );

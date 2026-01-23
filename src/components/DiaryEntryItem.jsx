@@ -43,7 +43,7 @@ const DiaryEntryItem = ({ item, onDelete, onSelect }) => {
             >
                 <div className="flex items-center gap-2 mb-3">
                     <Scroll size={14} className="text-yellow-600" />
-                    <span className="text-[12px] font-bold text-gray-500 uppercase tracking-widest">
+                    <span className="text-[13px] font-bold text-gray-700 uppercase tracking-widest">
                         Daily Fortune • {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                 </div>
@@ -70,7 +70,7 @@ const DiaryEntryItem = ({ item, onDelete, onSelect }) => {
                 {/* Time Header (Outside) */}
                 <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
-                        <span className="text-[13px] font-medium text-gray-500">
+                        <span className="text-[14px] font-medium text-gray-700">
                             {formattedTime}
                         </span>
                         {/* Only show lock if encrypted (AI entries likely not, but good to have logic) */}
@@ -110,7 +110,7 @@ const DiaryEntryItem = ({ item, onDelete, onSelect }) => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-6 pl-4 border-l-2 border-purple-200"
             >
-                <p className="text-gray-500 italic text-sm leading-relaxed font-serif">
+                <p className="text-gray-700 italic text-sm leading-relaxed font-serif">
                     "{item.content}"
                 </p>
             </motion.div>

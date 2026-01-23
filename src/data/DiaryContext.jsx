@@ -158,12 +158,12 @@ export const DiaryProvider = ({ children }) => {
     };
 
 
-    const addEntry = (content, type = 'entry') => {
+    const addEntry = (content, type = 'entry', customTimestamp = null) => {
         const newEntry = {
             id: crypto.randomUUID(),
             type,
             content,
-            timestamp: new Date().toISOString(),
+            timestamp: customTimestamp || new Date().toISOString(),
             lastModified: new Date().toISOString(),
             isEncrypted: type === 'entry', // Only encrypt user entries
         };
@@ -245,8 +245,19 @@ export const DiaryProvider = ({ children }) => {
         setFortuneHistory(prev => [newDraw, ...prev]);
 
         // Automatically generate AI Analysis for this fortune
-        const aiAnalysis = `I sense a ${newDraw.level} energy surrounding you. As the proverb says: "${newDraw.proverb_en}". ${newDraw.bloodTypeWorkAdvice}`;
-        addEntry(aiAnalysis, 'ai_entry');
+        // Automatically generate AI Analysis for this fortune
+        // Check for undefined values to avoid "undefined" strings
+        const pLevel = newDraw.level || '';
+        const pProverb = newDraw.proverb_en || '';
+        const pAdvice = newDraw.bloodTypeWorkAdvice || '';
+
+        const aiAnalysis = `I sense a ${pLevel} energy surrounding you. As the proverb says: "${pProverb}". ${pAdvice}`;
+
+        // Add minimal delay to ensure it appears above the fortune in history (which is sorted by date desc)
+        // Fortune timestamp is 'newDraw.timestamp'
+        const aiTimestamp = new Date(new Date(newDraw.timestamp).getTime() + 1000).toISOString();
+
+        addEntry(aiAnalysis, 'ai_entry', aiTimestamp);
 
         return newDraw;
     };

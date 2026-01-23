@@ -44,22 +44,22 @@ const DiaryEntryScreen = () => {
     };
 
     return (
-        <div className="h-full flex flex-col pt-14 pb-8 px-6 relative bg-[#0a0a0a]">
+        <div className="h-full flex flex-col pt-14 pb-8 px-6 relative bg-white">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
                 <button
                     onClick={() => navigate(-1)}
-                    className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all"
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-all"
                 >
                     <ArrowLeft size={20} />
                 </button>
 
                 <div className="flex flex-col items-center">
-                    <span className="text-xs font-medium text-gray-500 tracking-widest uppercase">
+                    <span className="text-xs font-bold text-gray-500 tracking-widest uppercase">
                         {id ? 'Reflecting' : 'New Reflection'}
                     </span>
                     {lastSaved && (
-                        <span className="text-[10px] text-green-500/70">
+                        <span className="text-[10px] text-green-600 font-medium">
                             Saved {lastSaved.toLocaleTimeString()}
                         </span>
                     )}
@@ -67,7 +67,7 @@ const DiaryEntryScreen = () => {
 
                 <button
                     onClick={handleSave}
-                    className="w-10 h-10 flex items-center justify-center rounded-full bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 transition-all font-medium"
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-purple-50 text-purple-600 hover:bg-purple-100 transition-all font-medium"
                 >
                     <Save size={18} />
                 </button>
@@ -79,12 +79,12 @@ const DiaryEntryScreen = () => {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="What's on your mind? The pages are locked..."
-                    className="flex-1 w-full bg-transparent text-gray-200 text-lg leading-relaxed placeholder:text-gray-700 resize-none focus:outline-none scrollbar-hide"
+                    className="flex-1 w-full bg-transparent text-gray-900 text-lg leading-relaxed placeholder:text-gray-400 resize-none focus:outline-none scrollbar-hide"
                     autoFocus
                 />
 
-                <div className="absolute bottom-0 w-full flex justify-between items-center py-4 border-t border-white/5">
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
+                <div className="absolute bottom-0 w-full flex justify-between items-center py-4 border-t border-gray-100">
+                    <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
                         <Lock size={12} />
                         <span>Encrypted & Local</span>
                     </div>
@@ -92,7 +92,7 @@ const DiaryEntryScreen = () => {
                     {id && (
                         <button
                             onClick={handleDelete}
-                            className="text-red-900/50 hover:text-red-500 transition-colors p-2"
+                            className="text-red-400 hover:text-red-600 transition-colors p-2"
                         >
                             <Trash2 size={18} />
                         </button>
