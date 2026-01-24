@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@400;500;700;900&display=swap');
+
 /* Custom fonts and base styles */
 body {
   margin: 0;
@@ -8,6 +10,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #FFFFFF;
   color: #000000;
+}
+
+.font-serif {
+  font-family: 'Zen Old Mincho', 'Noto Serif JP', serif;
 }
 
 /* Hide scrollbar but keep scroll functionality */

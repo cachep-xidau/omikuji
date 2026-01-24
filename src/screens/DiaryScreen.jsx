@@ -220,17 +220,27 @@ const DiaryScreen = () => {
                         whileTap={{ scale: 0.98 }}
                     >
                         {todaysFortune ? (
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between bg-gradient-to-r from-amber-100 to-orange-100 -mx-5 -mb-3 px-5 py-4 rounded-b-2xl border-t border-amber-200/50">
                                 <div>
-                                    <div
-                                        className="inline-block px-3 py-1 rounded-full text-base font-bold mb-2"
-                                        style={{ backgroundColor: todaysFortune.color + '30', color: todaysFortune.color === '#FFD700' ? '#B8860B' : todaysFortune.color }}
-                                    >
-                                        {todaysFortune.level}
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <div
+                                            className="px-2.5 py-0.5 rounded-full text-sm font-bold shadow-sm"
+                                            style={{
+                                                backgroundColor: todaysFortune.color,
+                                                color: '#FFFFFF',
+                                                textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+                                            }}
+                                        >
+                                            {todaysFortune.level}
+                                        </div>
+                                        <div className="text-xs font-bold text-gray-500 uppercase tracking-widest">{todaysFortune.level_romaji}</div>
                                     </div>
-                                    <p className="text-base text-gray-800 font-serif italic line-clamp-1">
+                                    <p className="text-lg text-gray-800 font-serif font-medium leading-snug">
                                         {todaysFortune.proverb_jp}
                                     </p>
+                                </div>
+                                <div className="text-2xl opacity-80 filter drop-shadow-sm grayscale-0">
+                                    {todaysFortune.level === '大吉' ? '🌸' : '🎋'}
                                 </div>
                             </div>
                         ) : (
