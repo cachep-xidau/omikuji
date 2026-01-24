@@ -44,12 +44,12 @@ const HomeScreen = () => {
 
         {/* Welcome Text */}
         <div className="px-6 pb-4">
-          <h1 className="text-2xl font-bold text-black">Good morning, Miley!</h1>
+          <h1 className="text-2xl font-semibold text-black">Good morning, Miley!</h1>
         </div>
 
         {/* Today Mission Section */}
         <section className="px-6 py-4">
-          <div className="bg-gray-50 rounded-2xl p-[19px]">
+          <div className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-2xl p-[19px]">
             {/* Header */}
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-xl font-bold text-black">Today</h3>
@@ -72,7 +72,7 @@ const HomeScreen = () => {
               {missions.map((mission) => (
                 <div
                   key={mission.id}
-                  className="bg-white rounded-xl p-4 flex items-center justify-between border border-gray-100"
+                  className="bg-[#FFFFFF] rounded-xl p-4 flex items-center justify-between border border-[#E6E3E3]"
                 >
                   <span className="text-base font-semibold text-black">{mission.title}</span>
                   <div className="flex gap-1">

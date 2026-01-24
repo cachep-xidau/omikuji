@@ -1,4 +1,10 @@
-import { Settings, Moon, Heart, Footprints, MapPin, Flame } from 'lucide-react';
+import { Settings, ChevronRight, Moon, Heart } from 'lucide-react';
+import iconAvgPace from '../assets/icon_avg_pace.png';
+import iconAdvice from '../assets/icon_advice.png';
+import iconSleepMoon from '../assets/icon_sleep_moon.png';
+import iconSteps from '../assets/icon_steps.png';
+import iconDistance from '../assets/icon_distance.png';
+import iconCalories from '../assets/icon_calories.png';
 
 // Mini bar chart component for weekly data
 const MiniBarChart = ({ data, highlightIndices = [] }) => {
@@ -24,23 +30,28 @@ const MiniBarChart = ({ data, highlightIndices = [] }) => {
 };
 
 // Simple circular display for pace (no progress, just ring + value)
+// Simple circular display for pace
 const PaceGauge = ({ value, unit }) => {
     return (
-        <div className="relative w-32 h-32 mx-auto">
-            <svg className="w-full h-full" viewBox="0 0 100 100">
-                {/* Simple ring */}
+        <div className="relative w-[150px] h-[150px] mx-auto">
+            {/* Background Ring */}
+            <svg className="w-full h-full" viewBox="0 0 150 150">
                 <circle
-                    cx="50"
-                    cy="50"
-                    r="45"
+                    cx="75"
+                    cy="75"
+                    r="68"
                     stroke="#E5E7EB"
                     strokeWidth="8"
                     fill="none"
                 />
             </svg>
+
+            {/* Centered Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold text-black">{value}</span>
-                <span className="text-sm text-gray-700">{unit}</span>
+                <img src={iconAvgPace} alt="Speedometer" className="w-6 h-6 object-contain mb-1" />
+                <span className="text-sm text-gray-500 mb-1">Avg. pace</span>
+                <span class="text-2xl font-medium text-black tracking-tight">{value}</span>
+                <span className="text-sm text-gray-400">{unit}</span>
             </div>
         </div>
     );
@@ -66,43 +77,49 @@ const WeeklySnapshot = () => {
     return (
         <section className="px-[19px] py-4">
             {/* Header */}
+            {/* Header */}
             <div className="flex justify-between items-start mb-[30px]">
-                <h3 className="text-xl font-bold text-black">Your Weekly Snapshot</h3>
+                <div>
+                    <h3 className="text-xl font-semibold text-black">Your Weekly Snapshot</h3>
+                    <p className="text-sm text-gray-700 mt-1">{weeklyData.dateRange}</p>
+                </div>
                 <button className="flex items-center gap-1 text-gray-700 text-sm">
                     <span>Setting</span>
                     <Settings size={16} />
                 </button>
             </div>
 
-            {/* Date Range */}
-            <p className="text-sm text-gray-700 mb-[30px]">{weeklyData.dateRange}</p>
-
             {/* User Tip / Alert */}
-            <div className="bg-[#F5F5F5] rounded-xl p-[19px] mb-[30px] flex items-start gap-3 border border-[#E5E7EB]">
-                <span className="text-xl">👟</span>
-                <p className="text-base text-black flex-1">Your data looks great.<br />Take a walk today to keep the momentum alive!</p>
+            {/* User Tip / Alert */}
+            <div className="bg-[#F5F5F5] rounded-xl p-4 mb-[30px] border border-[#E6E3E3]">
+                <div className="flex items-center gap-2 mb-2">
+                    <img src={iconAdvice} alt="Advice" className="w-5 h-5 object-contain" />
+                    <h4 className="text-sm font-semibold text-[#1F2937]">Overall Advice</h4>
+                </div>
+                <p className="text-base text-[#1F2937] leading-relaxed">
+                    Remember to balance activity with rest. Stay hydrated, take short breaks when needed, and aim for consistency rather than intensity.
+                </p>
             </div>
 
             {/* Pace Gauge */}
-            <div className="mb-[30px]">
-                <p className="text-sm text-gray-700 text-center mb-2">Avg. pace</p>
+            <div className="mb-[30px] flex justify-center">
                 <PaceGauge value={weeklyData.avgPace} unit={weeklyData.paceUnit} />
             </div>
 
             {/* Secondary Metrics Row */}
             <div className="grid grid-cols-3 gap-3 mb-[30px]">
                 <div className="p-3 text-center">
-                    <Footprints size={18} className="mx-auto text-gray-700 mb-1" />
+                    <img src={iconSteps} alt="Steps" className="w-[52px] h-[52px] mx-auto mb-1 object-contain" />
                     <p className="text-lg font-semibold text-black">{weeklyData.steps}</p>
                     <p className="text-sm text-gray-700">Steps</p>
                 </div>
                 <div className="p-3 text-center">
-                    <MapPin size={18} className="mx-auto text-gray-700 mb-1" />
+                    <img src={iconDistance} alt="Distance" className="w-[52px] h-[52px] mx-auto mb-1 object-contain" />
                     <p className="text-lg font-semibold text-black">{weeklyData.distance}</p>
                     <p className="text-sm text-gray-700">Km</p>
                 </div>
                 <div className="p-3 text-center">
-                    <Flame size={18} className="mx-auto text-gray-700 mb-1" />
+                    <img src={iconCalories} alt="Calories" className="w-[52px] h-[52px] mx-auto mb-1 object-contain" />
                     <p className="text-lg font-semibold text-black">{weeklyData.calories}</p>
                     <p className="text-sm text-gray-700">Kcal</p>
                 </div>
@@ -113,7 +130,7 @@ const WeeklySnapshot = () => {
                 {/* Sleep Card */}
                 <div className="bg-white rounded-xl px-3 py-4 border border-[#E5E7EB]">
                     <div className="flex items-center gap-2 mb-4">
-                        <Moon size={16} className="text-gray-700" />
+                        <img src={iconSleepMoon} alt="Sleep" className="w-4 h-4 object-contain" />
                         <span className="text-sm text-gray-700">Avg. Time in Bed</span>
                     </div>
                     <MiniBarChart data={weeklyData.sleepData} highlightIndices={[2, 5]} />
