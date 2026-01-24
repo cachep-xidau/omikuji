@@ -167,7 +167,7 @@ const DiaryScreen = () => {
                 <StatusBar />
 
                 {/* Navigation Header */}
-                <div className="px-6 pt-12 pb-2 flex justify-between items-center">
+                <div className="px-6 pt-6 pb-2 flex justify-between items-center">
                     <button
                         onClick={() => navigate('/')}
                         className="flex items-center text-black hover:opacity-70 transition-opacity gap-1"

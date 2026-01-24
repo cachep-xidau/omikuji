@@ -14,7 +14,7 @@ const PaywallScreen = () => {
         { icon: Cloud, text: "5GB Cloud Backup" },
         { icon: Shield, text: "Priority Support" },
         { icon: Star, text: "Exclusive Seasonal Themes" },
-        { icon: Clock, text: "Time Capsule Feature" },
+        { icon: Clock, text: "Live fortune teller connect" },
         { icon: Scroll, text: "Unlimited Fortune History" }
     ];
 

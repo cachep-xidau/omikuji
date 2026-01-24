@@ -90,7 +90,7 @@ const WeeklyCalendar = ({ selectedDate = new Date(), onDateSelect }) => {
                                 <span className={`text-[11px] uppercase font-bold tracking-wider ${isSelected ? 'text-gray-900' : 'text-gray-400'}`}>
                                     {getDayLabel(date)}
                                 </span>
-                                <span className={`text-[19px] font-bold ${isSelected ? 'text-gray-900' : isToday ? 'text-purple-600' : 'text-gray-400'}`}>
+                                <span className={`text-[19px] font-semibold ${isSelected ? 'text-gray-900' : isToday ? 'text-purple-600' : 'text-gray-400'}`}>
                                     {date.getDate()}
                                 </span>
 
