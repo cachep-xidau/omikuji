@@ -5,26 +5,33 @@ import { useLanguage } from '../contexts/LanguageContext';
 const LanguageToggle = () => {
     const { language, toggleLanguage } = useLanguage();
 
+    const options = [
+        { id: 'en', label: 'EN' },
+        { id: 'ja', label: 'JP' }
+    ];
+
     return (
-        <button
-            onClick={toggleLanguage}
-            className="relative w-16 h-8 bg-gray-200 rounded-full p-1 transition-colors hover:bg-gray-300"
-            aria-label="Toggle language"
-        >
-            <motion.div
-                className="absolute top-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center text-xs font-bold text-gray-900"
-                animate={{
-                    left: language === 'en' ? 4 : 36
-                }}
-                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            >
-                {language === 'en' ? 'EN' : 'JP'}
-            </motion.div>
-            <div className="flex justify-between items-center h-full px-2 text-xs font-medium text-gray-500">
-                <span className={language === 'en' ? 'opacity-0' : 'opacity-100'}>EN</span>
-                <span className={language === 'ja' ? 'opacity-0' : 'opacity-100'}>JP</span>
-            </div>
-        </button>
+        <div className="relative flex items-center bg-white rounded-full border border-gray-200 p-1 w-28 h-9 shadow-sm">
+            {options.map((option) => (
+                <button
+                    key={option.id}
+                    onClick={() => language !== option.id && toggleLanguage()}
+                    className={`relative z-10 flex-1 h-full text-xs font-semibold transition-colors duration-200 flex items-center justify-center rounded-full ${language === option.id ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'
+                        }`}
+                    aria-label={`Switch to ${option.label}`}
+                >
+                    {option.label}
+                    {language === option.id && (
+                        <motion.div
+                            layoutId="active-language-pill"
+                            className="absolute inset-0 bg-gray-100 rounded-full shadow-inner -z-10"
+                            initial={false}
+                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                        />
+                    )}
+                </button>
+            ))}
+        </div>
     );
 };
 

@@ -1,7 +1,7 @@
 
-import React, { useState, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { ChevronLeft, Grid, BookOpen, Share2, Lock, Scroll, Sparkles } from 'lucide-react';
+import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
 import { useDiary } from '../data/DiaryContext';
 import { getCurrentMicroseason } from '../data/microseasons';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,10 +12,8 @@ import { getImagePath } from '../utils/imagePath';
 
 const DiaryHistoryScreen = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const { t, formatDate, language } = useLanguage();
+    const { t, language } = useLanguage();
     const { getCombinedTimeline } = useDiary();
-    const [viewMode, setViewMode] = useState('list'); // 'list' | 'book'
 
     const allItems = getCombinedTimeline();
 
@@ -37,13 +35,6 @@ const DiaryHistoryScreen = () => {
         return Object.values(groups).sort((a, b) => b.date - a.date);
     }, [allItems]);
 
-    // Handle navigation state for view mode and scrolling
-    React.useEffect(() => {
-        if (location.state?.viewMode) {
-            setViewMode(location.state.viewMode);
-        }
-    }, [location.state]);
-
     return (
         <div className="h-full flex flex-col bg-white">
             {/* Header */}
@@ -57,38 +48,13 @@ const DiaryHistoryScreen = () => {
 
                 <h1 className="text-xl font-bold text-gray-900">{t('history.archive')}</h1>
 
-                <div className="flex bg-gray-100 rounded-lg p-1">
-                    <button
-                        onClick={() => setViewMode('list')}
-                        className={`p - 1.5 rounded - md transition - all ${viewMode === 'list' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'
-                            } `}
-                    >
-                        <Grid size={18} />
-                    </button>
-                    <button
-                        onClick={() => setViewMode('book')}
-                        className={`p - 1.5 rounded - md transition - all ${viewMode === 'book' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'
-                            } `}
-                    >
-                        <BookOpen size={18} />
-                    </button>
-                </div>
+                {/* Spacer to balance the back button */}
+                <div className="w-10"></div>
             </div>
 
             {/* Content Area */}
             <div className="flex-1 overflow-hidden relative">
-                <AnimatePresence mode="wait">
-                    {viewMode === 'list' ? (
-                        <VerticalFeedView key="list" groups={groupedItems} t={t} />
-                    ) : (
-                        <HorizontalBookView
-                            key="book"
-                            groups={groupedItems}
-                            initialTargetDate={location.state?.targetDate}
-                            t={t}
-                        />
-                    )}
-                </AnimatePresence>
+                <VerticalFeedView groups={groupedItems} t={t} />
             </div>
         </div>
     );
@@ -113,9 +79,7 @@ const VerticalFeedView = ({ groups, t }) => {
                             <h3 className="text-xl font-bold text-gray-900">
                                 {formatDate(group.date, 'full')}
                             </h3>
-                            <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                                {group.microseason?.name_en || 'Season'}
-                            </span>
+                            {/* Removed microseason label */}
                         </div>
                     </div>
 
@@ -174,123 +138,6 @@ const VerticalFeedView = ({ groups, t }) => {
                                 </div>
                             );
                         })}
-                    </div>
-                </div>
-            ))}
-        </motion.div>
-    );
-};
-
-const HorizontalBookView = ({ groups, initialTargetDate, t }) => {
-    const { formatDate } = useLanguage();
-    const containerRef = React.useRef(null);
-    const itemRefs = React.useRef([]);
-
-    React.useEffect(() => {
-        if (initialTargetDate && containerRef.current) {
-            const targetDateStr = new Date(initialTargetDate).toDateString();
-            const index = groups.findIndex(g => g.date.toDateString() === targetDateStr);
-
-            if (index !== -1 && itemRefs.current[index]) {
-                itemRefs.current[index].scrollIntoView({ behavior: 'smooth', inline: 'center' });
-            }
-        }
-    }, [initialTargetDate, groups]);
-
-    return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            ref={containerRef}
-            className="h-full overflow-x-auto snap-x snap-mandatory flex scrollbar-hide"
-        >
-            {groups.map((group, i) => (
-                <div
-                    key={group.date.toISOString()}
-                    ref={el => itemRefs.current[i] = el}
-                    className="snap-center shrink-0 w-full h-full p-6 flex flex-col"
-                >
-                    <div className="h-full bg-white border border-gray-200 shadow-xl rounded-2xl overflow-hidden flex flex-col relative">
-                        {/* Book Header (Season) */}
-                        <div
-                            className="h-32 p-6 flex flex-col justify-end relative"
-                            style={{ backgroundColor: group.microseason?.color || '#F3F4F6' }}
-                        >
-                            <div className="absolute top-4 right-4 text-white/80">
-                                <Lock size={16} />
-                            </div>
-                            <h2 className="text-white text-3xl font-serif font-bold mb-1">
-                                {group.date.getDate()}
-                            </h2>
-                            <p className="text-white/90 font-medium uppercase tracking-widest text-xs">
-                                {formatDate(group.date, 'full')}
-                            </p>
-                        </div>
-
-                        {/* Book Content */}
-                        <div className="flex-1 p-6 overflow-y-auto space-y-6">
-                            {/* Season Context */}
-                            <div className="text-center py-4 border-b border-gray-100 mb-2">
-                                <p className="text-sm font-bold text-gray-900">{group.microseason?.name_ja}</p>
-                                <p className="text-xs text-gray-500 italic mt-1">{group.microseason?.quote}</p>
-                            </div>
-
-                            {group.items.map(item => {
-                                if (item.type === 'fortune') {
-                                    return (
-                                        <div key={item.id} className="py-2">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Scroll size={14} className="text-yellow-600" />
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                                    {t('history.omikuji')}
-                                                </span>
-                                            </div>
-                                            <FortuneCard fortune={item} isTied={item.isTied} />
-                                        </div>
-                                    );
-                                }
-
-                                if (item.type === 'ai_entry') {
-                                    return (
-                                        <div key={item.id} className="py-2">
-                                            <div className="bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border border-purple-100 rounded-lg p-4 relative">
-                                                <div className="flex items-center gap-2 mb-2 text-purple-600/80">
-                                                    <div className="w-5 h-5 rounded-full overflow-hidden border border-purple-200 bg-white">
-                                                        <img src={getImagePath('/images/companion_avatar.png')}
-                                                            alt="Companion" className="w-full h-full object-cover" />
-                                                    </div>
-                                                    <span className="text-[9px] font-bold uppercase tracking-wider">The Mirror</span>
-                                                </div>
-                                                <p className="text-gray-800 text-[15px] font-serif italic leading-relaxed">
-                                                    "{item.content}"
-                                                </p>
-                                                <p className="text-right text-[10px] text-purple-300 mt-2 font-sans">
-                                                    {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    );
-                                }
-
-                                return (
-                                    <div key={item.id} className="">
-                                        <p className="text-gray-900 text-[17px] font-serif leading-[24px]">
-                                            {item.content}
-                                        </p>
-                                        <p className="text-right text-xs text-gray-400 mt-2 font-sans">
-                                            {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </p>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        {/* Book Footer */}
-                        <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
-                            <span>{t('history.page')} {groups.length - i} {t('history.of')} {groups.length}</span>
-                            <Share2 size={14} />
-                        </div>
                     </div>
                 </div>
             ))}
