@@ -30,7 +30,7 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['SF Pro Display', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Switzer', 'SF Pro Display', 'system-ui', '-apple-system', 'sans-serif'],
       },
       borderRadius: {
         '2xl': '20px',

@@ -9,7 +9,8 @@ export const MICROSEASONS = [
         description: "Parsley grows near the riverbanks.",
         quote: "Fresh greens invoke the resilience of life.",
         health_tip: "Eat seven-herb rice porridge (Nanakusa-gayu) to rest your stomach.",
-        color: "#AED581"
+        color: "#AED581",
+        icon: "🌿"
     },
     {
         id: 66,
@@ -21,7 +22,8 @@ export const MICROSEASONS = [
         description: "Frozen springs begin to move again deep underground.",
         quote: "Warmth moves unseen below the surface.",
         health_tip: "Keep your feet warm to assist circulation.",
-        color: "#4FC3F7"
+        color: "#4FC3F7",
+        icon: "💧"
     },
     {
         id: 67, // Approximate ID for mid-Jan
@@ -33,7 +35,8 @@ export const MICROSEASONS = [
         description: "Male pheasants begin to call for mates, signaling the deepening of winter.",
         quote: "The voice of the pheasant calls the morning sun.",
         health_tip: "The air is driest now. Keep hydrated and protect your throat with warm ginger tea.",
-        color: "#78909C" // Blue-grey for winter
+        color: "#78909C", // Blue-grey for winter
+        icon: "🐦"
     },
     {
         id: 68,
@@ -45,7 +48,8 @@ export const MICROSEASONS = [
         description: "Butterbur buds begin to emerge from the frozen ground.",
         quote: "Life stirs beneath the snow.",
         health_tip: "Root vegetables like daikon and burdock warm the body from within.",
-        color: "#8D6E63"
+        color: "#8D6E63",
+        icon: "🌱"
     },
     {
         id: 1,
@@ -57,7 +61,8 @@ export const MICROSEASONS = [
         description: "The east wind begins to melt the ice, signaling the first signs of spring.",
         quote: "Referenced in classical haiku to evoke hope and renewal.",
         health_tip: "As spring approaches, stretch in the morning to awaken your muscles.",
-        color: "#F48FB1"
+        color: "#F48FB1",
+        icon: "🧊"
     }
 ];
 

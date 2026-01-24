@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
+@import url('https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600,700,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@400;500;700;900&display=swap');
 
 /* Custom fonts and base styles */
 body {
   margin: 0;
-  font-family: 'SF Pro Display', system-ui, -apple-system, sans-serif;
+  font-family: 'Switzer', 'SF Pro Display', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #FFFFFF;
@@ -18,10 +19,13 @@ body {
 
 /* Hide scrollbar but keep scroll functionality */
 * {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
 }
 
 *::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }

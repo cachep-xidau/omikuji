@@ -79,7 +79,14 @@ const VerticalFeedView = ({ groups, t }) => {
                             <h3 className="text-xl font-bold text-gray-900">
                                 {formatDate(group.date, 'full')}
                             </h3>
-                            {/* Removed microseason label */}
+                            {group.microseason && (
+                                <div className="flex items-center gap-1.5 bg-stone-50 text-stone-500 rounded-full px-3 py-1">
+                                    <span className="text-sm">{group.microseason.icon || '🌸'}</span>
+                                    <span className="text-xs font-medium tracking-wide">
+                                        {group.microseason.name_en}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     </div>
 
