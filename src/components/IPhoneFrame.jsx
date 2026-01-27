@@ -45,9 +45,7 @@ const IPhoneFrame = ({ children }) => {
                 </div>
 
                 {/* Device Label */}
-                <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-white/40 text-sm font-light tracking-wide">
-                    iPhone 15 Pro Max
-                </div>
+
             </div>
         </div>
     );

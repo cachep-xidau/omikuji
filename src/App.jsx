@@ -2,14 +2,18 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import IPhoneFrame from './components/IPhoneFrame';
 import HomeScreen from './screens/HomeScreen';
-import StartScreen from './screens/StartScreen';
-import AchieveScreen from './screens/AchieveScreen';
+import ActivityScreen from './screens/ActivityScreen';
+import InsightScreen from './screens/InsightScreen';
+import QuestScreen from './screens/QuestScreen';
 import AccountScreen from './screens/AccountScreen';
-import DiscoverScreen from './screens/DiscoverScreen';
+import WalkingRecordScreen from './screens/WalkingRecordScreen';
+import RewardScreen from './screens/RewardScreen';
+import WalkingRouteScreen from './screens/WalkingRouteScreen';
 
 import DiaryLoadingScreen from './screens/DiaryLoadingScreen';
 import DiaryScreen from './screens/DiaryScreen';
 import DiaryHistoryScreen from './screens/DiaryHistoryScreen';
+import ChatDiaryScreen from './screens/ChatDiaryScreen';
 
 import { DiaryProvider } from './data/DiaryContext';
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -26,20 +30,26 @@ function App() {
             <IPhoneFrame>
               <AnimatePresence mode="wait">
                 <Routes>
+                  {/* Main Navigation */}
                   <Route path="/" element={<HomeScreen />} />
-                  <Route path="/start" element={<StartScreen />} />
-                  <Route path="/achieve" element={<AchieveScreen />} />
+                  <Route path="/activity" element={<ActivityScreen />} />
+                  <Route path="/insight" element={<InsightScreen />} />
+                  <Route path="/quest" element={<QuestScreen />} />
                   <Route path="/account" element={<AccountScreen />} />
+                  <Route path="/activity/walking-record" element={<WalkingRecordScreen />} />
+                  <Route path="/activity/walking-route" element={<WalkingRouteScreen />} />
+                  <Route path="/reward" element={<RewardScreen />} />
+
+                  {/* Diary Routes */}
                   <Route path="/diary-loading" element={<DiaryLoadingScreen />} />
                   <Route path="/diary" element={<DiaryScreen />} />
                   <Route path="/diary/new" element={<DiaryEntryScreen />} />
                   <Route path="/diary/history" element={<DiaryHistoryScreen />} />
-                  <Route path="/diary/history" element={<DiaryHistoryScreen />} />
                   <Route path="/diary/entry/:id" element={<DiaryEntryScreen />} />
-                  <Route path="/paywall" element={<PaywallScreen />} />
+                  <Route path="/chat-diary" element={<ChatDiaryScreen />} />
 
-                  {/* Placeholder routes */}
-                  <Route path="/discover" element={<DiscoverScreen />} />
+                  {/* Other Routes */}
+                  <Route path="/paywall" element={<PaywallScreen />} />
                 </Routes>
               </AnimatePresence>
             </IPhoneFrame>
@@ -51,4 +61,3 @@ function App() {
 }
 
 export default App;
-

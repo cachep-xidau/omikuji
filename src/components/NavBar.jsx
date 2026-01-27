@@ -1,4 +1,4 @@
-import { Star, Images, Sparkles, Medal, User } from 'lucide-react';
+import { Star, Activity, Lightbulb, Target, Gift } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { getImagePath } from '../utils/imagePath';
 
@@ -7,10 +7,10 @@ const NavBar = () => {
 
   const navItems = [
     { path: '/', icon: Star, label: 'Today' },
-    { path: '/discover', iconImg: getImagePath('/images/discover-icon.png'), label: 'Discover' },
-    { path: '/start', iconImg: getImagePath('/images/start-icon.png'), label: 'Start', isCenter: true },
-    { path: '/achieve', iconImg: getImagePath('/images/achieve-icon.png'), label: 'Achieve' },
-    { path: '/account', icon: User, label: 'Account' },
+    { path: '/activity', icon: Activity, label: 'Activity' },
+    { path: '/insight', icon: Lightbulb, label: 'Insight', isCenter: true },
+    { path: '/quest', icon: Target, label: 'Quest' },
+    { path: '/reward', icon: Gift, label: 'Reward' },
   ];
 
   return (
@@ -28,7 +28,7 @@ const NavBar = () => {
               >
                 <div className="w-[52px] h-[52px] rounded-full bg-[#181818] flex items-center justify-center shadow-lg transition-transform duration-200 hover:scale-105 active:scale-95 mb-0.5 p-[4px]">
                   {Icon ? (
-                    <Icon size={44} className="text-white" fill="white" strokeWidth={1.5} />
+                    <Icon size={28} className="text-white" strokeWidth={1.5} />
                   ) : (
                     <img src={iconImg} alt={label} className="w-[44px] h-[44px] object-contain" />
                   )}
@@ -64,4 +64,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-

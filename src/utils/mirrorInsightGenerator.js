@@ -1,4 +1,5 @@
 import { useLanguage } from '../contexts/LanguageContext';
+import { BLOOD_TYPE_WORK_ADVICE } from '../data/fortunes';
 
 // Weather patterns for analysis
 const weatherPatterns = {
@@ -147,4 +148,21 @@ export function generateMultipleMirrorInsights(recentEntries, recentWalks, count
     }
 
     return insights;
+}
+
+// Generate Fortune-Specific Insight
+export function generateFortuneInsight(fortune, bloodType = 'A') {
+    if (!fortune) return null;
+
+    // Get specific advice or fallback
+    const bloodTypeData = BLOOD_TYPE_WORK_ADVICE[bloodType] || BLOOD_TYPE_WORK_ADVICE['A'];
+    const specificAdvice = bloodTypeData[fortune.id] || fortune.advice?.[0]?.text || "Enjoy your day.";
+
+    return {
+        type: 'fortune_insight',
+        text: `I sense a ${fortune.level} energy surrounding you. As the proverb says: "${fortune.proverb_en}". ${specificAdvice}`,
+        fortuneLevel: fortune.level,
+        proverb: fortune.proverb_en,
+        advice: specificAdvice
+    };
 }

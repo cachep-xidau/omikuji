@@ -11,6 +11,11 @@ const AccountScreen = () => {
     const [faceIdEnabled, setFaceIdEnabled] = useState(true);
     const { status, daysRemaining, expireTrial, resetTrial } = useSubscription();
 
+    const clearFortune = () => {
+        localStorage.removeItem('kokoro_fortune_history');
+        window.location.reload();
+    };
+
     return (
         <div className="relative h-full bg-white flex flex-col">
             {/* Scrollable Content */}
@@ -132,6 +137,12 @@ const AccountScreen = () => {
                                 className="text-[10px] px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100"
                             >
                                 Reset Trial
+                            </button>
+                            <button
+                                onClick={clearFortune}
+                                className="text-[10px] px-3 py-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100"
+                            >
+                                Reset daily
                             </button>
                         </div>
                     </div>
