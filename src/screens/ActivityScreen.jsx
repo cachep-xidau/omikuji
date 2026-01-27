@@ -61,7 +61,7 @@ const MetricCard = ({ icon: Icon, iconBg, iconColor, label, value, unit, trend, 
 // Walk History Item
 const WalkHistoryItem = ({ title, distance, duration, date, icon }) => (
     <div className="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0">
-        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
             {icon || <Footprints size={20} color="#111827" fill="#FFFFFF" />}
         </div>
         <div className="flex-1">
