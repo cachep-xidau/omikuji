@@ -169,7 +169,6 @@ export const LanguageProvider = ({ children }) => {
         'fortune.subtitle.drawing': { ja: 'おみくじを引いています...', en: 'Drawing your fortune...' },
         'fortune.button.draw': { ja: 'おみくじを引く', en: 'Draw Fortune' },
         'fortune.button.keep': { ja: '手元に残す', en: 'Keep' },
-        'fortune.button.keep': { ja: '手元に残す', en: 'Keep' },
         'fortune.button.tie': { ja: '神社に結ぶ', en: 'Tie at Shrine' },
 
         // Chat Screen
