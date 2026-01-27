@@ -341,11 +341,7 @@ const QuestScreen = () => {
                             weeklyTotal={missionData.weeklyTotal}
                         />
 
-                        <ClaimRewardCard
-                            completedMissions={missionData.completedMissions}
-                            tickets={missionData.pendingTickets}
-                            onClaim={handleClaimRewards}
-                        />
+
 
                     </div>
                 </section>

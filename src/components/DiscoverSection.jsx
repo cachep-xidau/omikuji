@@ -1,30 +1,33 @@
 import { ChevronRight, Dumbbell, Bot, Gift } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const DiscoverSection = () => {
+    const navigate = useNavigate();
+
     const discoverItems = [
         {
             id: 1,
             title: 'Workout Tips',
-            description: 'Expert fitness advice',
             icon: Dumbbell,
             color: 'bg-blue-50',
             iconColor: 'text-blue-500',
+            path: '/quest',
         },
         {
             id: 2,
             title: 'AI Health Partners',
-            description: 'Smart health companions',
             icon: Bot,
             color: 'bg-emerald-50',
             iconColor: 'text-emerald-500',
+            path: '/chat-diary',
         },
         {
             id: 3,
             title: 'Gacha Collection',
-            description: 'View your rewards',
             icon: Gift,
             color: 'bg-purple-50',
             iconColor: 'text-purple-500',
+            path: '/reward',
         },
     ];
 
@@ -46,6 +49,7 @@ const DiscoverSection = () => {
                     return (
                         <div
                             key={item.id}
+                            onClick={() => item.path && navigate(item.path)}
                             className="flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 shadow-sm cursor-pointer transition-all hover:shadow-md hover:border-gray-200 active:scale-[0.98]"
                         >
                             {/* Icon */}
