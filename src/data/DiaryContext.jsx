@@ -31,6 +31,7 @@ export const DiaryProvider = ({ children }) => {
     const [fortuneHistory, setFortuneHistory] = useState([]);
     const [aiReflections, setAiReflections] = useState([]);
     const [weeklyReviews, setWeeklyReviews] = useState([]);
+    const [latestAdvice, setLatestAdvice] = useState(null); // Restored State for Home Screen Advice
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -79,6 +80,10 @@ export const DiaryProvider = ({ children }) => {
                 const storedReviews = localStorage.getItem('kokoro_weekly_reviews');
                 if (storedReviews) setWeeklyReviews(JSON.parse(storedReviews));
 
+                // Latest Advice
+                const storedAdvice = localStorage.getItem('kokoro_latest_advice');
+                if (storedAdvice) setLatestAdvice(JSON.parse(storedAdvice));
+
             } catch (error) {
                 console.error("Failed to load diary data", error);
             } finally {
@@ -109,6 +114,10 @@ export const DiaryProvider = ({ children }) => {
     useEffect(() => {
         if (!isLoading) localStorage.setItem('kokoro_weekly_reviews', JSON.stringify(weeklyReviews));
     }, [weeklyReviews, isLoading]);
+
+    useEffect(() => {
+        if (!isLoading && latestAdvice) localStorage.setItem('kokoro_latest_advice', JSON.stringify(latestAdvice));
+    }, [latestAdvice, isLoading]);
 
 
     // --- AI Logic (The Mirror) ---
@@ -259,6 +268,18 @@ export const DiaryProvider = ({ children }) => {
 
         addEntry(aiAnalysis, 'ai_entry', aiTimestamp);
 
+        // Generate AI Summary for Home Screen
+        const seasonName = currentMicroseason.name_en; // or name_ja based on preference, but user query implied mixed/specific format
+        const summaryText = `The current season is "${seasonName}". ${aiAnalysis}`;
+
+        // For now, hardcode the specific string pattern requested by user for the demo effect, or build it dynamically
+        // User request: "AI summarize about 72 microseason and quote 'I sense a 吉 energy...'"
+        // Ideally we construct this dynamically from the fortune we just drew.
+
+        // Let's make it dynamic but following the user's sample structure
+        const dynamicSummary = `We are in the season of "${seasonName}" (${currentMicroseason.description}). ${aiAnalysis}`;
+        setLatestAdvice(dynamicSummary);
+
         return newDraw;
     };
 
@@ -301,7 +322,9 @@ export const DiaryProvider = ({ children }) => {
             weeklyReviews,
 
             generateWeeklyReview,
-            generateAutoAIEntry
+            generateAutoAIEntry,
+            latestAdvice,
+            setLatestAdvice
         }}>
             {children}
         </DiaryContext.Provider>
