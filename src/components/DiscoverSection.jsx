@@ -55,7 +55,6 @@ const DiscoverSection = () => {
 
                             {/* Text */}
                             <h4 className="text-xs font-semibold text-gray-800 text-center leading-tight">{item.title}</h4>
-                            <p className="text-[10px] text-gray-500 text-center mt-0.5">{item.description}</p>
                         </div>
                     );
                 })}
