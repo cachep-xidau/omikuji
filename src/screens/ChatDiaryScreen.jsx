@@ -200,6 +200,7 @@ const FortuneTriggerBubble = ({ onClick }) => (
 
 // Message Bubble Component
 const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
+    const { t } = useLanguage();
     if (message.type === 'mirror_insight') {
         return <MirrorInsightBubble data={message.data} time={message.time} />;
     }

@@ -10,7 +10,7 @@ const NavBar = () => {
   const navItems = [
     { path: '/', icon: Star, label: t('nav.today') },
     { path: '/activity', icon: Activity, label: t('nav.activity') },
-    { path: '/insight', icon: Sparkles, label: t('nav.insight'), isCenter: true },
+    { path: '/insight', icon: Sparkles, label: t('nav.insight') },
     { path: '/quest', icon: Target, label: t('nav.quest') },
     { path: '/reward', icon: Gift, label: t('nav.reward') },
   ];
