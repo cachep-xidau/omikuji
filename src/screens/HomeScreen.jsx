@@ -139,8 +139,8 @@ const HomeScreen = () => {
 
         {/* AI Advice - Only show if available */}
         {latestAdvice && (
-          <div className="px-6 mb-5 animate-in fade-in slide-in-from-top-4 duration-500">
-            <div className="bg-[#F5F5F5] rounded-xl p-4 border border-[#E6E3E3]">
+          <div className="px-6 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-[#F5F5F5] rounded-xl p-4 mb-5 border border-[#E6E3E3]">
               <div className="flex items-start gap-2">
                 <img
                   alt="Advice"
