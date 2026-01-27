@@ -55,23 +55,7 @@ const ClaimRewardCard = ({ completedMissions, tickets, onClaim }) => (
 );
 
 // Mission Recap Button
-const MissionRecapButton = ({ onClick }) => (
-    <button
-        onClick={onClick}
-        className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-    >
-        <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
-                <CheckCircle2 size={24} className="text-purple-500" />
-            </div>
-            <div className="text-left">
-                <h3 className="text-base font-semibold text-gray-900">Mission Recap</h3>
-                <p className="text-sm text-gray-500">View AI summary of your achievements</p>
-            </div>
-        </div>
-        <ChevronRight size={20} className="text-gray-400" />
-    </button>
-);
+
 
 // Streak Badge Component
 const StreakBadge = ({ currentDay, targetDays }) => {
@@ -353,24 +337,7 @@ const QuestScreen = () => {
                             onClaim={handleClaimRewards}
                         />
 
-                        <MissionRecapButton onClick={() => setShowRecap(true)} />
 
-                        {/* Reward Screen Link */}
-                        <Link
-                            to="/reward"
-                            className="w-full flex items-center justify-between p-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-sm hover:shadow-md transition-shadow"
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                                    <Gift size={24} className="text-white" />
-                                </div>
-                                <div className="text-left">
-                                    <h3 className="text-base font-semibold text-white">Reward Center</h3>
-                                    <p className="text-sm text-white/80">Gacha & Collection</p>
-                                </div>
-                            </div>
-                            <ChevronRight size={20} className="text-white" />
-                        </Link>
                     </div>
                 </section>
 
