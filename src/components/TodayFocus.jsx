@@ -46,10 +46,14 @@ const PaceGauge = ({ value, unit }) => {
 };
 
 
+import { useDiary } from '../data/DiaryContext';
+
 const TodayFocus = () => {
+    const { latestAdvice } = useDiary();
+
     // Mock data for today
     const todayData = {
-        message: 'Your data looks great. Take a walk today to keep the momentum alive!',
+        message: latestAdvice || 'Your data looks great. Take a walk today to keep the momentum alive!',
         avgPace: '3.4',
         paceUnit: 'Min/Km',
         steps: '32,567',
@@ -70,14 +74,16 @@ const TodayFocus = () => {
             </div>
 
             {/* AI Insight Card */}
-            <div className="bg-[#F5F5F5] rounded-xl p-4 mb-5 border border-[#E6E3E3]">
-                <div className="flex items-start gap-2">
-                    <img src={iconAdvice} alt="Advice" className="w-5 h-5 object-contain mt-0.5" />
-                    <p className="text-sm text-[#1F2937] leading-relaxed">
-                        {todayData.message}
-                    </p>
+            {todayData.message && (
+                <div className="bg-[#F5F5F5] rounded-xl p-4 mb-5 border border-[#E6E3E3]">
+                    <div className="flex items-start gap-2">
+                        <img src={iconAdvice} alt="Advice" className="w-5 h-5 object-contain mt-0.5" />
+                        <p className="text-sm text-[#1F2937] leading-relaxed">
+                            {todayData.message}
+                        </p>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Pace Gauge */}
             <div className="mb-5 flex justify-center">
