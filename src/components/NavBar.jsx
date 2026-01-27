@@ -1,16 +1,18 @@
-import { Star, Activity, Lightbulb, Target, Gift } from 'lucide-react';
+import { Star, Activity, Sparkles, Target, Gift } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { getImagePath } from '../utils/imagePath';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const NavBar = () => {
   const location = useLocation();
+  const { t } = useLanguage();
 
   const navItems = [
-    { path: '/', icon: Star, label: 'Today' },
-    { path: '/activity', icon: Activity, label: 'Activity' },
-    { path: '/insight', icon: Lightbulb, label: 'Insight', isCenter: true },
-    { path: '/quest', icon: Target, label: 'Quest' },
-    { path: '/reward', icon: Gift, label: 'Reward' },
+    { path: '/', icon: Star, label: t('nav.today') },
+    { path: '/activity', icon: Activity, label: t('nav.activity') },
+    { path: '/insight', icon: Sparkles, label: t('nav.insight'), isCenter: true },
+    { path: '/quest', icon: Target, label: t('nav.quest') },
+    { path: '/reward', icon: Gift, label: t('nav.reward') },
   ];
 
   return (

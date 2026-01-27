@@ -11,16 +11,30 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSubscription } from '../contexts/SubscriptionContext';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useDiary } from '../data/DiaryContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { X } from 'lucide-react';
 
 const HomeScreen = () => {
   const navigate = useNavigate();
   const { status, hasSkipped } = useSubscription();
   const { getTodaysFortune } = useDiary();
+  const { t } = useLanguage();
   const hasFortune = getTodaysFortune();
   const [showTooltip, setShowTooltip] = useState(true);
+  const [isFabVisible, setIsFabVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  const handleScroll = (e) => {
+    const currentScrollY = e.target.scrollTop;
+    if (currentScrollY > lastScrollY.current && currentScrollY > 20) {
+      setIsFabVisible(false); // Hide on scroll down
+    } else {
+      setIsFabVisible(true); // Show on scroll up
+    }
+    lastScrollY.current = currentScrollY;
+  };
 
   useEffect(() => {
     if (status === 'expired' && !hasSkipped) {
@@ -34,7 +48,10 @@ const HomeScreen = () => {
   return (
     <div className="relative h-full bg-white flex flex-col">
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto pb-24">
+      <div
+        className="flex-1 overflow-y-auto pb-24"
+        onScroll={handleScroll}
+      >
         <StatusBar />
 
         {/* Header */}
@@ -46,10 +63,10 @@ const HomeScreen = () => {
               </div>
               <div>
                 <p className="text-sm font-semibold text-black">
-                  Sunny, 28°C <span className="font-normal text-gray-700">(feel like 30°C)</span>
+                  {t('home.sunny')}, 28°C <span className="font-normal text-gray-700">({t('home.feelLike')} 30°C)</span>
                 </p>
                 <p className="text-sm text-gray-700">
-                  Air quality: <span className="text-green-600">Good</span> (AQI 45)
+                  {t('home.airQuality')} <span className="text-green-600">{t('home.good')}</span> (AQI 45)
                 </p>
               </div>
             </div>
@@ -64,7 +81,7 @@ const HomeScreen = () => {
                 <div className="absolute top-12 right-0 w-64 bg-[#181818]/90 text-white text-xs p-3 rounded-xl shadow-xl backdrop-blur-sm z-50 animate-in fade-in slide-in-from-top-2 duration-500">
                   <div className="relative">
                     <p className="pr-4 leading-relaxed font-light text-gray-200">
-                      Bấm vào account, kéo xuống dưới chọn reset daily hoặc kết thúc dùng thử để trải nghiệm freemium và premium
+                      {t('home.tooltip')}
                     </p>
                     <button
                       onClick={() => setShowTooltip(false)}
@@ -83,7 +100,7 @@ const HomeScreen = () => {
 
         {/* Welcome Text */}
         <div className="px-6 pb-4">
-          <h1 className="text-2xl font-semibold text-black">Good morning, Miley!</h1>
+          <h1 className="text-2xl font-semibold text-black">{t('home.goodMorning')}, Miley!</h1>
         </div>
 
         {/* Today Mission Section - Single Mission */}
@@ -91,19 +108,19 @@ const HomeScreen = () => {
           <div className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-2xl p-[19px]">
             {/* Header */}
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-xl font-bold text-black">Today Mission</h3>
+              <h3 className="text-xl font-bold text-black">{t('home.todayMission')}</h3>
               <div className="flex items-center gap-1.5 text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
-                <span className="text-sm">Valid for: 20:15:01</span>
+                <span className="text-sm">{t('common.validFor')} 20:15:01</span>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-sm text-gray-700 mb-4">
-              Complete today's mission to unlock exciting rewards.
+              {t('home.missionDesc')}
             </p>
 
             {/* Single Mission Card */}
@@ -133,11 +150,12 @@ const HomeScreen = () => {
       {/* Floating Diary Button */}
       <Link
         to="/chat-diary"
-        className="absolute bottom-28 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 z-10"
+        className={`absolute bottom-28 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 z-10 ${isFabVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-75 pointer-events-none'
+          } hover:scale-105 active:scale-95`}
       >
         <Feather size={24} className="text-white" />
         {!hasFortune && (
-          <div className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center border border-white translate-x-1 -translate-y-1">
+          <div className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center border border-white translate-x-1 -translate-y-1 animate-pulse">
             <span className="text-[10px] text-white font-bold">1</span>
           </div>
         )}

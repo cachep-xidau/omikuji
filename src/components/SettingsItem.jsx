@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 
-const SettingsItem = ({ icon: Icon, label, value, toggle, onClick }) => {
+const SettingsItem = ({ icon: Icon, label, value, toggle, onClick, showRedDot }) => {
     return (
         <button
             onClick={onClick}
@@ -13,6 +13,9 @@ const SettingsItem = ({ icon: Icon, label, value, toggle, onClick }) => {
             </div>
 
             <div className="flex items-center gap-2">
+                {showRedDot && (
+                    <div className="w-2 h-2 bg-red-500 rounded-full mr-1"></div>
+                )}
                 {value && <span className="text-gray-500 text-sm">{value}</span>}
                 {toggle !== undefined ? (
                     <div className={`w-11 h-6 rounded-full p-1 transition-colors ${toggle ? 'bg-emerald-500' : 'bg-gray-300'}`}>

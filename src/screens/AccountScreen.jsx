@@ -6,10 +6,12 @@ import SettingsItem from '../components/SettingsItem';
 
 import { getImagePath } from '../utils/imagePath';
 import { useSubscription } from '../contexts/SubscriptionContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const AccountScreen = () => {
     const [faceIdEnabled, setFaceIdEnabled] = useState(true);
     const { status, daysRemaining, expireTrial, resetTrial } = useSubscription();
+    const { t, language, toggleLanguage } = useLanguage();
 
     const clearFortune = () => {
         localStorage.removeItem('kokoro_fortune_history');
@@ -24,7 +26,7 @@ const AccountScreen = () => {
 
                 {/* Header */}
                 <div className="bg-white px-6 py-4 flex justify-between items-center border-b border-gray-100">
-                    <h1 className="text-[24px] font-bold text-gray-900">Account</h1>
+                    <h1 className="text-[24px] font-bold text-gray-900">{t('account.title')}</h1>
                     <div className="flex items-center gap-4">
                         <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                             <Search size={22} className="text-gray-600" />
@@ -70,11 +72,11 @@ const AccountScreen = () => {
                 <div className="px-6 py-4 grid grid-cols-2 gap-3 bg-white">
                     <button className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-[8px] px-5 h-[74px] flex items-center gap-3 shadow-none hover:bg-gray-200 transition-colors w-full">
                         <img src={getImagePath('/images/my-activity-icon.png')} alt="Activity" className="w-[32px] h-[32px] object-contain" />
-                        <span className="font-medium text-[16px] text-gray-900 leading-tight text-left">My activity</span>
+                        <span className="font-medium text-[16px] text-gray-900 leading-tight text-left">{t('account.myActivity')}</span>
                     </button>
                     <button className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-[8px] px-5 h-[74px] flex items-center gap-3 shadow-none hover:bg-gray-200 transition-colors w-full">
                         <img src={getImagePath('/images/my-library-icon.png')} alt="Library" className="w-[32px] h-[32px] object-contain" />
-                        <span className="font-medium text-[16px] text-gray-900 leading-tight text-left">My library</span>
+                        <span className="font-medium text-[16px] text-gray-900 leading-tight text-left">{t('account.myLibrary')}</span>
                     </button>
                 </div>
 
@@ -83,34 +85,40 @@ const AccountScreen = () => {
                     {/* Account Section */}
                     <div className="bg-white border-y border-gray-100">
                         <div className="px-6 py-3">
-                            <h3 className="text-sm font-semibold text-gray-700 uppercase">Account</h3>
+                            <h3 className="text-sm font-semibold text-gray-700 uppercase">{t('account.section.account')}</h3>
                         </div>
-                        <SettingsItem icon={User} label="My account" />
-                        <SettingsItem icon={Heart} label="Health connect" />
-                        <SettingsItem icon={ShieldCheck} label="Verification method" />
-                        <SettingsItem icon={Lock} label="Password" />
-                        <SettingsItem icon={Scan} label="Face ID" toggle={faceIdEnabled} onClick={() => setFaceIdEnabled(!faceIdEnabled)} />
-                        <SettingsItem icon={Globe} label="Language" value="English" />
-                        <SettingsItem icon={BellRing} label="Notifications" />
+                        <SettingsItem icon={User} label={t('account.myAccount')} />
+                        <SettingsItem icon={Heart} label={t('account.healthConnect')} />
+                        <SettingsItem icon={ShieldCheck} label={t('account.verification')} />
+                        <SettingsItem icon={Lock} label={t('account.password')} />
+                        <SettingsItem icon={Scan} label={t('account.faceId')} toggle={faceIdEnabled} onClick={() => setFaceIdEnabled(!faceIdEnabled)} />
+                        <SettingsItem
+                            icon={Globe}
+                            label={t('account.language')}
+                            value={language === 'ja' ? '日本語' : 'English'}
+                            onClick={toggleLanguage}
+                            showRedDot={true}
+                        />
+                        <SettingsItem icon={BellRing} label={t('account.notifications')} />
                     </div>
 
                     {/* Help Section */}
                     <div className="bg-white border-y border-gray-100 mt-4">
                         <div className="px-6 py-3">
-                            <h3 className="text-sm font-semibold text-gray-700 uppercase">Help</h3>
+                            <h3 className="text-sm font-semibold text-gray-700 uppercase">{t('account.section.help')}</h3>
                         </div>
-                        <SettingsItem icon={MessageCircle} label="Virtual assistant" />
-                        <SettingsItem icon={HelpCircle} label="Help center" />
-                        <SettingsItem icon={Flag} label="Report an issue" />
-                        <SettingsItem icon={FileText} label="Share log file" />
+                        <SettingsItem icon={MessageCircle} label={t('account.virtualAssistant')} />
+                        <SettingsItem icon={HelpCircle} label={t('account.helpCenter')} />
+                        <SettingsItem icon={Flag} label={t('account.reportIssue')} />
+                        <SettingsItem icon={FileText} label={t('account.shareLog')} />
                     </div>
 
                     {/* Legal Section */}
                     <div className="bg-white border-y border-gray-100 mt-4">
                         <div className="px-6 py-3">
-                            <h3 className="text-sm font-semibold text-gray-700 uppercase">Legal</h3>
+                            <h3 className="text-sm font-semibold text-gray-700 uppercase">{t('account.section.legal')}</h3>
                         </div>
-                        <SettingsItem icon={FileText} label="Privacy policy" />
+                        <SettingsItem icon={FileText} label={t('account.privacyPolicy')} />
                     </div>
                 </div>
 
@@ -118,31 +126,31 @@ const AccountScreen = () => {
                 <div className="px-6 py-6 flex flex-col items-center gap-2">
                     <button className="flex items-center gap-2 text-red-500 font-medium hover:text-red-600 transition-colors">
                         <LogOut size={18} />
-                        Sign out
+                        {t('account.signOut')}
                     </button>
                     <p className="text-sm text-gray-600">VERSION V1.10.1(1)</p>
 
                     {/* Developer Options */}
                     <div className="mt-4 pt-4 border-t border-gray-100 w-full px-4">
-                        <p className="text-[10px] font-bold text-gray-400 uppercase text-center mb-2">Developer / Prototype</p>
+                        <p className="text-[10px] font-bold text-gray-400 uppercase text-center mb-2">{t('account.developer')}</p>
                         <div className="flex gap-2 justify-center">
                             <button
                                 onClick={expireTrial}
                                 className="text-[10px] px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100"
                             >
-                                Force Expire Trial
+                                {t('account.expireTrial')}
                             </button>
                             <button
                                 onClick={resetTrial}
                                 className="text-[10px] px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100"
                             >
-                                Reset Trial
+                                {t('account.resetTrial')}
                             </button>
                             <button
                                 onClick={clearFortune}
                                 className="text-[10px] px-3 py-2 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100"
                             >
-                                Reset daily
+                                {t('account.resetDaily')}
                             </button>
                         </div>
                     </div>

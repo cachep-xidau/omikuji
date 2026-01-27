@@ -10,7 +10,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { generateFortuneInsight } from '../utils/mirrorInsightGenerator';
 import { getImagePath } from '../utils/imagePath';
 import { getDailySeasonGreeting } from '../utils/seasonalGreetings';
+import { getImagePath } from '../utils/imagePath';
+import { getDailySeasonGreeting } from '../utils/seasonalGreetings';
 import { getCurrentMicroseason } from '../data/microseasons';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Mirror Insight Bubble Component (Styled as a friend's message)
 const MirrorInsightBubble = ({ data, time }) => (
@@ -232,7 +235,7 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
                             className="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-xl text-xs font-bold hover:bg-green-100 transition-colors w-full justify-center border border-green-100"
                         >
                             <Footprints size={14} />
-                            View on map
+                            {t('chat.viewMap')}
                         </button>
                     </div>
                     <p className="text-[10px] mt-2 text-gray-400">
@@ -284,7 +287,7 @@ const getAIResponse = (userMessage) => {
     else greeting = 'Good evening! 🌙';
 
     // Dynamic Weather/Season Logic for Walking Tips
-    if (lowerMessage.includes('walking') || lowerMessage.includes('walk') || lowerMessage.includes('tips') || lowerMessage.includes('đi bộ')) {
+    if (lowerMessage.includes('walking') || lowerMessage.includes('walk') || lowerMessage.includes('tips') || lowerMessage.includes('đi bộ') || lowerMessage.includes('ウォーキング') || lowerMessage.includes('散歩')) {
         const microseason = getCurrentMicroseason(now);
         const seasonName = microseason ? microseason.name_romaji : "Seasonal Transition";
 
@@ -312,7 +315,7 @@ const getAIResponse = (userMessage) => {
         };
     }
 
-    if (lowerMessage.includes('tired') || lowerMessage.includes('mệt')) {
+    if (lowerMessage.includes('tired') || lowerMessage.includes('mệt') || lowerMessage.includes('疲れた')) {
         return {
             text: "I understand. Even small steps matter. Remember, consistency beats intensity! 🌟",
             suggestion: "Light activity: Just a 10-min gentle walk around your home or office. Every step counts toward your streak!",
@@ -346,6 +349,7 @@ const getAIResponse = (userMessage) => {
 const ChatDiaryScreen = () => {
     const navigate = useNavigate();
     const { getTodaysFortune, addEntry, bloodType, isLoading } = useDiary();
+    const { t } = useLanguage();
     const [inputText, setInputText] = useState('');
     const [showFortuneModal, setShowFortuneModal] = useState(false);
     const [activeTriggerId, setActiveTriggerId] = useState(null);
@@ -501,8 +505,8 @@ const ChatDiaryScreen = () => {
                         <Sparkles size={20} className="text-white" />
                     </div>
                     <div>
-                        <h1 className="text-base font-semibold text-gray-900">Fortune Teller</h1>
-                        <p className="text-xs text-green-500">● Online</p>
+                        <h1 className="text-base font-semibold text-gray-900">{t('chat.title')}</h1>
+                        <p className="text-xs text-green-500">● {t('chat.online')}</p>
                     </div>
                 </div>
             </div>
@@ -523,13 +527,13 @@ const ChatDiaryScreen = () => {
 
             {/* Quick Actions */}
             <div className="px-4 py-2 bg-white border-t border-gray-100 flex gap-2 overflow-x-auto">
-                {['🚶 Walking tips', '😴 Feeling tired'].map((action, i) => (
+                {['chat.walkingTips', 'chat.feelingTired'].map((key, i) => (
                     <button
                         key={i}
-                        onClick={() => handleSend(action)}
+                        onClick={() => handleSend(t(key))}
                         className="flex-shrink-0 px-3 py-1.5 bg-gray-100 rounded-full text-xs text-gray-700 hover:bg-gray-200 transition-colors"
                     >
-                        {action}
+                        {t(key)}
                     </button>
                 ))}
             </div>
@@ -542,7 +546,7 @@ const ChatDiaryScreen = () => {
                         value={inputText}
                         onChange={(e) => setInputText(e.target.value)}
                         onKeyPress={handleKeyPress}
-                        placeholder="Write your diary or ask for guidance..."
+                        placeholder={t('chat.placeholder')}
                         className="flex-1 px-4 py-3 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-purple-200"
                     />
                     <button

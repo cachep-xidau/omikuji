@@ -3,62 +3,72 @@ import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
 import { ChevronRight, ChevronLeft, Gift, Ticket, CheckCircle2, Flame, Calendar, Image, Video, Trophy } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Mission Summary Card
-const MissionSummaryCard = ({ dailyCompleted, dailyTotal, weeklyCompleted, weeklyTotal }) => (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Mission Summary</h3>
-        <div className="grid grid-cols-2 gap-4">
-            <div className="bg-orange-50 rounded-xl p-4 text-center">
-                <p className="text-3xl font-bold text-orange-500">{dailyCompleted}/{dailyTotal}</p>
-                <p className="text-sm text-gray-600 mt-1">Daily Mission</p>
-            </div>
-            <div className="bg-blue-50 rounded-xl p-4 text-center">
-                <p className="text-3xl font-bold text-blue-500">{weeklyCompleted}/{weeklyTotal}</p>
-                <p className="text-sm text-gray-600 mt-1">Weekly Mission</p>
+const MissionSummaryCard = ({ dailyCompleted, dailyTotal, weeklyCompleted, weeklyTotal }) => {
+    const { t } = useLanguage();
+    return (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('quest.summary')}</h3>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="bg-orange-50 rounded-xl p-4 text-center">
+                    <p className="text-3xl font-bold text-orange-500">{dailyCompleted}/{dailyTotal}</p>
+                    <p className="text-sm text-gray-600 mt-1">{t('quest.daily')}</p>
+                </div>
+                <div className="bg-blue-50 rounded-xl p-4 text-center">
+                    <p className="text-3xl font-bold text-blue-500">{weeklyCompleted}/{weeklyTotal}</p>
+                    <p className="text-sm text-gray-600 mt-1">{t('quest.weekly')}</p>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 // Claim Reward Card
-const ClaimRewardCard = ({ completedMissions, tickets, onClaim }) => (
-    <div className="bg-gradient-to-br from-orange-100 to-yellow-100 rounded-2xl p-4 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-                <Gift size={24} className="text-orange-500" />
-                <h3 className="text-lg font-semibold text-gray-900">Claim Rewards</h3>
+// Claim Reward Card
+const ClaimRewardCard = ({ completedMissions, tickets, onClaim }) => {
+    const { t } = useLanguage();
+    return (
+        <div className="bg-gradient-to-br from-orange-100 to-yellow-100 rounded-2xl p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                    <Gift size={24} className="text-orange-500" />
+                    <h3 className="text-lg font-semibold text-gray-900">{t('quest.claim')}</h3>
+                </div>
+                <div className="flex items-center gap-1 bg-orange-200/50 rounded-full px-3 py-1">
+                    <Ticket size={16} className="text-orange-600" />
+                    <span className="text-sm font-medium text-orange-600">{tickets} {t('quest.tickets')}</span>
+                </div>
             </div>
-            <div className="flex items-center gap-1 bg-orange-200/50 rounded-full px-3 py-1">
-                <Ticket size={16} className="text-orange-600" />
-                <span className="text-sm font-medium text-orange-600">{tickets} tickets</span>
+
+            <div className="bg-white/60 rounded-xl p-3 mb-3">
+                <p className="text-sm text-gray-700">
+                    You have <span className="font-bold text-orange-600">{completedMissions}</span> {t('quest.readyToClaim')}
+                </p>
             </div>
-        </div>
 
-        <div className="bg-white/60 rounded-xl p-3 mb-3">
-            <p className="text-sm text-gray-700">
-                You have <span className="font-bold text-orange-600">{completedMissions}</span> completed missions ready to claim!
-            </p>
+            <button
+                onClick={onClaim}
+                disabled={completedMissions === 0}
+                className={`w-full py-3 rounded-xl font-semibold transition-all ${completedMissions > 0
+                    ? 'bg-orange-500 text-white hover:bg-orange-600'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    }`}
+            >
+                {completedMissions > 0 ? `${t('quest.claimBtn')} (${tickets})` : t('quest.noRewards')}
+            </button>
         </div>
-
-        <button
-            onClick={onClaim}
-            disabled={completedMissions === 0}
-            className={`w-full py-3 rounded-xl font-semibold transition-all ${completedMissions > 0
-                ? 'bg-orange-500 text-white hover:bg-orange-600'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
-        >
-            {completedMissions > 0 ? `Claim ${tickets} Gacha Tickets` : 'No Rewards Available'}
-        </button>
-    </div>
-);
+    );
+};
 
 // Mission Recap Button
 
 
 // Streak Badge Component
+// Streak Badge Component
 const StreakBadge = ({ currentDay, targetDays }) => {
+    const { t } = useLanguage();
     const milestones = [7, 14, 30];
     // Calculate progress based on current day relative to 30-day max
     const progressPercent = (currentDay / 30) * 100;
@@ -67,7 +77,7 @@ const StreakBadge = ({ currentDay, targetDays }) => {
         <div className="bg-white rounded-3xl shadow-sm p-6" style={{ height: '124px' }}>
             {/* Header */}
             <div className="flex items-center justify-between" style={{ marginBottom: '20px' }}>
-                <h3 className="text-lg font-bold text-gray-900">{targetDays} day challenge</h3>
+                <h3 className="text-lg font-bold text-gray-900">{targetDays} {t('quest.challenge')}</h3>
                 <span className="text-base text-gray-400">Day {currentDay} / {targetDays}</span>
             </div>
 
@@ -117,7 +127,9 @@ const StreakBadge = ({ currentDay, targetDays }) => {
 };
 
 // Streak Calendar Component
+// Streak Calendar Component
 const StreakCalendar = ({ streakDays }) => {
+    const { t } = useLanguage();
     const today = new Date();
     const currentMonth = today.toLocaleString('default', { month: 'long', year: 'numeric' });
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
@@ -134,7 +146,7 @@ const StreakCalendar = ({ streakDays }) => {
     return (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Streak Calendar</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{t('quest.streakCalendar')}</h3>
                 <div className="flex items-center gap-1">
                     <Calendar size={16} className="text-gray-400" />
                     <span className="text-sm text-gray-500">{currentMonth}</span>
@@ -176,11 +188,11 @@ const StreakCalendar = ({ streakDays }) => {
             <div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-gray-100">
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-orange-100" />
-                    <span className="text-xs text-gray-500">Streak day</span>
+                    <span className="text-xs text-gray-500">{t('quest.streakDay')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-gray-900" />
-                    <span className="text-xs text-gray-500">Today</span>
+                    <span className="text-xs text-gray-500">{t('quest.today')}</span>
                 </div>
             </div>
         </div>
@@ -281,6 +293,7 @@ const MissionRecapModal = ({ onClose }) => (
 
 const QuestScreen = () => {
     const [showRecap, setShowRecap] = useState(false);
+    const { t } = useLanguage();
 
     // Mock data
     const missionData = {
@@ -314,14 +327,14 @@ const QuestScreen = () => {
 
                 {/* Header */}
                 <div className="px-6 py-4">
-                    <h1 className="text-2xl font-bold text-gray-900">Quest</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('quest.title')}</h1>
                 </div>
 
                 {/* Mission Section */}
                 <section className="px-6 mb-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
                         <Trophy size={20} className="text-orange-500" />
-                        Mission
+                        {t('quest.section.mission')}
                     </h2>
                     <div className="space-y-3">
                         <MissionSummaryCard
@@ -337,7 +350,6 @@ const QuestScreen = () => {
                             onClaim={handleClaimRewards}
                         />
 
-
                     </div>
                 </section>
 
@@ -345,7 +357,7 @@ const QuestScreen = () => {
                 <section className="px-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
                         <Flame size={20} className="text-orange-500" />
-                        Streak
+                        {t('quest.section.streak')}
                     </h2>
                     <div className="space-y-3">
                         <StreakBadge currentDay={1} targetDays={7} />
