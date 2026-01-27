@@ -31,6 +31,7 @@ export const DiaryProvider = ({ children }) => {
     const [fortuneHistory, setFortuneHistory] = useState([]);
     const [aiReflections, setAiReflections] = useState([]);
     const [weeklyReviews, setWeeklyReviews] = useState([]);
+    const [latestAdvice, setLatestAdvice] = useState(null); // New State for Home Screen Advice
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -79,6 +80,10 @@ export const DiaryProvider = ({ children }) => {
                 const storedReviews = localStorage.getItem('kokoro_weekly_reviews');
                 if (storedReviews) setWeeklyReviews(JSON.parse(storedReviews));
 
+                // Latest Advice
+                const storedAdvice = localStorage.getItem('kokoro_latest_advice');
+                if (storedAdvice) setLatestAdvice(JSON.parse(storedAdvice));
+
             } catch (error) {
                 console.error("Failed to load diary data", error);
             } finally {
@@ -109,6 +114,10 @@ export const DiaryProvider = ({ children }) => {
     useEffect(() => {
         if (!isLoading) localStorage.setItem('kokoro_weekly_reviews', JSON.stringify(weeklyReviews));
     }, [weeklyReviews, isLoading]);
+
+    useEffect(() => {
+        if (!isLoading && latestAdvice) localStorage.setItem('kokoro_latest_advice', JSON.stringify(latestAdvice));
+    }, [latestAdvice, isLoading]);
 
 
     // --- AI Logic (The Mirror) ---
@@ -301,7 +310,9 @@ export const DiaryProvider = ({ children }) => {
             weeklyReviews,
 
             generateWeeklyReview,
-            generateAutoAIEntry
+            generateAutoAIEntry,
+            latestAdvice,
+            setLatestAdvice
         }}>
             {children}
         </DiaryContext.Provider>

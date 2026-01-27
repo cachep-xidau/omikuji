@@ -274,70 +274,107 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
 };
 
 // Fortune Teller AI responses
-const getAIResponse = (userMessage) => {
+const getAIResponse = (userMessage, language = 'en') => {
     const lowerMessage = userMessage.toLowerCase();
     const now = new Date();
     const hour = now.getHours();
 
+    // Localized Greetings
     let greeting = '';
-    if (hour < 12) greeting = 'Good morning! ☀️';
-    else if (hour < 18) greeting = 'Good afternoon! 🌤️';
-    else greeting = 'Good evening! 🌙';
+    if (language === 'ja') {
+        if (hour < 12) greeting = 'おはようございます！ ☀️';
+        else if (hour < 18) greeting = 'こんにちは！ 🌤️';
+        else greeting = 'こんばんは！ 🌙';
+    } else {
+        if (hour < 12) greeting = 'Good morning! ☀️';
+        else if (hour < 18) greeting = 'Good afternoon! 🌤️';
+        else greeting = 'Good evening! 🌙';
+    }
 
     // Dynamic Weather/Season Logic for Walking Tips
     if (lowerMessage.includes('walking') || lowerMessage.includes('walk') || lowerMessage.includes('tips') || lowerMessage.includes('đi bộ') || lowerMessage.includes('ウォーキング') || lowerMessage.includes('散歩')) {
         const microseason = getCurrentMicroseason(now);
-        const seasonName = microseason ? microseason.name_romaji : "Seasonal Transition";
+        const seasonName = language === 'ja' ? microseason.name_ja : microseason.name_en;
 
         // Mock Weather (In a real app, fetch from API)
-        const weathers = ['Sunny ☀️', 'Cloudy ☁️', 'Cool 🍃', 'Misty 🌫️'];
+        const weathers = language === 'ja'
+            ? ['晴れ ☀️', '曇り ☁️', '涼しい 🍃', '霧 🌫️']
+            : ['Sunny ☀️', 'Cloudy ☁️', 'Cool 🍃', 'Misty 🌫️'];
         const currentWeather = weathers[Math.floor(Math.random() * weathers.length)];
 
         // Mock Locations
-        const locations = ['the nearby park 🌳', 'a quiet shrine ⛩️', 'the riverbank 🌊', 'a local cafe ☕'];
+        const locations = language === 'ja'
+            ? ['近くの公園 🌳', '静かな神社 ⛩️', '川沿い 🌊', 'カフェ ☕']
+            : ['the nearby park 🌳', 'a quiet shrine ⛩️', 'the riverbank 🌊', 'a local cafe ☕'];
         const location = locations[Math.floor(Math.random() * locations.length)];
 
         // Random Steps (5000 - 8000)
         const steps = Math.floor(Math.random() * (8000 - 5000 + 1)) + 5000;
 
+        const text = language === 'ja'
+            ? `今の天気は${currentWeather}です。「${seasonName}」の季節を感じながら、${location}まで約${steps.toLocaleString()}歩、歩いてみませんか？`
+            : `With ${currentWeather} weather, during the "${seasonName}", you should walk about ${steps.toLocaleString()} steps to ${location}.`;
+
         return {
             type: 'walking_proposal',
-            text: `With ${currentWeather} weather, during the "${seasonName}", you should walk about ${steps.toLocaleString()} steps to ${location}.`
+            text: text
         };
     }
 
     if (lowerMessage.includes('fortune') || lowerMessage.includes('luck') || lowerMessage.includes('vận may')) {
         return {
-            text: "✨ The cosmic energies are flowing in your favor today!",
-            fortune: "You have 1 Fortune Draw available! Tap here to reveal your daily omikuji fortune and unlock special rewards.",
+            text: language === 'ja'
+                ? "✨ 今日の運勢はあなたに味方しています！"
+                : "✨ The cosmic energies are flowing in your favor today!",
+            fortune: language === 'ja'
+                ? "おみくじを1回引けます！ここをタップして今日の運勢を占い、特別な報酬を受け取りましょう。"
+                : "You have 1 Fortune Draw available! Tap here to reveal your daily omikuji fortune and unlock special rewards.",
         };
     }
 
     if (lowerMessage.includes('tired') || lowerMessage.includes('mệt') || lowerMessage.includes('疲れた')) {
         return {
-            text: "I understand. Even small steps matter. Remember, consistency beats intensity! 🌟",
-            suggestion: "Light activity: Just a 10-min gentle walk around your home or office. Every step counts toward your streak!",
+            text: language === 'ja'
+                ? "無理はしないでくださいね。小さな一歩でも大切です。継続は力なり！ 🌟"
+                : "I understand. Even small steps matter. Remember, consistency beats intensity! 🌟",
+            suggestion: language === 'ja'
+                ? "軽い運動: 家やオフィスの周りを10分だけゆっくり歩いてみましょう。"
+                : "Light activity: Just a 10-min gentle walk around your home or office. Every step counts toward your streak!",
         };
     }
 
     if (lowerMessage.includes('goal') || lowerMessage.includes('mục tiêu')) {
         return {
-            text: "Setting intentions is powerful! Your walking journey is unique to you. 🎯",
-            suggestion: "Today's personalized goal: 5,000 steps. Break it into 3 sessions - morning (2000), lunch (1500), evening (1500).",
+            text: language === 'ja'
+                ? "目標設定は素晴らしいですね！あなたのペースで進みましょう。 🎯"
+                : "Setting intentions is powerful! Your walking journey is unique to you. 🎯",
+            suggestion: language === 'ja'
+                ? "今日の目標: 5,000歩。朝(2000)、昼(1500)、夜(1500)に分けてみましょう。"
+                : "Today's personalized goal: 5,000 steps. Break it into 3 sessions - morning (2000), lunch (1500), evening (1500).",
         };
     }
 
     const responses = [
         {
-            text: `${greeting} How are you feeling today? Share your thoughts and I'll guide your walking journey!`,
-            fortune: "🎴 Daily reminder: You have 1 Fortune Draw waiting! Don't miss today's special blessing.",
+            text: language === 'ja'
+                ? `${greeting} 今日の気分はいかがですか？`
+                : `${greeting} How are you feeling today? Share your thoughts and I'll guide your walking journey!`,
+            fortune: language === 'ja'
+                ? "🎴 デイリーリマインダー: おみくじが待っています！今日の運勢をチェックしましょう。"
+                : "🎴 Daily reminder: You have 1 Fortune Draw waiting! Don't miss today's special blessing.",
         },
         {
-            text: "I'm here to support your wellness journey! Tell me about your day or ask for walking suggestions. 🚶‍♀️",
-            suggestion: "Quick tip: Park farther away or take stairs today. Small choices, big impact!",
+            text: language === 'ja'
+                ? "あなたの健康をサポートします！今日の予定や、ウォーキングの相談など、何でも話してください。 🚶‍♀️"
+                : "I'm here to support your wellness journey! Tell me about your day or ask for walking suggestions. 🚶‍♀️",
+            suggestion: language === 'ja'
+                ? "ヒント: 今日は少し遠くに駐車するか、階段を使ってみましょう。小さな積み重ねが大切です！"
+                : "Quick tip: Park farther away or take stairs today. Small choices, big impact!",
         },
         {
-            text: "Every step you take is a step toward better health! What's on your mind? 💭",
+            text: language === 'ja'
+                ? "一歩一歩が健康への道です！何か考え事ですか？ 💭"
+                : "Every step you take is a step toward better health! What's on your mind? 💭",
         },
     ];
 
@@ -346,228 +383,238 @@ const getAIResponse = (userMessage) => {
 
 const ChatDiaryScreen = () => {
     const navigate = useNavigate();
-    const { getTodaysFortune, addEntry, bloodType, isLoading } = useDiary();
-    const { t } = useLanguage();
-    const [inputText, setInputText] = useState('');
-    const [showFortuneModal, setShowFortuneModal] = useState(false);
-    const [activeTriggerId, setActiveTriggerId] = useState(null);
+    const ChatDiaryScreen = () => {
+        const navigate = useNavigate();
+        const { getTodaysFortune, addEntry, bloodType, isLoading, setLatestAdvice } = useDiary();
+        const { t, language } = useLanguage();
+        const [inputText, setInputText] = useState('');
+        const [showFortuneModal, setShowFortuneModal] = useState(false);
+        const [activeTriggerId, setActiveTriggerId] = useState(null);
 
-    const [messages, setMessages] = useState([]);
-    const messagesEndRef = useRef(null);
-    const hasInitialized = useRef(false);
+        const [messages, setMessages] = useState([]);
+        const messagesEndRef = useRef(null);
+        const hasInitialized = useRef(false);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    // Initialize Chat Content
-    useEffect(() => {
-        if (isLoading) return;
-        if (hasInitialized.current) return;
-        hasInitialized.current = true;
-
-        const todayFortune = getTodaysFortune();
-        let greetingText = getDailySeasonGreeting();
-        let initialMessages = [];
-
-        // 1. Determine Greeting
-        if (todayFortune) {
-            const insight = generateFortuneInsight(todayFortune, bloodType);
-            greetingText = insight.text;
-        }
-
-        initialMessages.push({
-            id: 1,
-            text: greetingText,
-            isUser: false,
-            time: '9:00 AM',
-        });
-
-        // 2. Add Fortune Trigger if not drawn, or Result if drawn
-        if (todayFortune) {
-            console.log("Fortune found, showing result card", todayFortune);
-            initialMessages.push({
-                id: 2,
-                type: 'fortune_result',
-                data: todayFortune,
-                time: '9:01 AM'
-            });
-        } else {
-            initialMessages.push({
-                id: 2,
-                type: 'fortune_trigger',
-                time: '9:00 AM',
-            });
-        }
-
-        setMessages(initialMessages);
-    }, [isLoading, getTodaysFortune, bloodType]);
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    const handleSend = (textOverride = null) => {
-        const textToSend = typeof textOverride === 'string' ? textOverride : inputText;
-        if (!textToSend.trim()) return;
-
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-
-        // Save to Diary Context
-        addEntry(textToSend, 'entry');
-
-        const userMessage = {
-            id: messages.length + 1,
-            text: textToSend,
-            isUser: true,
-            time: timeStr,
+        const scrollToBottom = () => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         };
 
-        setMessages(prev => [...prev, userMessage]);
-        setInputText('');
+        // Initialize Chat Content
+        useEffect(() => {
+            if (isLoading) return;
+            if (hasInitialized.current) return;
+            hasInitialized.current = true;
 
-        setTimeout(() => {
-            const aiResponse = getAIResponse(textToSend);
-            const aiMessage = {
-                id: messages.length + 2,
-                ...aiResponse,
+            const todayFortune = getTodaysFortune();
+            let greetingText = getDailySeasonGreeting();
+            let initialMessages = [];
+
+            // 1. Determine Greeting
+            if (todayFortune) {
+                const insight = generateFortuneInsight(todayFortune, bloodType);
+                greetingText = insight.text;
+            }
+
+            initialMessages.push({
+                id: 1,
+                text: greetingText,
                 isUser: false,
-                time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+                time: '9:00 AM',
+            });
+
+            // 2. Add Fortune Trigger if not drawn, or Result if drawn
+            if (todayFortune) {
+                console.log("Fortune found, showing result card", todayFortune);
+                initialMessages.push({
+                    id: 2,
+                    type: 'fortune_result',
+                    data: todayFortune,
+                    time: '9:01 AM'
+                });
+            } else {
+                initialMessages.push({
+                    id: 2,
+                    type: 'fortune_trigger',
+                    time: '9:00 AM',
+                });
+            }
+
+            setMessages(initialMessages);
+        }, [isLoading, getTodaysFortune, bloodType]);
+
+        useEffect(() => {
+            scrollToBottom();
+        }, [messages]);
+
+        const handleSend = (textOverride = null) => {
+            const textToSend = typeof textOverride === 'string' ? textOverride : inputText;
+            if (!textToSend.trim()) return;
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+            // Save to Diary Context
+            addEntry(textToSend, 'entry');
+
+            const userMessage = {
+                id: messages.length + 1,
+                text: textToSend,
+                isUser: true,
+                time: timeStr,
             };
 
-            // Check if response has fortune trigger
-            if (aiMessage.fortune) {
-                const introMsg = { ...aiMessage, fortune: undefined };
-                setMessages(prev => [...prev, introMsg]);
+            setMessages(prev => [...prev, userMessage]);
+            setInputText('');
 
-                setTimeout(() => {
-                    setMessages(prev => [...prev, {
-                        id: Date.now(),
-                        type: 'fortune_trigger',
-                        time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
-                    }]);
-                }, 500);
-            } else {
-                setMessages(prev => [...prev, aiMessage]);
-            }
-        }, 1000);
-    };
+            setTimeout(() => {
+                const aiResponse = getAIResponse(textToSend, language);
 
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
-        }
-    };
+                // Sync to Home Screen if it's a walking idea or suggestion
+                if (aiResponse.type === 'walking_proposal') {
+                    setLatestAdvice(aiResponse.text);
+                } else if (aiResponse.suggestion) {
+                    setLatestAdvice(aiResponse.suggestion);
+                }
 
-    const handleFortuneClick = (msgId) => {
-        setActiveTriggerId(msgId);
-        setShowFortuneModal(true);
-    };
-
-    const handleKeepFortune = (fortune) => {
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-
-        // 1. Replace the Trigger Button with the Fortune Card Result
-        setMessages(prev => prev.map(msg => {
-            if (msg.id === activeTriggerId) {
-                return {
-                    ...msg,
-                    type: 'fortune_result',
-                    data: fortune,
-                    time: timeStr
+                const aiMessage = {
+                    id: messages.length + 2,
+                    ...aiResponse,
+                    isUser: false,
+                    time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
                 };
+
+                // Check if response has fortune trigger
+                if (aiMessage.fortune) {
+                    const introMsg = { ...aiMessage, fortune: undefined };
+                    setMessages(prev => [...prev, introMsg]);
+
+                    setTimeout(() => {
+                        setMessages(prev => [...prev, {
+                            id: Date.now(),
+                            type: 'fortune_trigger',
+                            time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+                        }]);
+                    }, 500);
+                } else {
+                    setMessages(prev => [...prev, aiMessage]);
+                }
+            }, 1000);
+        };
+
+        const handleKeyPress = (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
             }
-            return msg;
-        }));
+        };
 
-        // No AI follow-ups.
+        const handleFortuneClick = (msgId) => {
+            setActiveTriggerId(msgId);
+            setShowFortuneModal(true);
+        };
 
-        setShowFortuneModal(false);
-        setActiveTriggerId(null);
+        const handleKeepFortune = (fortune) => {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+            // 1. Replace the Trigger Button with the Fortune Card Result
+            setMessages(prev => prev.map(msg => {
+                if (msg.id === activeTriggerId) {
+                    return {
+                        ...msg,
+                        type: 'fortune_result',
+                        data: fortune,
+                        time: timeStr
+                    };
+                }
+                return msg;
+            }));
+
+            // No AI follow-ups.
+
+            setShowFortuneModal(false);
+            setActiveTriggerId(null);
+        };
+
+        return (
+            <div className="absolute inset-0 z-50 bg-gray-50 flex flex-col h-full">
+                <StatusBar />
+
+                {/* Header */}
+                <div className="px-4 py-3 flex items-center gap-3 bg-white border-b border-gray-100 flex-shrink-0">
+                    <button onClick={() => navigate(-1)} className="p-1">
+                        <ChevronLeft size={24} className="text-gray-900" />
+                    </button>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                            <Sparkles size={20} className="text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-base font-semibold text-gray-900">{t('chat.title')}</h1>
+                            <p className="text-xs text-green-500">● {t('chat.online')}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+                    {messages.map((message) => (
+                        <MessageBubble
+                            key={message.id}
+                            message={message}
+                            isUser={message.isUser}
+                            onFortuneClick={handleFortuneClick}
+                            onNavigate={navigate}
+                        />
+                    ))}
+                    <div ref={messagesEndRef} />
+                </div>
+
+                {/* Quick Actions */}
+                <div className="px-4 py-2 bg-white border-t border-gray-100 flex gap-2 overflow-x-auto">
+                    {['chat.walkingTips', 'chat.feelingTired'].map((key, i) => (
+                        <button
+                            key={i}
+                            onClick={() => handleSend(t(key))}
+                            className="flex-shrink-0 px-3 py-1.5 bg-gray-100 rounded-full text-xs text-gray-700 hover:bg-gray-200 transition-colors"
+                        >
+                            {t(key)}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Input Area */}
+                <div className="px-4 py-3 bg-white border-t border-gray-100 flex-shrink-0">
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="text"
+                            value={inputText}
+                            onChange={(e) => setInputText(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            placeholder={t('chat.placeholder')}
+                            className="flex-1 px-4 py-3 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-purple-200"
+                        />
+                        <button
+                            onClick={handleSend}
+                            disabled={!inputText.trim()}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${inputText.trim()
+                                ? 'bg-purple-500 text-white hover:bg-purple-600'
+                                : 'bg-gray-200 text-gray-400'
+                                }`}
+                        >
+                            <Send size={18} />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Fortune Draw Modal */}
+                <FortuneDrawModal
+                    isOpen={showFortuneModal}
+                    onClose={() => setShowFortuneModal(false)}
+                    onKeep={handleKeepFortune}
+                />
+            </div>
+        );
     };
 
-    return (
-        <div className="absolute inset-0 z-50 bg-gray-50 flex flex-col h-full">
-            <StatusBar />
-
-            {/* Header */}
-            <div className="px-4 py-3 flex items-center gap-3 bg-white border-b border-gray-100 flex-shrink-0">
-                <button onClick={() => navigate(-1)} className="p-1">
-                    <ChevronLeft size={24} className="text-gray-900" />
-                </button>
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
-                        <Sparkles size={20} className="text-white" />
-                    </div>
-                    <div>
-                        <h1 className="text-base font-semibold text-gray-900">{t('chat.title')}</h1>
-                        <p className="text-xs text-green-500">● {t('chat.online')}</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-                {messages.map((message) => (
-                    <MessageBubble
-                        key={message.id}
-                        message={message}
-                        isUser={message.isUser}
-                        onFortuneClick={handleFortuneClick}
-                        onNavigate={navigate}
-                    />
-                ))}
-                <div ref={messagesEndRef} />
-            </div>
-
-            {/* Quick Actions */}
-            <div className="px-4 py-2 bg-white border-t border-gray-100 flex gap-2 overflow-x-auto">
-                {['chat.walkingTips', 'chat.feelingTired'].map((key, i) => (
-                    <button
-                        key={i}
-                        onClick={() => handleSend(t(key))}
-                        className="flex-shrink-0 px-3 py-1.5 bg-gray-100 rounded-full text-xs text-gray-700 hover:bg-gray-200 transition-colors"
-                    >
-                        {t(key)}
-                    </button>
-                ))}
-            </div>
-
-            {/* Input Area */}
-            <div className="px-4 py-3 bg-white border-t border-gray-100 flex-shrink-0">
-                <div className="flex items-center gap-2">
-                    <input
-                        type="text"
-                        value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder={t('chat.placeholder')}
-                        className="flex-1 px-4 py-3 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-purple-200"
-                    />
-                    <button
-                        onClick={handleSend}
-                        disabled={!inputText.trim()}
-                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${inputText.trim()
-                            ? 'bg-purple-500 text-white hover:bg-purple-600'
-                            : 'bg-gray-200 text-gray-400'
-                            }`}
-                    >
-                        <Send size={18} />
-                    </button>
-                </div>
-            </div>
-
-            {/* Fortune Draw Modal */}
-            <FortuneDrawModal
-                isOpen={showFortuneModal}
-                onClose={() => setShowFortuneModal(false)}
-                onKeep={handleKeepFortune}
-            />
-        </div>
-    );
-};
-
-export default ChatDiaryScreen;
+    export default ChatDiaryScreen;
