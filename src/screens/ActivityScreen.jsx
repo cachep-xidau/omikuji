@@ -62,7 +62,7 @@ const MetricCard = ({ icon: Icon, iconBg, iconColor, label, value, unit, trend, 
 const WalkHistoryItem = ({ title, distance, duration, date, icon }) => (
     <div className="flex items-center gap-4 py-3 border-b border-gray-100 last:border-0">
         <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-            {icon || <Footprints size={20} className="text-gray-900 fill-white" />}
+            {icon || <Footprints size={20} color="#111827" fill="#FFFFFF" />}
         </div>
         <div className="flex-1">
             <p className="text-sm font-medium text-gray-900">{title}</p>
@@ -228,7 +228,7 @@ const ActivityScreen = () => {
                 <section className="px-6 py-4">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-lg font-semibold text-gray-900">Walk History</h3>
-                        <Link to="/activity/walking-record" className="flex items-center gap-1 text-green-600 text-sm">
+                        <Link to="/activity/walking-record" className="flex items-center gap-1 text-gray-500 text-sm">
                             <span>Show More</span>
                             <ChevronRight size={16} />
                         </Link>
