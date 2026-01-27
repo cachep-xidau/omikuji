@@ -383,7 +383,7 @@ const getAIResponse = (userMessage, language = 'en') => {
 
 const ChatDiaryScreen = () => {
     const navigate = useNavigate();
-    const { getTodaysFortune, addEntry, bloodType, isLoading, setLatestAdvice } = useDiary();
+    const { getTodaysFortune, addEntry, bloodType, isLoading } = useDiary();
     const { t, language } = useLanguage();
     const [inputText, setInputText] = useState('');
     const [showFortuneModal, setShowFortuneModal] = useState(false);
@@ -466,13 +466,6 @@ const ChatDiaryScreen = () => {
 
         setTimeout(() => {
             const aiResponse = getAIResponse(textToSend, language);
-
-            // Sync to Home Screen if it's a walking idea or suggestion
-            if (aiResponse.type === 'walking_proposal') {
-                setLatestAdvice(aiResponse.text);
-            } else if (aiResponse.suggestion) {
-                setLatestAdvice(aiResponse.suggestion);
-            }
 
             const aiMessage = {
                 id: messages.length + 2,

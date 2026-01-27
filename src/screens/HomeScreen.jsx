@@ -19,7 +19,7 @@ import { X } from 'lucide-react';
 const HomeScreen = () => {
   const navigate = useNavigate();
   const { status, hasSkipped } = useSubscription();
-  const { getTodaysFortune, latestAdvice } = useDiary();
+  const { getTodaysFortune } = useDiary();
   const { t } = useLanguage();
   const hasFortune = getTodaysFortune();
   const [showTooltip, setShowTooltip] = useState(true);
@@ -136,24 +136,6 @@ const HomeScreen = () => {
             )}
           </div>
         </section>
-
-        {/* AI Advice - Only show if available */}
-        {latestAdvice && (
-          <div className="px-6 animate-in fade-in slide-in-from-top-4 duration-500">
-            <div className="bg-[#F5F5F5] rounded-xl p-4 mb-5 border border-[#E6E3E3]">
-              <div className="flex items-start gap-2">
-                <img
-                  alt="Advice"
-                  className="w-5 h-5 object-contain mt-0.5"
-                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAAXNSR0IArs4c6QAAA01JREFUWEfdmD1S21AQgHctJZRxaqyMaZCTJuYGuE2sYE4QcwLgBJgTBE5gcgKcsZIW3yBOQywalLGocZnCepvss+R5siVbP8Bk8gqGGXa139u/twvCP3YwC0+11qpmkQ9l3VHPTauXCMTGp2L6EQBaiFgloHLaj8bJIeCEgIYIONRQO0+CjAUyTOsTAR0VAVirS9DxbuzTRbkloM3t911EbLNgcKvPhGKIUHJ10FO7fm6oBOWpmJZRYJmQdhFwj4Bk6JHwYnzTP1ChIkCV7eYJIHQCgXPPsR/FS5VaswMEJ8Glz8ZO/ziEmgPJnKHprfwDwqk3skOwtd7PI1Axm2cAcMi6OupbYU7NgUIBBHTHTn8rj5GsOoZp3ctiURygAl0BwC4APFqoFoEVLw09x96ZBSc4IS2WcH/8s9/Lets88pu1d22kUhcAJp5jv4wAVcwmBfnT8Eb2II+BrDqVWnMXCDgy4Dm2dI78oSY0aWLn7vrbMOvH88irdsPEXgJSM37RyCvzwyER1bMYJyTOj/M4nUJAkbaQhWihrFXVQkD8oVevrSMieJuFR5D4ced85Z6zdAoDZQFJI/v/AXGZEoiVM1FJaJPxTbo+VshD1WqrPN2Y3qcJRdrmWgiIQQzTuhQoVpY9Ek501PfTTImFgdJ4J4tMMpASjqfs1IlPRxAOOQog4sF41L/IctO8ssa21SKky6THVY4fcWNlXoPr9Iya1SWiNiAMvJHdiLz2Rs1qExGPAvAUYVPzR41KZKY2TOuWB3CeGjXUGmkqZZ0Xkp4Mn/yr0JY6oUaAqm9add+XgmWG4tHyofOJIwEEvGaxjYmG2o568aU1KIC6nK8qwYLHicc9Rt4YYUJIX5IGOa4eJNwDgvlySUB1deGUMJrWcK97kdkrdlHk+Prgd4iIN9fEQ0DHiy/5wioVq8uFo5W007iUWLnbSzDh16lEdb4tIr6QST8b0mTHVge6hVVqIMMeHAL6RSDcZ7+f91y3N/N0zMn0z4ZQn981f8P/HoR14DmzkuWn5e/+3iqySuUCYuNql+XQaaCRACEHsSLNNTeQhDKb4S43d37RxloIKAhdl8MUVN9AB/2gSP8qBKTmFP++KlnTNtAHAUprLI3cH4c2MUOzf9F8AAAAAElFTkSuQmCC"
-                />
-                <p className="text-sm text-[#1F2937] leading-relaxed">
-                  {latestAdvice}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Today Focus */}
         <TodayFocus />
