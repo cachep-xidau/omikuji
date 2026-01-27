@@ -10,10 +10,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { generateFortuneInsight } from '../utils/mirrorInsightGenerator';
 import { getImagePath } from '../utils/imagePath';
 import { getDailySeasonGreeting } from '../utils/seasonalGreetings';
-import { getImagePath } from '../utils/imagePath';
-import { getDailySeasonGreeting } from '../utils/seasonalGreetings';
 import { getCurrentMicroseason } from '../data/microseasons';
-import { useLanguage } from '../contexts/LanguageContext';
 
 // Mirror Insight Bubble Component (Styled as a friend's message)
 const MirrorInsightBubble = ({ data, time }) => (

@@ -26,7 +26,6 @@ const MissionSummaryCard = ({ dailyCompleted, dailyTotal, weeklyCompleted, weekl
 };
 
 // Claim Reward Card
-// Claim Reward Card
 const ClaimRewardCard = ({ completedMissions, tickets, onClaim }) => {
     const { t } = useLanguage();
     return (
@@ -65,7 +64,6 @@ const ClaimRewardCard = ({ completedMissions, tickets, onClaim }) => {
 // Mission Recap Button
 
 
-// Streak Badge Component
 // Streak Badge Component
 const StreakBadge = ({ currentDay, targetDays }) => {
     const { t } = useLanguage();
@@ -126,7 +124,6 @@ const StreakBadge = ({ currentDay, targetDays }) => {
     );
 };
 
-// Streak Calendar Component
 // Streak Calendar Component
 const StreakCalendar = ({ streakDays }) => {
     const { t } = useLanguage();
