@@ -4,8 +4,8 @@ import { ChevronRight, Footprints, Flame, Moon, Heart, Timer, TrendingUp } from 
 import { Link } from 'react-router-dom';
 import { SimpleLineChart, SimpleBarChart, DonutChart, CandleChart } from '../components/ActivityCharts';
 
-// Activity Ring Component (Apple-style)
-const ActivityRing = ({ progress, color, size = 120, strokeWidth = 12 }) => {
+// Activity Ring Component with Gradient Support
+const ActivityRing = ({ progress, gradientId, size = 120, strokeWidth = 12, opacity = 1 }) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference - (progress / 100) * circumference;
@@ -18,8 +18,10 @@ const ActivityRing = ({ progress, color, size = 120, strokeWidth = 12 }) => {
                 cy={size / 2}
                 r={radius}
                 fill="none"
-                stroke={`${color}20`}
+                stroke="currentColor"
+                className="text-gray-100"
                 strokeWidth={strokeWidth}
+                opacity={0.3}
             />
             {/* Progress ring */}
             <circle
@@ -27,11 +29,12 @@ const ActivityRing = ({ progress, color, size = 120, strokeWidth = 12 }) => {
                 cy={size / 2}
                 r={radius}
                 fill="none"
-                stroke={color}
+                stroke={`url(#${gradientId})`}
                 strokeWidth={strokeWidth}
                 strokeDasharray={circumference}
                 strokeDashoffset={offset}
                 strokeLinecap="round"
+                opacity={opacity}
             />
         </svg>
     );
@@ -111,39 +114,57 @@ const ActivityScreen = () => {
 
                 {/* Activity Rings Section */}
                 <section className="px-6 py-4">
-                    <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                    <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm relative overflow-hidden">
+                        {/* Define Gradients for the entire section */}
+                        <svg className="absolute w-0 h-0">
+                            <defs>
+                                <linearGradient id="ring-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#F4AA1C" />
+                                    <stop offset="100%" stopColor="#EE3424" />
+                                </linearGradient>
+                                <linearGradient id="ring-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#3B82F6" />
+                                    <stop offset="100%" stopColor="#2563EB" />
+                                </linearGradient>
+                                <linearGradient id="ring-green" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#10B981" />
+                                    <stop offset="100%" stopColor="#059669" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
                         <div className="flex items-center justify-between">
-                            {/* Rings */}
+                            {/* Rings - Darkest outside, Lightest inside */}
                             <div className="relative w-[120px] h-[120px]">
                                 <div className="absolute inset-0">
-                                    <ActivityRing progress={75} color="#FF2D55" size={120} strokeWidth={10} />
+                                    <ActivityRing progress={75} gradientId="ring-orange" size={120} strokeWidth={10} opacity={1} />
                                 </div>
                                 <div className="absolute inset-[12px]">
-                                    <ActivityRing progress={60} color="#32D74B" size={96} strokeWidth={10} />
+                                    <ActivityRing progress={60} gradientId="ring-blue" size={96} strokeWidth={10} opacity={0.7} />
                                 </div>
                                 <div className="absolute inset-[24px]">
-                                    <ActivityRing progress={85} color="#00C7BE" size={72} strokeWidth={10} />
+                                    <ActivityRing progress={85} gradientId="ring-green" size={72} strokeWidth={10} opacity={0.4} />
                                 </div>
                             </div>
 
                             {/* Stats */}
                             <div className="flex-1 pl-6 space-y-3">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-[#FF2D55]" />
+                                    <div className="w-3 h-3 rounded-full bg-brand-gradient" />
                                     <div>
                                         <p className="text-xs text-gray-500">Move</p>
                                         <p className="text-sm font-semibold text-gray-900">324/500 <span className="text-gray-400 font-normal">CAL</span></p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-[#32D74B]" />
+                                    <div className="w-3 h-3 rounded-full bg-blue-500 opacity-70" />
                                     <div>
                                         <p className="text-xs text-gray-500">Exercise</p>
                                         <p className="text-sm font-semibold text-gray-900">28/30 <span className="text-gray-400 font-normal">MIN</span></p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-[#00C7BE]" />
+                                    <div className="w-3 h-3 rounded-full bg-green-500 opacity-40" />
                                     <div>
                                         <p className="text-xs text-gray-500">Stand</p>
                                         <p className="text-sm font-semibold text-gray-900">10/12 <span className="text-gray-400 font-normal">HRS</span></p>
@@ -159,28 +180,22 @@ const ActivityScreen = () => {
                     <div className="grid grid-cols-2 gap-3">
                         {/* Pace - Line Chart */}
                         <MetricCard
-                            icon={Timer}
-                            iconBg="bg-orange-100"
-                            iconColor="text-orange-500"
                             label="Pace"
                             value={activityData.pace.value}
                             unit={activityData.pace.unit}
                             trend={activityData.pace.trend}
                             trendColor="text-green-500"
-                            chart={<SimpleLineChart data={[8.5, 8.2, 8.0, 7.8, 8.3, 8.1, 7.9]} color="#f97316" />}
+                            chart={<SimpleLineChart data={[8.5, 8.2, 8.0, 7.8, 8.3, 8.1, 7.9]} />}
                         />
 
                         {/* Steps - Bar Chart */}
                         <MetricCard
-                            icon={Footprints}
-                            iconBg="bg-green-100"
-                            iconColor="text-green-500"
                             label="Steps"
                             value={activityData.steps.value}
                             unit=""
                             trend={activityData.steps.trend}
                             trendColor="text-green-500"
-                            chart={<SimpleBarChart data={[4000, 6000, 7500, 8432, 5000, 9000, 8200]} color="#10b981" />}
+                            chart={<SimpleBarChart data={[4000, 6000, 7500, 8432, 5000, 9000, 8200]} />}
                         />
 
                         {/* Distance - Big Number (No Chart, Just Text Emphasis) */}
@@ -200,17 +215,13 @@ const ActivityScreen = () => {
 
                         {/* Calories - Donut Chart */}
                         <MetricCard
-                            icon={Flame}
-                            iconBg="bg-red-100"
-                            iconColor="text-red-500"
                             label="Calories"
                             value={activityData.calories.value}
                             unit={activityData.calories.unit}
-                            // trend={activityData.calories.trend}
                             trendColor="text-red-500"
                             chart={
                                 <div className="flex items-center gap-3">
-                                    <DonutChart value={324} total={500} color="#ef4444" size={50} />
+                                    <DonutChart value={324} total={500} size={50} />
                                     <span className="text-xs text-red-500 font-medium">+45 kcal</span>
                                 </div>
                             }
@@ -218,9 +229,6 @@ const ActivityScreen = () => {
 
                         {/* Time in Bed - Candle Chart */}
                         <MetricCard
-                            icon={Moon}
-                            iconBg="bg-purple-100"
-                            iconColor="text-purple-500"
                             label="Sleep"
                             value={activityData.sleep.value}
                             unit={activityData.sleep.unit}
@@ -234,7 +242,6 @@ const ActivityScreen = () => {
                                             { open: 7, close: 8, high: 8.5, low: 6 },
                                             { open: 7.2, close: 7.8, high: 8.2, low: 7 },
                                         ]}
-                                        color="#a855f7"
                                     />
                                 </div>
                             }
@@ -242,13 +249,10 @@ const ActivityScreen = () => {
 
                         {/* Heart Rate - Line Chart */}
                         <MetricCard
-                            icon={Heart}
-                            iconBg="bg-pink-100"
-                            iconColor="text-pink-500"
                             label="Heart Rate"
                             value={activityData.heartRate.value}
                             unit={activityData.heartRate.unit}
-                            chart={<SimpleLineChart data={[65, 68, 72, 70, 75, 72, 68]} color="#ec4899" />}
+                            chart={<SimpleLineChart data={[65, 68, 72, 70, 75, 72, 68]} />}
                         />
                     </div>
                 </section>
