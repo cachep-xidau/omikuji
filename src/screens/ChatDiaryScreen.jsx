@@ -649,6 +649,13 @@ const ChatDiaryScreen = () => {
 
     return (
         <div className="absolute inset-0 z-50 bg-gray-50 flex flex-col h-full">
+            {/* Fake Dynamic Island */}
+            <div className="absolute top-[12px] left-1/2 -translate-x-1/2 z-[60] pointer-events-none">
+                <div className="w-[126px] h-[37px] bg-black rounded-full flex items-center justify-center">
+                    <div className="w-[10px] h-[10px] bg-[#1a1a1a] rounded-full mr-2"></div>
+                </div>
+            </div>
+
             <StatusBar />
 
             {/* Header */}
