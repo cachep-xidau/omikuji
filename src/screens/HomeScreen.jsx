@@ -137,7 +137,7 @@ const HomeScreen = () => {
 
           {/* Single Mission Card - Redesigned and moved out of shaded box */}
           {todayMission && (
-            <div className="bg-white rounded-xl p-4 border border-[#E6E3E3] shadow-sm">
+            <div className="bg-white rounded-xl p-4 border border-[#E6E3E3]">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-base font-semibold text-black">{todayMission.title}</span>
                 <span className="text-sm font-bold text-brand-gradient">60%</span>
