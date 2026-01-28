@@ -168,7 +168,7 @@ const HomeScreen = () => {
       {/* Floating Diary Button */}
       <Link
         to="/chat-diary"
-        className={`absolute bottom-28 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 z-10 ${isFabVisible ? 'scale-100 translate-y-0' : 'scale-[0.6] translate-y-8 opacity-80'
+        className={`absolute bottom-28 right-6 w-14 h-14 rounded-full bg-[linear-gradient(135deg,#F4AA1C_0%,#EE3424_75%)] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 z-10 ${isFabVisible ? 'scale-100 translate-y-0' : 'scale-[0.6] translate-y-8 opacity-80'
           } hover:scale-105 active:scale-95`}
       >
         <Feather size={24} className="text-white" />
