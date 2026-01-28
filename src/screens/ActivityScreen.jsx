@@ -241,6 +241,8 @@ const ActivityScreen = () => {
                                             { open: 7.5, close: 7, high: 8.5, low: 6.5 },
                                             { open: 7, close: 8, high: 8.5, low: 6 },
                                             { open: 7.2, close: 7.8, high: 8.2, low: 7 },
+                                            { open: 6.8, close: 8.2, high: 8.5, low: 6.5 },
+                                            { open: 7.5, close: 8, high: 9, low: 7 },
                                         ]}
                                     />
                                 </div>
