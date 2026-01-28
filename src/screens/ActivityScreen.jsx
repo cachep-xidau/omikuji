@@ -43,7 +43,7 @@ const ActivityRing = ({ progress, gradientId, size = 120, strokeWidth = 12, opac
 // Metric Card Component
 // MetricCard Component with Chart Support
 const MetricCard = ({ label, value, unit, trend, trendColor, chart }) => (
-    <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between h-[215px]">
+    <div className="bg-white rounded-2xl p-4 border border-[#E6E3E3] flex flex-col justify-between h-[215px]">
         <div>
             <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm font-semibold text-gray-900">{label}</span>
@@ -114,7 +114,7 @@ const ActivityScreen = () => {
 
                 {/* Activity Rings Section */}
                 <section className="px-6 py-4">
-                    <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm relative overflow-hidden">
+                    <div className="bg-white rounded-2xl p-5 border border-[#E6E3E3] relative overflow-hidden">
                         {/* Define Gradients for the entire section */}
                         <svg className="absolute w-0 h-0">
                             <defs>
@@ -199,7 +199,7 @@ const ActivityScreen = () => {
                         />
 
                         {/* Distance - Big Number (No Chart, Just Text Emphasis) */}
-                        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between h-[215px]">
+                        <div className="bg-white rounded-2xl p-4 border border-[#E6E3E3] flex flex-col justify-between h-[215px]">
                             <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-semibold text-gray-900">Distance</span>
                             </div>
@@ -273,7 +273,7 @@ const ActivityScreen = () => {
                         </Link>
                     </div>
 
-                    <div className="bg-white rounded-2xl px-4 border border-gray-100 shadow-sm">
+                    <div className="bg-white rounded-2xl px-4 border border-[#E6E3E3]">
                         {walkHistory.map((walk, index) => (
                             <WalkHistoryItem
                                 key={index}
