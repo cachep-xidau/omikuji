@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import StatusBar from '../components/StatusBar';
-import { ChevronLeft, Send, Sparkles, Footprints, Gift, X, Share2, Crown } from 'lucide-react';
+import { ChevronLeft, Send, Sparkles, Footprints, Gift, X, Share2, Crown, History } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDiary } from '../data/DiaryContext';
@@ -463,8 +463,7 @@ const ChatDiaryScreen = () => {
         const now = new Date();
         const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
-        // Save to Diary Context
-        addEntry(textToSend, 'entry');
+        // Removed addEntry here because getCombinedTimeline now includes chatMessages directly
 
         const userMessage = {
             id: `user-${Date.now()}`,
@@ -561,6 +560,13 @@ const ChatDiaryScreen = () => {
                         <p className="text-xs text-green-500">● {t('chat.online')}</p>
                     </div>
                 </div>
+                <button
+                    onClick={() => navigate('/diary/history')}
+                    className="ml-auto p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all"
+                    title="Chat History"
+                >
+                    <History size={22} />
+                </button>
             </div>
 
             {/* Messages */}

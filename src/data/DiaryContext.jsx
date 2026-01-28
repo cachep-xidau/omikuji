@@ -297,9 +297,22 @@ export const DiaryProvider = ({ children }) => {
     };
 
     const getCombinedTimeline = () => {
-        // Merge entries, AI observations (static), fortunes, AI reflections (removed), and Weekly Reviews
+        // Merge entries, AI observations (static), fortunes, AI reflections (removed), weekly reviews, and chat messages
         const fortunesWithType = fortuneHistory.map(f => ({ ...f, type: 'fortune' }));
-        const allItems = [...entries, ...MOCK_AI_OBSERVATIONS, ...fortunesWithType, ...weeklyReviews];
+        const chatWithTypes = chatMessages.map(m => ({
+            ...m,
+            type: m.isUser ? 'chat_user' : 'chat_ai',
+            // Ensure timestamp is present for sorting
+            timestamp: m.timestamp || new Date().toISOString()
+        }));
+
+        const allItems = [
+            ...entries,
+            ...MOCK_AI_OBSERVATIONS,
+            ...fortunesWithType,
+            ...weeklyReviews,
+            ...chatWithTypes
+        ];
         return allItems.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     };
 

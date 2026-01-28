@@ -1,7 +1,7 @@
 
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Sparkles, Footprints, History } from 'lucide-react';
 import { useDiary } from '../data/DiaryContext';
 import { getCurrentMicroseason } from '../data/microseasons';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -144,7 +144,99 @@ const VerticalFeedView = ({ groups, t }) => {
                                     </div>
                                 </div>
                             );
-                        })}
+                        }
+
+                        if (item.type === 'chat_user') {
+                            return (
+                        <div key={item.id} className="relative group">
+                            <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-blue-400 border-2 border-white" />
+                            <p className="text-gray-400 text-xs mb-1 font-mono flex items-center gap-1">
+                                {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                <span className="bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">Me</span>
+                            </p>
+                            <div className="bg-gray-900 text-white rounded-xl p-4 text-base leading-relaxed mr-4">
+                                {item.text}
+                            </div>
+                        </div>
+                        );
+                        }
+
+                        if (item.type === 'chat_ai' || item.type === 'mirror_insight' || item.type === 'walking_proposal') {
+                            const isProposal = item.type === 'walking_proposal';
+                        const isInsight = item.type === 'mirror_insight';
+
+                        return (
+                        <div key={item.id} className="relative group">
+                            <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-purple-400 border-2 border-white" />
+                            <p className="text-gray-400 text-xs mb-1 font-mono flex items-center gap-1">
+                                {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                <span className="bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">AI</span>
+                            </p>
+                            <div className="bg-white border border-gray-100 shadow-sm rounded-xl p-4 text-base leading-relaxed mr-4">
+                                <div className="flex items-center gap-2 mb-2 text-purple-600">
+                                    <Sparkles size={14} />
+                                    <span className="text-[10px] font-bold uppercase tracking-wider">
+                                        {isInsight ? 'Mirror Insight' : 'AI Companion'}
+                                    </span>
+                                </div>
+                                <p className="text-gray-800 italic font-serif">
+                                    {isInsight ? item.data.text : (item.text || item.content)}
+                                </p>
+                                {isProposal && (
+                                    <div className="mt-3">
+                                        <button
+                                            onClick={() => navigate('/activity/walking-route')}
+                                            className="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-xl text-xs font-bold hover:bg-green-100 transition-colors w-full justify-center border border-green-100"
+                                        >
+                                            <Footprints size={14} />
+                                            Explore Route
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        );
+                        }
+
+                        if (item.type === 'fortune_result') {
+                            return (
+                        <div key={item.id} className="relative group">
+                            <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-yellow-400 border-2 border-white" />
+                            <p className="text-gray-400 text-xs mb-2 font-bold uppercase tracking-widest pl-1">
+                                {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                <span className="ml-2 bg-yellow-50 text-yellow-600 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">Fortune</span>
+                            </p>
+                            <div className="transform origin-left scale-90 -mt-2">
+                                <FortuneCard fortune={item.data} isTied={item.data?.isTied} />
+                            </div>
+                        </div>
+                        );
+                        }
+
+                        if (item.type === 'fortune_trigger') {
+                            return (
+                        <div key={item.id} className="relative group opacity-50">
+                            <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-gray-300 border-2 border-white" />
+                            <p className="text-gray-400 text-xs mb-1 font-mono">
+                                {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                            <div className="text-[10px] uppercase font-bold text-gray-400 italic">Fortune Drawn / Skipped</div>
+                        </div>
+                        );
+                        }
+
+                        return (
+                        <div key={item.id} className="relative group">
+                            <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-gray-200 border-2 border-white" />
+                            <p className="text-gray-600 text-base mb-1 font-mono">
+                                {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                            <div className="bg-gray-50 rounded-xl p-4 text-gray-900 text-lg leading-relaxed">
+                                {item.content}
+                            </div>
+                        </div>
+                        );
+                    })}
                     </div>
                 </div>
             ))}
