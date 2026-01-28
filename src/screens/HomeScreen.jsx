@@ -16,15 +16,26 @@ import { useDiary } from '../data/DiaryContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { X } from 'lucide-react';
 
+// Module-level variable to track tooltip state across SPA navigations
+// This resets only on full browser refresh
+let hasSeenTooltip = false;
+
 const HomeScreen = () => {
   const navigate = useNavigate();
   const { status, hasSkipped } = useSubscription();
   const { getTodaysFortune } = useDiary();
   const { t } = useLanguage();
   const hasFortune = getTodaysFortune();
-  const [showTooltip, setShowTooltip] = useState(true);
+
+  // Initialize state based on the module-level variable
+  const [showTooltip, setShowTooltip] = useState(!hasSeenTooltip);
   const [isFabVisible, setIsFabVisible] = useState(true);
   const lastScrollY = useRef(0);
+
+  const handleCloseTooltip = () => {
+    hasSeenTooltip = true;
+    setShowTooltip(false);
+  };
 
   const handleScroll = (e) => {
     const currentScrollY = e.target.scrollTop;
@@ -84,7 +95,7 @@ const HomeScreen = () => {
                       {t('home.tooltip')}
                     </p>
                     <button
-                      onClick={() => setShowTooltip(false)}
+                      onClick={handleCloseTooltip}
                       className="absolute -top-1 -right-1 p-1 text-gray-400 hover:text-white transition-colors"
                     >
                       <X size={14} />
