@@ -12,12 +12,29 @@ import { getImagePath } from '../utils/imagePath';
 import { getDailySeasonGreeting } from '../utils/seasonalGreetings';
 import { getCurrentMicroseason } from '../data/microseasons';
 
+// Unified AI Avatar Component
+const AIAvatar = ({ size = 8 }) => (
+    <div className={`w-${size} h-${size} rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center mr-2 flex-shrink-0 overflow-hidden relative border border-purple-100/50 shadow-sm`}>
+        <img
+            src={getImagePath('images/companion_avatar.png')}
+            alt="AI"
+            className="w-full h-full object-cover relative z-10"
+            onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'block';
+            }}
+        />
+        <Sparkles
+            size={Math.round(size * 2)}
+            className="text-white hidden absolute"
+        />
+    </div>
+);
+
 // Mirror Insight Bubble Component (Styled as a friend's message)
 const MirrorInsightBubble = ({ data, time }) => (
     <div className="flex justify-start mb-3">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center mr-2 flex-shrink-0">
-            <Sparkles size={16} className="text-white" />
-        </div>
+        <AIAvatar />
         <div className="max-w-[75%] rounded-2xl px-4 py-3 bg-white border border-gray-100 text-gray-900 rounded-bl-md shadow-sm">
             <p className="text-sm text-gray-800 leading-relaxed font-medium">
                 {data.text}
@@ -220,9 +237,7 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
     if (message.type === 'walking_proposal') {
         return (
             <div className="flex justify-start mb-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center mr-2 flex-shrink-0">
-                    <Sparkles size={16} className="text-white" />
-                </div>
+                <AIAvatar />
                 <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-white border border-gray-100 text-gray-900 rounded-bl-md shadow-sm">
                     <p className="text-sm leading-relaxed font-medium">
                         {message.text}
@@ -246,11 +261,7 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
 
     return (
         <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-3`}>
-            {!isUser && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center mr-2 flex-shrink-0">
-                    <Sparkles size={16} className="text-white" />
-                </div>
-            )}
+            {!isUser && <AIAvatar />}
             <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${isUser
                 ? 'bg-gray-900 text-white rounded-br-md'
                 : 'bg-white border border-gray-100 text-gray-900 rounded-bl-md shadow-sm'

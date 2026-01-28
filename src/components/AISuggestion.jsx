@@ -39,12 +39,14 @@ const AISuggestion = ({ suggestion }) => {
             {/* Header */}
             <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-2">
-                    <img
-                        src={getImagePath('images/companion_avatar.png')}
-                        alt="AI Avatar"
-                        className="w-8 h-8 rounded-full bg-indigo-100 object-cover"
-                        onError={(e) => { e.target.src = 'https://ui-avatars.com/api/?name=AI&background=6366f1&color=fff'; }}
-                    />
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center overflow-hidden border border-purple-100/50 shadow-sm">
+                        <img
+                            src={getImagePath('images/companion_avatar.png')}
+                            alt="AI Avatar"
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.target.src = 'https://ui-avatars.com/api/?name=AI&background=c084fc&color=fff'; }}
+                        />
+                    </div>
                     <div>
                         <h3 className="text-sm font-bold text-indigo-900">AI 運解析</h3>
                         <p className="text-[10px] text-indigo-600 font-medium">AI Fortune Analysis</p>
