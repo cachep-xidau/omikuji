@@ -2,6 +2,7 @@ import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
 import { ChevronRight, Footprints, Flame, Moon, Heart, Timer, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SimpleLineChart, SimpleBarChart, DonutChart, CandleChart } from '../components/ActivityCharts';
 
 // Activity Ring Component (Apple-style)
 const ActivityRing = ({ progress, color, size = 120, strokeWidth = 12 }) => {
@@ -150,7 +151,7 @@ const ActivityScreen = () => {
                 {/* Metrics Grid */}
                 <section className="px-6 py-2">
                     <div className="grid grid-cols-2 gap-3">
-                        {/* Pace */}
+                        {/* Pace - Line Chart */}
                         <MetricCard
                             icon={Timer}
                             iconBg="bg-orange-100"
@@ -160,9 +161,10 @@ const ActivityScreen = () => {
                             unit={activityData.pace.unit}
                             trend={activityData.pace.trend}
                             trendColor="text-green-500"
+                            chart={<SimpleLineChart data={[8.5, 8.2, 8.0, 7.8, 8.3, 8.1, 7.9]} color="#f97316" />}
                         />
 
-                        {/* Steps */}
+                        {/* Steps - Bar Chart */}
                         <MetricCard
                             icon={Footprints}
                             iconBg="bg-green-100"
@@ -172,21 +174,28 @@ const ActivityScreen = () => {
                             unit=""
                             trend={activityData.steps.trend}
                             trendColor="text-green-500"
+                            chart={<SimpleBarChart data={[4000, 6000, 7500, 8432, 5000, 9000, 8200]} color="#10b981" />}
                         />
 
-                        {/* Distance */}
-                        <MetricCard
-                            icon={TrendingUp}
-                            iconBg="bg-blue-100"
-                            iconColor="text-blue-500"
-                            label="Distance"
-                            value={activityData.distance.value}
-                            unit={activityData.distance.unit}
-                            trend={activityData.distance.trend}
-                            trendColor="text-blue-500"
-                        />
+                        {/* Distance - Big Number (No Chart, Just Text Emphasis) */}
+                        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                                    <TrendingUp size={18} className="text-blue-500" />
+                                </div>
+                                <span className="text-sm text-gray-500">Distance</span>
+                            </div>
+                            <div className="flex items-baseline gap-1 my-2">
+                                <span className="text-4xl font-extrabold text-blue-600">{activityData.distance.value}</span>
+                                <span className="text-base font-medium text-gray-400">{activityData.distance.unit}</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-blue-500">
+                                <TrendingUp size={14} />
+                                <span className="text-xs">{activityData.distance.trend}</span>
+                            </div>
+                        </div>
 
-                        {/* Calories Burned */}
+                        {/* Calories - Donut Chart */}
                         <MetricCard
                             icon={Flame}
                             iconBg="bg-red-100"
@@ -194,23 +203,41 @@ const ActivityScreen = () => {
                             label="Calories"
                             value={activityData.calories.value}
                             unit={activityData.calories.unit}
-                            trend={activityData.calories.trend}
+                            // trend={activityData.calories.trend}
                             trendColor="text-red-500"
+                            chart={
+                                <div className="flex items-center gap-3">
+                                    <DonutChart value={324} total={500} color="#ef4444" size={50} />
+                                    <span className="text-xs text-red-500 font-medium">+45 kcal</span>
+                                </div>
+                            }
                         />
 
-                        {/* Time in Bed */}
+                        {/* Time in Bed - Candle Chart */}
                         <MetricCard
                             icon={Moon}
                             iconBg="bg-purple-100"
                             iconColor="text-purple-500"
-                            label="Time in Bed"
+                            label="Sleep"
                             value={activityData.sleep.value}
                             unit={activityData.sleep.unit}
-                            trend={activityData.sleep.trend}
-                            trendColor="text-purple-500"
+                            chart={
+                                <div className="mt-1">
+                                    <CandleChart
+                                        data={[
+                                            { open: 7, close: 8, high: 9, low: 6 },
+                                            { open: 6.5, close: 7.5, high: 8, low: 6 },
+                                            { open: 7.5, close: 7, high: 8.5, low: 6.5 },
+                                            { open: 7, close: 8, high: 8.5, low: 6 },
+                                            { open: 7.2, close: 7.8, high: 8.2, low: 7 },
+                                        ]}
+                                        color="#a855f7"
+                                    />
+                                </div>
+                            }
                         />
 
-                        {/* Heart Rate */}
+                        {/* Heart Rate - Line Chart */}
                         <MetricCard
                             icon={Heart}
                             iconBg="bg-pink-100"
@@ -218,8 +245,7 @@ const ActivityScreen = () => {
                             label="Heart Rate"
                             value={activityData.heartRate.value}
                             unit={activityData.heartRate.unit}
-                            trend={activityData.heartRate.trend}
-                            trendColor="text-pink-500"
+                            chart={<SimpleLineChart data={[65, 68, 72, 70, 75, 72, 68]} color="#ec4899" />}
                         />
                     </div>
                 </section>
