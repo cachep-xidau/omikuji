@@ -666,9 +666,6 @@ const ChatDiaryScreen = () => {
                     <ChevronLeft size={24} className="text-gray-900" />
                 </button>
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[linear-gradient(135deg,#F4AA1C_0%,#EE3424_75%)] flex items-center justify-center shadow-sm">
-                        <Feather size={20} className="text-white" />
-                    </div>
                     <div>
                         <h1 className="text-base font-semibold text-gray-900">{t('chat.title')}</h1>
                         <p className="text-xs text-green-500">● {t('chat.online')}</p>
