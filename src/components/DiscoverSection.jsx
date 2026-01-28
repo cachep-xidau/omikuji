@@ -89,7 +89,7 @@ const DiscoverSection = () => {
                         </div>
                     </div>
                 ))}
-                ))}
+
             </div>
 
             {/* AI Partner Section */}
