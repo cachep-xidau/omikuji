@@ -39,14 +39,11 @@ const ActivityRing = ({ progress, color, size = 120, strokeWidth = 12 }) => {
 
 // Metric Card Component
 // MetricCard Component with Chart Support
-const MetricCard = ({ icon: Icon, iconBg, iconColor, label, value, unit, trend, trendColor, chart }) => (
+const MetricCard = ({ label, value, unit, trend, trendColor, chart }) => (
     <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col h-full justify-between min-h-[140px]">
         <div>
             <div className="flex items-center gap-2 mb-2">
-                <div className={`w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center`}>
-                    <Icon size={18} className={iconColor} />
-                </div>
-                <span className="text-sm text-gray-500">{label}</span>
+                <span className="text-sm font-semibold text-gray-900">{label}</span>
             </div>
             <div className="flex items-baseline gap-1 mb-2">
                 <span className="text-2xl font-bold text-gray-900">{value}</span>
