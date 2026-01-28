@@ -76,7 +76,7 @@ const DiaryHistoryScreen = () => {
             </div>
 
             {/* Header */}
-            <div className="px-6 py-3 flex justify-between items-center bg-white z-10 relative">
+            <div className="px-6 py-3 flex items-center gap-4 bg-white z-10 relative">
                 <button
                     onClick={() => navigate(-1)}
                     className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -85,9 +85,6 @@ const DiaryHistoryScreen = () => {
                 </button>
 
                 <h1 className="text-xl font-bold text-gray-900">{t('history.archive')}</h1>
-
-                {/* Spacer to balance the back button */}
-                <div className="w-10"></div>
             </div>
 
             {/* Sticky Calendar Component */}

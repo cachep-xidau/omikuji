@@ -157,7 +157,7 @@ export const LanguageProvider = ({ children }) => {
         'timeline.noActivity': { ja: 'まだ記録がありません。', en: 'No activity yet.' },
 
         // Diary History Screen
-        'history.archive': { ja: 'アーカイブ', en: 'Archive' },
+        'history.archive': { ja: '履歴', en: 'History' },
         'history.dailyDrawing': { ja: '今日の運勢', en: 'Daily Drawing' },
         'history.omikuji': { ja: 'おみくじ', en: 'Omikuji' },
         'history.page': { ja: 'ページ', en: 'Page' },
