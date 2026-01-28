@@ -136,10 +136,7 @@ const HomeScreen = () => {
               </div>
             </div>
 
-            {/* Description */}
-            <p className="text-sm text-gray-700 mb-4">
-              {t('home.missionDesc')}
-            </p>
+            {/* Description removed as requested */}
 
             {/* Single Mission Card - Redesigned with Progress Bar */}
             {todayMission && (
