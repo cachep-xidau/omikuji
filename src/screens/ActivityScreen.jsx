@@ -43,7 +43,7 @@ const ActivityRing = ({ progress, gradientId, size = 120, strokeWidth = 12, opac
 // Metric Card Component
 // MetricCard Component with Chart Support
 const MetricCard = ({ label, value, unit, trend, trendColor, chart }) => (
-    <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between w-[186px] h-[215px]">
+    <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between h-[215px]">
         <div>
             <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm font-semibold text-gray-900">{label}</span>
@@ -177,7 +177,7 @@ const ActivityScreen = () => {
 
                 {/* Metrics Grid */}
                 <section className="px-6 py-2">
-                    <div className="flex flex-wrap justify-center gap-3">
+                    <div className="grid grid-cols-2 gap-3">
                         {/* Pace - Line Chart */}
                         <MetricCard
                             label="Pace"
@@ -199,7 +199,7 @@ const ActivityScreen = () => {
                         />
 
                         {/* Distance - Big Number (No Chart, Just Text Emphasis) */}
-                        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between w-[186px] h-[215px]">
+                        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between h-[215px]">
                             <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-semibold text-gray-900">Distance</span>
                             </div>
