@@ -16,9 +16,14 @@ import { useDiary } from '../data/DiaryContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { X } from 'lucide-react';
 
-// Module-level variable to track tooltip state across SPA navigations
-// This resets only on full browser refresh
-let hasSeenTooltip = false;
+// Module-level variable is unreliable in some hot-reload/chunk loading scenarios
+// Use window object to ensure persistence until refresh
+const checkTooltipState = () => {
+  if (typeof window !== 'undefined') {
+    return !window.hasClosedHomeTooltip;
+  }
+  return true;
+};
 
 const HomeScreen = () => {
   const navigate = useNavigate();
@@ -27,13 +32,15 @@ const HomeScreen = () => {
   const { t } = useLanguage();
   const hasFortune = getTodaysFortune();
 
-  // Initialize state based on the module-level variable
-  const [showTooltip, setShowTooltip] = useState(!hasSeenTooltip);
+  // Initialize state from window variable
+  const [showTooltip, setShowTooltip] = useState(checkTooltipState);
   const [isFabVisible, setIsFabVisible] = useState(true);
   const lastScrollY = useRef(0);
 
   const handleCloseTooltip = () => {
-    hasSeenTooltip = true;
+    if (typeof window !== 'undefined') {
+      window.hasClosedHomeTooltip = true;
+    }
     setShowTooltip(false);
   };
 
