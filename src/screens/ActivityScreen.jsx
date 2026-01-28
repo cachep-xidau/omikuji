@@ -189,10 +189,7 @@ const ActivityScreen = () => {
                         {/* Distance - Big Number (No Chart, Just Text Emphasis) */}
                         <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
                             <div className="flex items-center gap-2 mb-1">
-                                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                                    <TrendingUp size={18} className="text-blue-500" />
-                                </div>
-                                <span className="text-sm text-gray-500">Distance</span>
+                                <span className="text-sm font-semibold text-gray-900">Distance</span>
                             </div>
                             <div className="flex items-baseline gap-1 my-2">
                                 <span className="text-4xl font-extrabold text-blue-600">{activityData.distance.value}</span>
