@@ -135,31 +135,27 @@ const HomeScreen = () => {
             </div>
           </div>
 
-          <div className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-2xl p-[19px]">
-            {/* Description removed as requested */}
-
-            {/* Single Mission Card - Redesigned with Progress Bar */}
-            {todayMission && (
-              <div className="bg-white rounded-xl p-4 border border-[#E6E3E3]">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-base font-semibold text-black">{todayMission.title}</span>
-                  <span className="text-sm font-bold text-brand-gradient">60%</span>
-                </div>
-
-                {/* Horizontal Progress Bar */}
-                <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-brand-gradient rounded-full"
-                    style={{ width: '60%' }}
-                  />
-                </div>
-
-                <p className="text-[10px] text-gray-400 mt-2 font-medium uppercase tracking-wider">
-                  900 / 1,500 steps completed
-                </p>
+          {/* Single Mission Card - Redesigned and moved out of shaded box */}
+          {todayMission && (
+            <div className="bg-white rounded-xl p-4 border border-[#E6E3E3] shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-base font-semibold text-black">{todayMission.title}</span>
+                <span className="text-sm font-bold text-brand-gradient">60%</span>
               </div>
-            )}
-          </div>
+
+              {/* Horizontal Progress Bar */}
+              <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-brand-gradient rounded-full"
+                  style={{ width: '60%' }}
+                />
+              </div>
+
+              <p className="text-[10px] text-gray-400 mt-2 font-medium uppercase tracking-wider">
+                900 / 1,500 steps completed
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Today Focus */}
