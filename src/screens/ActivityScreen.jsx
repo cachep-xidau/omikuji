@@ -195,7 +195,7 @@ const ActivityScreen = () => {
                             unit=""
                             trend={activityData.steps.trend}
                             trendColor="text-green-500"
-                            chart={<SimpleBarChart data={[4000, 6000, 7500, 8432, 5000, 9000, 8200]} />}
+                            chart={<SimpleBarChart data={[4000, 6000, 7500, 8432, 5000, 9000, 8200]} solidColor="#EE3424" />}
                         />
 
                         {/* Distance - Big Number (No Chart, Just Text Emphasis) */}
@@ -204,10 +204,10 @@ const ActivityScreen = () => {
                                 <span className="text-sm font-semibold text-gray-900">Distance</span>
                             </div>
                             <div className="flex items-baseline gap-1 my-2">
-                                <span className="text-4xl font-extrabold text-blue-600">{activityData.distance.value}</span>
+                                <span className="text-4xl font-extrabold text-black">{activityData.distance.value}</span>
                                 <span className="text-base font-medium text-gray-400">{activityData.distance.unit}</span>
                             </div>
-                            <div className="flex items-center gap-1 text-blue-500">
+                            <div className="flex items-center gap-1 text-gray-500">
                                 <TrendingUp size={14} />
                                 <span className="text-xs">{activityData.distance.trend}</span>
                             </div>
@@ -235,6 +235,7 @@ const ActivityScreen = () => {
                             chart={
                                 <div className="mt-1">
                                     <CandleChart
+                                        solidColor="#EE3424"
                                         data={[
                                             { open: 7, close: 8, high: 9, low: 6 },
                                             { open: 6.5, close: 7.5, high: 8, low: 6 },
