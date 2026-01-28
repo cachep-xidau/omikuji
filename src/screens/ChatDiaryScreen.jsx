@@ -383,13 +383,12 @@ const getAIResponse = (userMessage, language = 'en') => {
 
 const ChatDiaryScreen = () => {
     const navigate = useNavigate();
-    const { getTodaysFortune, addEntry, bloodType, isLoading } = useDiary();
+    const { getTodaysFortune, addEntry, bloodType, isLoading, chatMessages, setChatMessages } = useDiary();
     const { t, language } = useLanguage();
     const [inputText, setInputText] = useState('');
     const [showFortuneModal, setShowFortuneModal] = useState(false);
     const [activeTriggerId, setActiveTriggerId] = useState(null);
 
-    const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
     const hasInitialized = useRef(false);
 
@@ -403,46 +402,59 @@ const ChatDiaryScreen = () => {
         if (hasInitialized.current) return;
         hasInitialized.current = true;
 
-        const todayFortune = getTodaysFortune();
-        let greetingText = getDailySeasonGreeting();
-        let initialMessages = [];
+        const now = new Date();
+        const todayStr = now.toDateString();
+        const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
-        // 1. Determine Greeting
-        if (todayFortune) {
-            const insight = generateFortuneInsight(todayFortune, bloodType);
-            greetingText = insight.text;
-        }
+        // Check if we need to add a daily greeting
+        const lastMessage = chatMessages.length > 0 ? chatMessages[chatMessages.length - 1] : null;
+        const lastMsgDate = lastMessage ? new Date(lastMessage.timestamp || Date.now()).toDateString() : null;
+        const isNewDay = lastMsgDate !== todayStr;
 
-        initialMessages.push({
-            id: 1,
-            text: greetingText,
-            isUser: false,
-            time: '9:00 AM',
-        });
+        if (chatMessages.length === 0 || isNewDay) {
+            const todayFortune = getTodaysFortune();
+            let greetingText = getDailySeasonGreeting();
+            let initialMessages = [];
 
-        // 2. Add Fortune Trigger if not drawn, or Result if drawn
-        if (todayFortune) {
-            console.log("Fortune found, showing result card", todayFortune);
+            // 1. Determine Greeting
+            if (todayFortune) {
+                const insight = generateFortuneInsight(todayFortune, bloodType);
+                greetingText = insight.text;
+            }
+
             initialMessages.push({
-                id: 2,
-                type: 'fortune_result',
-                data: todayFortune,
-                time: '9:01 AM'
+                id: `greeting-${Date.now()}`,
+                text: greetingText,
+                isUser: false,
+                time: timeStr,
+                timestamp: now.toISOString()
             });
-        } else {
-            initialMessages.push({
-                id: 2,
-                type: 'fortune_trigger',
-                time: '9:00 AM',
-            });
-        }
 
-        setMessages(initialMessages);
-    }, [isLoading, getTodaysFortune, bloodType]);
+            // 2. Add Fortune Trigger if not drawn, or Result if drawn
+            if (todayFortune) {
+                initialMessages.push({
+                    id: `fortune-${Date.now()}`,
+                    type: 'fortune_result',
+                    data: todayFortune,
+                    time: timeStr,
+                    timestamp: now.toISOString()
+                });
+            } else {
+                initialMessages.push({
+                    id: `trigger-${Date.now()}`,
+                    type: 'fortune_trigger',
+                    time: timeStr,
+                    timestamp: now.toISOString()
+                });
+            }
+
+            setChatMessages(prev => [...prev, ...initialMessages]);
+        }
+    }, [isLoading, getTodaysFortune, bloodType, chatMessages, setChatMessages]);
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
+    }, [chatMessages]);
 
     const handleSend = (textOverride = null) => {
         const textToSend = typeof textOverride === 'string' ? textOverride : inputText;
@@ -455,39 +467,42 @@ const ChatDiaryScreen = () => {
         addEntry(textToSend, 'entry');
 
         const userMessage = {
-            id: messages.length + 1,
+            id: `user-${Date.now()}`,
             text: textToSend,
             isUser: true,
             time: timeStr,
+            timestamp: now.toISOString()
         };
 
-        setMessages(prev => [...prev, userMessage]);
+        setChatMessages(prev => [...prev, userMessage]);
         setInputText('');
 
         setTimeout(() => {
             const aiResponse = getAIResponse(textToSend, language);
 
             const aiMessage = {
-                id: messages.length + 2,
+                id: `ai-${Date.now()}`,
                 ...aiResponse,
                 isUser: false,
                 time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+                timestamp: new Date().toISOString()
             };
 
             // Check if response has fortune trigger
             if (aiMessage.fortune) {
                 const introMsg = { ...aiMessage, fortune: undefined };
-                setMessages(prev => [...prev, introMsg]);
+                setChatMessages(prev => [...prev, introMsg]);
 
                 setTimeout(() => {
-                    setMessages(prev => [...prev, {
-                        id: Date.now(),
+                    setChatMessages(prev => [...prev, {
+                        id: `trigger-${Date.now()}`,
                         type: 'fortune_trigger',
                         time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+                        timestamp: new Date().toISOString()
                     }]);
                 }, 500);
             } else {
-                setMessages(prev => [...prev, aiMessage]);
+                setChatMessages(prev => [...prev, aiMessage]);
             }
         }, 1000);
     };
@@ -509,13 +524,14 @@ const ChatDiaryScreen = () => {
         const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
         // 1. Replace the Trigger Button with the Fortune Card Result
-        setMessages(prev => prev.map(msg => {
+        setChatMessages(prev => prev.map(msg => {
             if (msg.id === activeTriggerId) {
                 return {
                     ...msg,
                     type: 'fortune_result',
                     data: fortune,
-                    time: timeStr
+                    time: timeStr,
+                    timestamp: now.toISOString()
                 };
             }
             return msg;
@@ -549,7 +565,7 @@ const ChatDiaryScreen = () => {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-                {messages.map((message) => (
+                {chatMessages.map((message) => (
                     <MessageBubble
                         key={message.id}
                         message={message}
