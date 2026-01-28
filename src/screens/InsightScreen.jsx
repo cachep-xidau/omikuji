@@ -51,31 +51,28 @@ const WalkingHighlightSection = () => {
         <section className="px-6 mb-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-3">Walking Highlight</h2>
 
-            <div className="bg-gradient-to-br from-[#181818] to-[#2d2d2d] rounded-2xl p-5 shadow-lg text-white relative overflow-hidden">
-                {/* Decorative background element */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/3"></div>
-
-                <div className="relative z-10">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Award className="text-yellow-400" size={20} />
-                        <span className="text-sm font-medium text-gray-300">Best Performance</span>
+            <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                <div className="flex items-center gap-2 mb-4">
+                    <div className="p-1.5 bg-[oklch(75%_.183_55.934)]/10 rounded-lg">
+                        <Award className="text-[oklch(75%_.183_55.934)]" size={20} />
                     </div>
+                    <span className="text-sm font-medium text-gray-500">Best Performance</span>
+                </div>
 
-                    <div className="flex justify-between items-end">
-                        <div>
-                            <p className="text-3xl font-bold mb-1">Morning Walk</p>
-                            <p className="text-gray-400 text-sm">Wednesday, Jan 24</p>
-                        </div>
-                        <div className="text-right">
-                            <p className="text-2xl font-semibold">5.2 km</p>
-                            <p className="text-gray-400 text-xs">Distance</p>
-                        </div>
+                <div className="flex justify-between items-end">
+                    <div>
+                        <p className="text-3xl font-bold text-gray-900 mb-1">Morning Walk</p>
+                        <p className="text-gray-500 text-sm">Wednesday, Jan 24</p>
                     </div>
+                    <div className="text-right">
+                        <p className="text-2xl font-semibold text-gray-900">5.2 km</p>
+                        <p className="text-gray-500 text-xs">Distance</p>
+                    </div>
+                </div>
 
-                    <div className="mt-4 flex gap-2">
-                        <span className="text-xs bg-white/10 px-2 py-1 rounded text-gray-200">Longest Duration</span>
-                        <span className="text-xs bg-white/10 px-2 py-1 rounded text-gray-200">Most Calories</span>
-                    </div>
+                <div className="mt-4 flex gap-2">
+                    <span className="text-xs bg-[oklch(75%_.183_55.934)]/10 px-2 py-1 rounded text-gray-700 border border-[oklch(75%_.183_55.934)]/20">Longest Duration</span>
+                    <span className="text-xs bg-[oklch(75%_.183_55.934)]/10 px-2 py-1 rounded text-gray-700 border border-[oklch(75%_.183_55.934)]/20">Most Calories</span>
                 </div>
             </div>
         </section>
