@@ -172,7 +172,7 @@ export const LanguageProvider = ({ children }) => {
         'fortune.button.tie': { ja: '神社に結ぶ', en: 'Tie at Shrine' },
 
         // Chat Screen
-        'chat.title': { ja: 'フォーチュンテラー', en: 'Fortune Teller' },
+        'chat.title': { ja: 'チャット日記', en: 'Chat Diary' },
         'chat.online': { ja: 'オンライン', en: 'Online' },
         'chat.placeholder': { ja: '日記を書く、または、導きを求める...', en: 'Write your diary or ask for guidance...' },
         'chat.walkingTips': { ja: '🚶 ウォーキングのヒント', en: '🚶 Walking tips' },

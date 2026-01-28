@@ -273,7 +273,7 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
     );
 };
 
-// Fortune Teller AI responses
+// Chat Diary AI responses
 const getAIResponse = (userMessage, language = 'en') => {
     const lowerMessage = userMessage.toLowerCase();
     const now = new Date();
