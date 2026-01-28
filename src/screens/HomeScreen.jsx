@@ -141,15 +141,25 @@ const HomeScreen = () => {
               {t('home.missionDesc')}
             </p>
 
-            {/* Single Mission Card */}
+            {/* Single Mission Card - Redesigned with Progress Bar */}
             {todayMission && (
-              <div className="bg-white rounded-xl p-4 flex items-center justify-between border border-[#E6E3E3]">
-                <span className="text-base font-semibold text-black">{todayMission.title}</span>
-                <div className="flex gap-1">
-                  <img src={getImagePath('/images/difficulty-icon.png')} alt="Difficulty" className="w-[18px] h-[18px] object-contain" />
-                  <img src={getImagePath('/images/difficulty-icon.png')} alt="Difficulty" className="w-[18px] h-[18px] object-contain opacity-30" />
-                  <img src={getImagePath('/images/difficulty-icon.png')} alt="Difficulty" className="w-[18px] h-[18px] object-contain opacity-30" />
+              <div className="bg-white rounded-xl p-4 border border-[#E6E3E3]">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-base font-semibold text-black">{todayMission.title}</span>
+                  <span className="text-sm font-bold text-brand-gradient">60%</span>
                 </div>
+
+                {/* Horizontal Progress Bar */}
+                <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-brand-gradient rounded-full"
+                    style={{ width: '60%' }}
+                  />
+                </div>
+
+                <p className="text-[10px] text-gray-400 mt-2 font-medium uppercase tracking-wider">
+                  900 / 1,500 steps completed
+                </p>
               </div>
             )}
           </div>
