@@ -14,14 +14,14 @@ const RecapSection = () => {
 
             <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
                 <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
-                        <TrendingUp size={24} className="text-orange-500" />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 flex items-center justify-center flex-shrink-0">
+                        <TrendingUp size={24} className="text-[#F4AA1C]" />
                     </div>
                     <div>
                         <h3 className="text-base font-semibold text-gray-900">Weekly Progress</h3>
                         <p className="text-sm text-gray-500 mt-1 leading-relaxed">
                             You've walked <span className="font-semibold text-gray-900">14.2 km</span> this week.
-                            That's <span className="text-[oklch(75%_.183_55.934)] font-medium">+15%</span> compared to last week!
+                            That's <span className="text-brand-gradient font-bold">+15%</span> compared to last week!
                         </p>
                     </div>
                 </div>
@@ -53,8 +53,8 @@ const WalkingHighlightSection = () => {
 
             <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                    <div className="p-1.5 bg-[oklch(75%_.183_55.934)]/10 rounded-lg">
-                        <Award className="text-[oklch(75%_.183_55.934)]" size={20} />
+                    <div className="p-1.5 bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 rounded-lg">
+                        <Award className="text-[#F4AA1C]" size={20} />
                     </div>
                     <span className="text-sm font-medium text-gray-500">Best Performance</span>
                 </div>
@@ -71,8 +71,8 @@ const WalkingHighlightSection = () => {
                 </div>
 
                 <div className="mt-4 flex gap-2">
-                    <span className="text-xs bg-[oklch(75%_.183_55.934)]/10 px-2 py-1 rounded text-gray-700 border border-[oklch(75%_.183_55.934)]/20">Longest Duration</span>
-                    <span className="text-xs bg-[oklch(75%_.183_55.934)]/10 px-2 py-1 rounded text-gray-700 border border-[oklch(75%_.183_55.934)]/20">Most Calories</span>
+                    <span className="text-xs bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 px-2 py-1 rounded text-gray-700 border border-[#F4AA1C]/20">Longest Duration</span>
+                    <span className="text-xs bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 px-2 py-1 rounded text-gray-700 border border-[#F4AA1C]/20">Most Calories</span>
                 </div>
             </div>
         </section>
@@ -97,16 +97,16 @@ const WalkHabitSection = () => {
 
             <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-[oklch(75%_.183_55.934)]/10 rounded-lg">
-                        <Calendar size={20} className="text-[oklch(75%_.183_55.934)]" />
+                    <div className="p-2 bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 rounded-lg">
+                        <Activity size={20} className="text-[#F4AA1C]" />
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-900">Consistency Score</p>
                         <div className="flex items-center gap-2">
                             <div className="h-1.5 w-24 bg-gray-100 rounded-full overflow-hidden">
-                                <div className="h-full bg-[oklch(75%_.183_55.934)] w-[80%]" />
+                                <div className="h-full bg-brand-gradient w-[80%]" />
                             </div>
-                            <span className="text-xs text-[oklch(75%_.183_55.934)] font-bold">80%</span>
+                            <span className="text-xs text-brand-gradient font-bold">80%</span>
                         </div>
                     </div>
                 </div>
@@ -118,9 +118,9 @@ const WalkHabitSection = () => {
                         let height = 'h-1.5';
                         let color = 'bg-gray-100';
 
-                        if (level === 1) { height = 'h-8'; color = 'bg-[oklch(75%_.183_55.934)]/40'; }
-                        if (level === 2) { height = 'h-14'; color = 'bg-[oklch(75%_.183_55.934)]/70'; }
-                        if (level === 3) { height = 'h-20'; color = 'bg-[oklch(75%_.183_55.934)]'; }
+                        if (level === 1) { height = 'h-8'; color = 'bg-brand-gradient opacity-40'; }
+                        if (level === 2) { height = 'h-14'; color = 'bg-brand-gradient opacity-70'; }
+                        if (level === 3) { height = 'h-20'; color = 'bg-brand-gradient'; }
 
                         return (
                             <div key={i} className="flex flex-col items-center gap-2">
