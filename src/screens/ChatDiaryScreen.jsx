@@ -656,10 +656,12 @@ const ChatDiaryScreen = () => {
                 </div>
             </div>
 
-            <StatusBar />
+            <div className="bg-white">
+                <StatusBar />
+            </div>
 
             {/* Header */}
-            <div className="px-4 py-3 flex items-center gap-3 bg-white border-b border-gray-100 flex-shrink-0">
+            <div className="px-4 py-3 flex items-center gap-3 bg-white flex-shrink-0">
                 <button onClick={() => navigate(-1)} className="p-1">
                     <ChevronLeft size={24} className="text-gray-900" />
                 </button>

@@ -71,9 +71,12 @@ const DiaryHistoryScreen = () => {
                 </div>
             </div>
 
-            <StatusBar />
+            <div className="bg-white">
+                <StatusBar />
+            </div>
+
             {/* Header */}
-            <div className="px-6 pt-12 pb-4 flex justify-between items-center bg-white z-10 shadow-sm relative">
+            <div className="px-6 pt-12 pb-4 flex justify-between items-center bg-white z-10 relative">
                 <button
                     onClick={() => navigate(-1)}
                     className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
