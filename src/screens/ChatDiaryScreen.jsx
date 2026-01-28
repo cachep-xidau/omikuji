@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import StatusBar from '../components/StatusBar';
-import { ChevronLeft, Send, Sparkles, Footprints, Gift, X, Share2, Crown, History, Feather } from 'lucide-react';
+import { ChevronLeft, Send, Sparkles, Footprints, Gift, X, Share2, Crown, History, Feather, Mic, Volume2, Square } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDiary } from '../data/DiaryContext';
 import FortuneCard from '../components/FortuneCard';
 import AISuggestion from '../components/AISuggestion';
+import VoiceRecordingModal from '../components/VoiceRecordingModal';
 import { useLanguage } from '../contexts/LanguageContext';
 import { generateFortuneInsight } from '../utils/mirrorInsightGenerator';
 import { getImagePath } from '../utils/imagePath';
@@ -45,6 +46,48 @@ const MirrorInsightBubble = ({ data, time }) => (
         </div>
     </div>
 );
+
+// Voice Message Bubble Component
+const VoiceMessageBubble = ({ duration, time }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const togglePlay = () => {
+        setIsPlaying(!isPlaying);
+        if (!isPlaying) {
+            setTimeout(() => setIsPlaying(false), 3000);
+        }
+    };
+
+    return (
+        <div className="flex justify-end mb-3">
+            <div
+                onClick={togglePlay}
+                className="max-w-[70%] bg-purple-600 rounded-2xl rounded-br-md px-4 py-3 text-white shadow-md flex items-center gap-3 cursor-pointer hover:bg-purple-700 transition-colors"
+            >
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                    <Volume2 size={18} className={isPlaying ? 'animate-pulse' : ''} />
+                </div>
+                <div className="flex-1 min-w-[100px]">
+                    <div className="flex items-center gap-1 h-3">
+                        {[1, 2, 3, 4, 1, 2, 3, 2, 1, 4, 3, 2].map((v, i) => (
+                            <motion.div
+                                key={i}
+                                animate={isPlaying ? { height: [4, v * 4, 4] } : { height: 4 }}
+                                transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
+                                className="w-1 bg-white/60 rounded-full"
+                                style={{ height: '4px' }}
+                            />
+                        ))}
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                        <span className="text-[10px] opacity-80">{isPlaying ? 'Playing...' : 'Voice message'}</span>
+                        <span className="text-[10px] opacity-80 font-mono">0:{duration.toString().padStart(2, '0')}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 // Fortune Draw Modal
 const FortuneDrawModal = ({ isOpen, onClose, onKeep }) => {
@@ -220,6 +263,10 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
     const { t } = useLanguage();
     if (message.type === 'mirror_insight') {
         return <MirrorInsightBubble data={message.data} time={message.time} />;
+    }
+
+    if (message.type === 'voice_msg') {
+        return <VoiceMessageBubble duration={message.duration} time={message.time} />;
     }
 
     if (message.type === 'fortune_trigger') {
@@ -399,6 +446,7 @@ const ChatDiaryScreen = () => {
     const [inputText, setInputText] = useState('');
     const [showFortuneModal, setShowFortuneModal] = useState(false);
     const [activeTriggerId, setActiveTriggerId] = useState(null);
+    const [isRecording, setIsRecording] = useState(false);
 
     const messagesEndRef = useRef(null);
     const hasInitialized = useRef(false);
@@ -524,6 +572,52 @@ const ChatDiaryScreen = () => {
         }
     };
 
+    const handleVoiceFinish = () => {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+        // 1. Send Audio Message
+        const voiceMsg = {
+            id: `voice-${Date.now()}`,
+            type: 'voice_msg',
+            duration: 8, // Simulating 8 second duration
+            isUser: true,
+            time: timeStr,
+            timestamp: now.toISOString()
+        };
+
+        // 2. Send Transcript Message
+        const transcriptText = language === 'ja'
+            ? "今日はとても良い天気ですね。公園を散歩しようと思います。"
+            : "It's a beautiful day today. I think I'll go for a walk in the park.";
+
+        const transcriptMsg = {
+            id: `user-${Date.now() + 1}`,
+            text: transcriptText,
+            isUser: true,
+            time: timeStr,
+            timestamp: now.toISOString()
+        };
+
+        setChatMessages(prev => [...prev, voiceMsg, transcriptMsg]);
+        setIsRecording(false);
+
+        // 3. Trigger AI Response
+        setTimeout(() => {
+            const aiResponse = getAIResponse(transcriptText, language);
+
+            const aiMessage = {
+                id: `ai-${Date.now()}`,
+                ...aiResponse,
+                isUser: false,
+                time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+                timestamp: new Date().toISOString()
+            };
+
+            setChatMessages(prev => [...prev, aiMessage]);
+        }, 1200);
+    };
+
     const handleFortuneClick = (msgId) => {
         setActiveTriggerId(msgId);
         setShowFortuneModal(true);
@@ -610,6 +704,12 @@ const ChatDiaryScreen = () => {
             {/* Input Area */}
             <div className="px-4 py-3 bg-white border-t border-gray-100 flex-shrink-0">
                 <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setIsRecording(true)}
+                        className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
+                    >
+                        <Mic size={20} />
+                    </button>
                     <input
                         type="text"
                         value={inputText}
@@ -630,6 +730,13 @@ const ChatDiaryScreen = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Voice Recording Modal */}
+            <VoiceRecordingModal
+                isOpen={isRecording}
+                onClose={() => setIsRecording(false)}
+                onFinish={handleVoiceFinish}
+            />
 
             {/* Fortune Draw Modal */}
             <FortuneDrawModal
