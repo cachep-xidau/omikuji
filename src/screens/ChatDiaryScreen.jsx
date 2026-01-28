@@ -19,10 +19,10 @@ const MirrorInsightBubble = ({ data, time }) => (
             <Sparkles size={16} className="text-white" />
         </div>
         <div className="max-w-[75%] rounded-2xl px-4 py-3 bg-white border border-gray-100 text-gray-900 rounded-bl-md shadow-sm">
-            <p className="text-sm text-gray-800 font-serif leading-relaxed">
+            <p className="text-sm text-gray-800 leading-relaxed font-medium">
                 {data.text}
             </p>
-            <p className="text-[10px] mt-1 text-gray-400">
+            <p className="text-[10px] mt-1 text-gray-400 font-medium tracking-tight">
                 {time}
             </p>
         </div>
@@ -224,7 +224,7 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
                     <Sparkles size={16} className="text-white" />
                 </div>
                 <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-white border border-gray-100 text-gray-900 rounded-bl-md shadow-sm">
-                    <p className="text-sm font-serif leading-relaxed">
+                    <p className="text-sm leading-relaxed font-medium">
                         {message.text}
                     </p>
                     <div className="mt-3">
@@ -265,7 +265,7 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
                         <p className="text-xs text-gray-700">{message.suggestion}</p>
                     </div>
                 )}
-                <p className={`text-[10px] mt-1 ${isUser ? 'text-gray-400' : 'text-gray-400'}`}>
+                <p className={`text-[10px] mt-1 ${isUser ? 'text-gray-400' : 'text-gray-400'} font-medium tracking-tight`}>
                     {message.time}
                 </p>
             </div>

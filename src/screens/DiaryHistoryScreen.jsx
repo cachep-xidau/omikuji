@@ -16,6 +16,8 @@ const DiaryHistoryScreen = () => {
     const { t, language } = useLanguage();
     const { getCombinedTimeline } = useDiary();
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const isInternalScroll = useRef(false);
+    const scrollTimeout = useRef(null);
 
     const allItems = getCombinedTimeline();
 
@@ -39,11 +41,23 @@ const DiaryHistoryScreen = () => {
     }, [allItems]);
 
     const handleDateSelect = (date) => {
-        setSelectedDate(date);
         const key = date.toISOString().split('T')[0];
         const element = document.getElementById(`date-group-${key}`);
+
+        // Update selected date state regardless of element presence
+        setSelectedDate(date);
+
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            isInternalScroll.current = true;
+            element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+
+            // Clear existing timeout if any
+            if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+
+            // Release lock after smooth scroll is likely done
+            scrollTimeout.current = setTimeout(() => {
+                isInternalScroll.current = false;
+            }, 800);
         }
     };
 
@@ -71,7 +85,12 @@ const DiaryHistoryScreen = () => {
 
             {/* Content Area */}
             <div className="flex-1 overflow-hidden relative">
-                <VerticalFeedView groups={groupedItems} t={t} onDateVisible={setSelectedDate} />
+                <VerticalFeedView
+                    groups={groupedItems}
+                    t={t}
+                    onDateVisible={setSelectedDate}
+                    isInternalScroll={isInternalScroll}
+                />
             </div>
         </div>
     );
@@ -79,7 +98,7 @@ const DiaryHistoryScreen = () => {
 
 // --- Sub-Components ---
 
-const VerticalFeedView = ({ groups, t, onDateVisible }) => {
+const VerticalFeedView = ({ groups, t, onDateVisible, isInternalScroll }) => {
     const navigate = useNavigate();
     const { formatDate } = useLanguage();
     const observerRef = useRef(null);
@@ -88,11 +107,14 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
     useEffect(() => {
         const options = {
             root: scrollContainerRef.current,
-            rootMargin: '-10% 0px -80% 0px', // Trigger near the top of viewport
+            rootMargin: '-10% 0px -70% 0px', // Trigger focus when element hits top 10%
             threshold: 0
         };
 
         const callback = (entries) => {
+            // IF we are currently doing an internal scroll from selecting a date, skip the scroll-sync logic
+            if (isInternalScroll.current) return;
+
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const dateStr = entry.target.getAttribute('data-date');
@@ -105,17 +127,16 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
 
         observerRef.current = new IntersectionObserver(callback, options);
 
-        // Use a small timeout to ensure DOM elements are rendered
         const timer = setTimeout(() => {
             const targets = document.querySelectorAll('.date-group-section');
             targets.forEach(target => observerRef.current.observe(target));
-        }, 100);
+        }, 300);
 
         return () => {
             clearTimeout(timer);
             if (observerRef.current) observerRef.current.disconnect();
         };
-    }, [groups, onDateVisible]);
+    }, [groups, onDateVisible, isInternalScroll]);
 
     return (
         <motion.div
@@ -123,7 +144,7 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             ref={scrollContainerRef}
-            className="h-full overflow-y-auto px-6 pb-24 space-y-8 no-scrollbar"
+            className="h-full overflow-y-auto px-6 pb-24 space-y-8 no-scrollbar scroll-smooth"
         >
             {groups.length === 0 ? (
                 <div className="text-center py-20 opacity-40">
@@ -157,7 +178,8 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
                         <div className="space-y-4 pl-4 border-l border-gray-100">
                             {group.items.map(item => {
                                 // Render different types of content
-                                if (item.type === 'fortune') {
+                                if (item.type === 'fortune' || item.type === 'fortune_result') {
+                                    const fortuneData = item.type === 'fortune' ? item : item.data;
                                     return (
                                         <div key={item.id} className="relative group">
                                             <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-yellow-400 border-2 border-white" />
@@ -166,22 +188,7 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
                                                 <span className="ml-2 bg-yellow-50 text-yellow-600 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">Fortune</span>
                                             </p>
                                             <div className="transform origin-left scale-90 -mt-2">
-                                                <FortuneCard fortune={item} isTied={item.isTied} />
-                                            </div>
-                                        </div>
-                                    );
-                                }
-
-                                if (item.type === 'fortune_result') {
-                                    return (
-                                        <div key={item.id} className="relative group">
-                                            <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-yellow-400 border-2 border-white" />
-                                            <p className="text-gray-400 text-xs mb-2 font-bold uppercase tracking-widest pl-1">
-                                                {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                <span className="ml-2 bg-yellow-50 text-yellow-600 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">Fortune</span>
-                                            </p>
-                                            <div className="transform origin-left scale-90 -mt-2">
-                                                <FortuneCard fortune={item.data} isTied={item.data?.isTied} />
+                                                <FortuneCard fortune={fortuneData} isTied={fortuneData?.isTied} />
                                             </div>
                                         </div>
                                     );
@@ -191,7 +198,7 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
                                     return (
                                         <div key={item.id} className="relative group">
                                             <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-blue-400 border-2 border-white" />
-                                            <p className="text-gray-400 text-xs mb-1 font-mono flex items-center gap-1">
+                                            <p className="text-gray-400 text-xs mb-1 font-medium tracking-tight flex items-center gap-1">
                                                 {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 <span className="bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">Me</span>
                                             </p>
@@ -210,7 +217,7 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
                                     return (
                                         <div key={item.id} className="relative group">
                                             <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-purple-400 border-2 border-white" />
-                                            <p className="text-gray-400 text-xs mb-1 font-mono flex items-center gap-1">
+                                            <p className="text-gray-400 text-xs mb-1 font-medium tracking-tight flex items-center gap-1">
                                                 {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 <span className="bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">AI</span>
                                             </p>
@@ -221,7 +228,7 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
                                                         {isInsight ? 'Mirror Insight' : (isAIEntry ? 'The Mirror' : 'AI Companion')}
                                                     </span>
                                                 </div>
-                                                <p className="text-gray-900 italic font-serif leading-relaxed">
+                                                <p className="text-gray-900 leading-relaxed font-medium">
                                                     {isInsight ? item.data.text : (item.text || item.content)}
                                                 </p>
                                                 {isProposal && (
@@ -240,11 +247,23 @@ const VerticalFeedView = ({ groups, t, onDateVisible }) => {
                                     );
                                 }
 
-                                // Default fallback for any other items
+                                if (item.type === 'fortune_trigger') {
+                                    return (
+                                        <div key={item.id} className="relative group opacity-50">
+                                            <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-gray-300 border-2 border-white" />
+                                            <p className="text-gray-400 text-xs mb-1 font-medium tracking-tight">
+                                                {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </p>
+                                            <div className="text-[10px] uppercase font-bold text-gray-400 italic">Fortune Drawn / Skipped</div>
+                                        </div>
+                                    );
+                                }
+
+                                // Default fallback for any other items (Observations or standard entries)
                                 return (
                                     <div key={item.id} className="relative group">
                                         <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-gray-200 border-2 border-white" />
-                                        <p className="text-gray-400 text-xs mb-1 font-mono">
+                                        <p className="text-gray-400 text-xs mb-1 font-medium tracking-tight">
                                             {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </p>
                                         <div className="bg-gray-50 rounded-xl p-4 text-gray-900 text-base leading-relaxed mr-4">
