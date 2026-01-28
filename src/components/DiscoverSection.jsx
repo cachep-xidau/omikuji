@@ -1,67 +1,89 @@
-import { ChevronRight, Dumbbell, Bot, Gift } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ChevronRight, MapPin } from 'lucide-react';
+import { getImagePath } from '../utils/imagePath';
 
 const DiscoverSection = () => {
     const navigate = useNavigate();
 
-    const discoverItems = [
+    const locations = [
         {
             id: 1,
-            title: 'Workout Tips',
-            icon: Dumbbell,
-            color: 'bg-blue-50',
-            iconColor: 'text-blue-500',
-            path: '/quest',
+            title: 'Meiji Jingu Shrine',
+            distance: '1.2 km',
+            image: 'file:///Users/lucasbraci/.gemini/antigravity/brain/c44faa7d-ccef-43e2-8f70-fb63b7873aca/location_shrine_1769562226071.png',
+            tags: ['Peaceful', 'Nature'],
         },
         {
             id: 2,
-            title: 'AI Health Partners',
-            icon: Bot,
-            color: 'bg-emerald-50',
-            iconColor: 'text-emerald-500',
-            path: '/chat-diary',
+            title: 'Sumida River Walk',
+            distance: '3.5 km',
+            image: 'file:///Users/lucasbraci/.gemini/antigravity/brain/c44faa7d-ccef-43e2-8f70-fb63b7873aca/location_river_1769562243970.png',
+            tags: ['Scenic', 'Riverside'],
         },
         {
             id: 3,
-            title: 'Gacha Collection',
-            icon: Gift,
-            color: 'bg-purple-50',
-            iconColor: 'text-purple-500',
-            path: '/reward',
+            title: 'Omotesando Avenue',
+            distance: '0.8 km',
+            image: 'file:///Users/lucasbraci/.gemini/antigravity/brain/c44faa7d-ccef-43e2-8f70-fb63b7873aca/location_urban_1769562259829.png',
+            tags: ['Urban', 'Shopping'],
         },
     ];
 
     return (
-        <section className="px-6 py-4">
+        <section className="px-6 py-4 pb-8">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-black">Discover</h3>
-                <button className="flex items-center gap-1 text-gray-500 text-sm">
-                    <span>See all</span>
+                <h3 className="text-xl font-semibold text-black">Location</h3>
+                <button
+                    onClick={() => navigate('/activity/walking-route')}
+                    className="flex items-center gap-1 text-gray-500 text-sm"
+                >
+                    <span>View map</span>
                     <ChevronRight size={16} />
                 </button>
             </div>
 
-            {/* Discover Grid */}
-            <div className="grid grid-cols-3 gap-3">
-                {discoverItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                        <div
-                            key={item.id}
-                            onClick={() => item.path && navigate(item.path)}
-                            className="flex flex-col items-center p-4 rounded-2xl bg-white border border-gray-100 shadow-sm cursor-pointer transition-all hover:shadow-md hover:border-gray-200 active:scale-[0.98]"
-                        >
-                            {/* Icon */}
-                            <div className={`w-12 h-12 rounded-xl ${item.color} flex items-center justify-center mb-2`}>
-                                <Icon size={24} className={item.iconColor} />
+            {/* Horizontal Scroll Locations */}
+            <div className="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide snap-x snap-mandatory">
+                {locations.map((location) => (
+                    <div
+                        key={location.id}
+                        onClick={() => navigate('/activity/walking-route')}
+                        className="flex-shrink-0 w-[280px] h-[180px] rounded-2xl relative overflow-hidden shadow-md snap-center cursor-pointer group"
+                    >
+                        {/* Background Image */}
+                        <img
+                            src={location.image}
+                            alt={location.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                        {/* Content */}
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                            <div className="flex items-start justify-between">
+                                <div>
+                                    <h4 className="text-white font-bold text-lg mb-1">{location.title}</h4>
+                                    <div className="flex items-center gap-1 text-gray-300 text-xs mb-2">
+                                        <MapPin size={12} />
+                                        <span>{location.distance} away</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Text */}
-                            <h4 className="text-xs font-semibold text-gray-800 text-center leading-tight">{item.title}</h4>
+                            {/* Tags */}
+                            <div className="flex gap-2">
+                                {location.tags.map((tag, i) => (
+                                    <span key={i} className="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-[10px] text-white font-medium border border-white/10">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
-                    );
-                })}
+                    </div>
+                ))}
             </div>
         </section>
     );
