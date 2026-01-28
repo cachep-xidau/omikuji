@@ -552,8 +552,8 @@ const ChatDiaryScreen = () => {
                     <ChevronLeft size={24} className="text-gray-900" />
                 </button>
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
-                        <Sparkles size={20} className="text-white" />
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center shadow-sm">
+                        <Sparkles size={20} className="text-white fill-current opacity-90" />
                     </div>
                     <div>
                         <h1 className="text-base font-semibold text-gray-900">{t('chat.title')}</h1>

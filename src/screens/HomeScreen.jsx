@@ -3,7 +3,7 @@ import TodayFocus from '../components/TodayFocus';
 import FeatureSection from '../components/FeatureSection';
 import DiscoverSection from '../components/DiscoverSection';
 import NavBar from '../components/NavBar';
-import { Sun, Feather } from 'lucide-react';
+import { Sun, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { missions } from '../data/mockData';
 import { getImagePath } from '../utils/imagePath';
@@ -168,10 +168,10 @@ const HomeScreen = () => {
       {/* Floating Diary Button */}
       <Link
         to="/chat-diary"
-        className={`absolute bottom-28 right-6 w-14 h-14 rounded-full bg-[linear-gradient(135deg,#F4AA1C_0%,#EE3424_75%)] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 z-10 ${isFabVisible ? 'scale-100 translate-y-0' : 'scale-[0.6] translate-y-8 opacity-80'
+        className={`absolute bottom-28 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 z-10 ${isFabVisible ? 'scale-100 translate-y-0' : 'scale-[0.6] translate-y-8 opacity-80'
           } hover:scale-105 active:scale-95`}
       >
-        <Feather size={24} className="text-white" />
+        <Sparkles size={28} className="text-white fill-current opacity-80" />
         {!hasFortune && (
           <div className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center border border-white translate-x-1 -translate-y-1 animate-pulse">
             <span className="text-[10px] text-white font-bold">1</span>
