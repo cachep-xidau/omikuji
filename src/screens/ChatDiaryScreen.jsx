@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import StatusBar from '../components/StatusBar';
-import { ChevronLeft, Send, Sparkles, Footprints, Gift, X, Share2, Crown, History } from 'lucide-react';
+import { ChevronLeft, Send, Sparkles, Footprints, Gift, X, Share2, Crown, History, Feather } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDiary } from '../data/DiaryContext';
@@ -552,8 +552,8 @@ const ChatDiaryScreen = () => {
                     <ChevronLeft size={24} className="text-gray-900" />
                 </button>
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center shadow-sm">
-                        <Sparkles size={20} className="text-white fill-current opacity-90" />
+                    <div className="w-10 h-10 rounded-full bg-[linear-gradient(135deg,#F4AA1C_0%,#EE3424_75%)] flex items-center justify-center shadow-sm">
+                        <Feather size={20} className="text-white" />
                     </div>
                     <div>
                         <h1 className="text-base font-semibold text-gray-900">{t('chat.title')}</h1>
