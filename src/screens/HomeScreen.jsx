@@ -123,19 +123,19 @@ const HomeScreen = () => {
 
         {/* Today Mission Section - Single Mission */}
         <section className="px-6 py-4">
-          <div className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-2xl p-[19px]">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-xl font-bold text-black">{t('home.todayMission')}</h3>
-              <div className="flex items-center gap-1.5 text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
-                <span className="text-sm">{t('common.validFor')} 20:15:01</span>
-              </div>
+          {/* Header moved outside */}
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-semibold text-black">{t('home.todayMission')}</h3>
+            <div className="flex items-center gap-1.5 text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span className="text-sm">{t('common.validFor')} 20:15:01</span>
             </div>
+          </div>
 
+          <div className="bg-[#F5F5F5] border border-[#E6E3E3] rounded-2xl p-[19px]">
             {/* Description removed as requested */}
 
             {/* Single Mission Card - Redesigned with Progress Bar */}
