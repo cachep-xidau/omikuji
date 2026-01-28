@@ -38,19 +38,28 @@ const ActivityRing = ({ progress, color, size = 120, strokeWidth = 12 }) => {
 };
 
 // Metric Card Component
-const MetricCard = ({ icon: Icon, iconBg, iconColor, label, value, unit, trend, trendColor }) => (
-    <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-        <div className="flex items-center gap-2 mb-3">
-            <div className={`w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center`}>
-                <Icon size={18} className={iconColor} />
+// MetricCard Component with Chart Support
+const MetricCard = ({ icon: Icon, iconBg, iconColor, label, value, unit, trend, trendColor, chart }) => (
+    <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col h-full justify-between min-h-[140px]">
+        <div>
+            <div className="flex items-center gap-2 mb-2">
+                <div className={`w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center`}>
+                    <Icon size={18} className={iconColor} />
+                </div>
+                <span className="text-sm text-gray-500">{label}</span>
             </div>
-            <span className="text-sm text-gray-500">{label}</span>
+            <div className="flex items-baseline gap-1 mb-2">
+                <span className="text-2xl font-bold text-gray-900">{value}</span>
+                <span className="text-sm text-gray-400">{unit}</span>
+            </div>
         </div>
-        <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-gray-900">{value}</span>
-            <span className="text-sm text-gray-400">{unit}</span>
-        </div>
-        {trend && (
+
+        {/* Render Chart if available, otherwise trend */}
+        {chart ? (
+            <div className="mt-2 text-xs w-full">
+                {chart}
+            </div>
+        ) : trend && (
             <div className={`flex items-center gap-1 mt-2 ${trendColor}`}>
                 <TrendingUp size={14} />
                 <span className="text-xs">{trend}</span>
