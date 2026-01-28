@@ -50,30 +50,33 @@ const RecapSection = () => {
 const WalkingHighlightSection = () => {
     return (
         <section className="px-6 mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Walking Highlight</h2>
-
             <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                    <div className="p-1.5 bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 rounded-lg">
-                        <Award className="text-[#F4AA1C]" size={20} />
+                <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 flex items-center justify-center flex-shrink-0">
+                        <Award className="text-[#F4AA1C]" size={24} />
                     </div>
-                    <span className="text-sm font-medium text-gray-500">Best Performance</span>
-                </div>
-
-                <div className="flex justify-between items-end">
                     <div>
-                        <p className="text-3xl font-bold text-gray-900 mb-1">Morning Walk</p>
-                        <p className="text-gray-500 text-sm">Wednesday, Jan 24</p>
-                    </div>
-                    <div className="text-right">
-                        <p className="text-2xl font-semibold text-gray-900">5.2 km</p>
-                        <p className="text-gray-500 text-xs">Distance</p>
+                        <h3 className="text-base font-semibold text-gray-900">Walking Highlight</h3>
+                        <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                            Your <span className="font-semibold text-gray-900">Morning Walk</span> on Jan 24 was outstanding.
+                            You achieved a personal best distance of <span className="text-brand-gradient font-bold">5.2 km</span>!
+                        </p>
                     </div>
                 </div>
 
-                <div className="mt-4 flex gap-2">
-                    <span className="text-xs bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 px-2 py-1 rounded text-gray-700 border border-[#F4AA1C]/20">Longest Duration</span>
-                    <span className="text-xs bg-gradient-to-br from-[#F4AA1C]/10 to-[#EE3424]/10 px-2 py-1 rounded text-gray-700 border border-[#F4AA1C]/20">Most Calories</span>
+                <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-3 gap-2">
+                    <div className="text-center">
+                        <p className="text-xs text-gray-400">Distance</p>
+                        <p className="text-sm font-semibold text-gray-900">5.2 km</p>
+                    </div>
+                    <div className="text-center">
+                        <p className="text-xs text-gray-400">Calories</p>
+                        <p className="text-sm font-semibold text-gray-900">420</p>
+                    </div>
+                    <div className="text-center">
+                        <p className="text-xs text-gray-400">Duration</p>
+                        <p className="text-sm font-semibold text-gray-900">55 min</p>
+                    </div>
                 </div>
             </div>
         </section>
