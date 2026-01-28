@@ -43,7 +43,7 @@ const ActivityRing = ({ progress, gradientId, size = 120, strokeWidth = 12, opac
 // Metric Card Component
 // MetricCard Component with Chart Support
 const MetricCard = ({ label, value, unit, trend, trendColor, chart }) => (
-    <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col h-full justify-between min-h-[140px]">
+    <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between w-[186px] h-[215px]">
         <div>
             <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm font-semibold text-gray-900">{label}</span>
@@ -177,7 +177,7 @@ const ActivityScreen = () => {
 
                 {/* Metrics Grid */}
                 <section className="px-6 py-2">
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="flex flex-wrap justify-center gap-3">
                         {/* Pace - Line Chart */}
                         <MetricCard
                             label="Pace"
@@ -185,7 +185,7 @@ const ActivityScreen = () => {
                             unit={activityData.pace.unit}
                             trend={activityData.pace.trend}
                             trendColor="text-green-500"
-                            chart={<SimpleLineChart data={[8.5, 8.2, 8.0, 7.8, 8.3, 8.1, 7.9]} />}
+                            chart={<SimpleLineChart data={[8.5, 8.2, 8.0, 7.8, 8.3, 8.1, 7.9]} height={80} />}
                         />
 
                         {/* Steps - Bar Chart */}
@@ -195,17 +195,19 @@ const ActivityScreen = () => {
                             unit=""
                             trend={activityData.steps.trend}
                             trendColor="text-green-500"
-                            chart={<SimpleBarChart data={[4000, 6000, 7500, 8432, 5000, 9000, 8200]} solidColor="#EE3424" />}
+                            chart={<SimpleBarChart data={[4000, 6000, 7500, 8432, 5000, 9000, 8200]} solidColor="#EE3424" height={80} />}
                         />
 
                         {/* Distance - Big Number (No Chart, Just Text Emphasis) */}
-                        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+                        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between w-[186px] h-[215px]">
                             <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-semibold text-gray-900">Distance</span>
                             </div>
-                            <div className="flex items-baseline gap-1 my-2">
-                                <span className="text-4xl font-extrabold text-black">{activityData.distance.value}</span>
-                                <span className="text-base font-medium text-gray-400">{activityData.distance.unit}</span>
+                            <div className="flex-1 flex flex-col justify-center items-center">
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-5xl font-extrabold text-black">{activityData.distance.value}</span>
+                                    <span className="text-base font-medium text-gray-400">{activityData.distance.unit}</span>
+                                </div>
                             </div>
                             <div className="flex items-center gap-1 text-gray-500">
                                 <TrendingUp size={14} />
@@ -220,9 +222,9 @@ const ActivityScreen = () => {
                             unit={activityData.calories.unit}
                             trendColor="text-red-500"
                             chart={
-                                <div className="flex items-center gap-3">
-                                    <DonutChart value={324} total={500} size={50} />
-                                    <span className="text-xs text-red-500 font-medium">+45 kcal</span>
+                                <div className="flex flex-col items-center gap-3">
+                                    <DonutChart value={324} total={500} size={80} />
+                                    <span className="text-xs text-red-500 font-medium">+45 kcal Today</span>
                                 </div>
                             }
                         />
@@ -236,6 +238,7 @@ const ActivityScreen = () => {
                                 <div className="mt-1">
                                     <CandleChart
                                         solidColor="#EE3424"
+                                        height={80}
                                         data={[
                                             { open: 7, close: 8, high: 9, low: 6 },
                                             { open: 6.5, close: 7.5, high: 8, low: 6 },
@@ -255,7 +258,7 @@ const ActivityScreen = () => {
                             label="Heart Rate"
                             value={activityData.heartRate.value}
                             unit={activityData.heartRate.unit}
-                            chart={<SimpleLineChart data={[65, 68, 72, 70, 75, 72, 68]} />}
+                            chart={<SimpleLineChart data={[65, 68, 72, 70, 75, 72, 68]} height={80} />}
                         />
                     </div>
                 </section>
