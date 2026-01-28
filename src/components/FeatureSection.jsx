@@ -31,13 +31,13 @@ const FeatureSection = () => {
                 </button>
             </div>
 
-            {/* Horizontal Scroll Cards */}
-            <div className="flex gap-3 overflow-x-auto pb-2 -mx-6 px-6 scrollbar-hide">
+            {/* Grid Layout Cards - No Horizontal Scroll */}
+            <div className="grid grid-cols-2 gap-3">
                 {features.map((feature) => {
                     return (
                         <div
                             key={feature.id}
-                            className={`flex-shrink-0 w-[200px] h-[100px] rounded-2xl bg-gradient-to-br ${feature.gradient} p-4 relative overflow-hidden cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-end`}
+                            className={`rounded-2xl bg-gradient-to-br ${feature.gradient} p-4 relative overflow-hidden cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-end h-[100px]`}
                         >
                             {/* Text */}
                             <h4 className={`text-sm font-semibold ${feature.titleColor}`}>{feature.title}</h4>
