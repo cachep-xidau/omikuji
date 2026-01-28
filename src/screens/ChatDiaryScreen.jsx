@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import StatusBar from '../components/StatusBar';
-import { ChevronLeft, Send, Sparkles, Footprints, Gift, X, Share2, Crown, History, Feather, Mic, Volume2, Square } from 'lucide-react';
+import { ChevronLeft, Send, Sparkles, Footprints, Gift, X, Share2, Crown, History, Feather, Volume2, Square, Video } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDiary } from '../data/DiaryContext';
@@ -12,6 +12,9 @@ import { generateFortuneInsight } from '../utils/mirrorInsightGenerator';
 import { getImagePath } from '../utils/imagePath';
 import { getDailySeasonGreeting } from '../utils/seasonalGreetings';
 import { getCurrentMicroseason } from '../data/microseasons';
+import { getAIResponse } from '../utils/aiResponseGenerator';
+import FortuneDrawModal from '../components/FortuneDrawModal';
+import BloodTypeModal from '../components/BloodTypeModal';
 
 // Unified AI Avatar Component
 const AIAvatar = ({ size = 8 }) => (
@@ -89,171 +92,31 @@ const VoiceMessageBubble = ({ duration, time }) => {
     );
 };
 
-// Fortune Draw Modal
-const FortuneDrawModal = ({ isOpen, onClose, onKeep }) => {
-    const { drawFortune, tieFortune, getTodaysFortune } = useDiary();
-    const { t } = useLanguage();
-    const [drawState, setDrawState] = useState('intro');
-    const [result, setResult] = useState(null);
 
-    useEffect(() => {
-        if (isOpen) {
-            // Check if already drawn today
-            const todayFortune = getTodaysFortune();
-            if (todayFortune) {
-                setResult(todayFortune);
-                setDrawState('result');
-            } else {
-                setDrawState('intro');
-                setResult(null);
-            }
-        }
-    }, [isOpen, getTodaysFortune]);
-
-    const handleDraw = () => {
-        setDrawState('shaking');
-        setTimeout(() => {
-            const fortune = drawFortune();
-            setResult(fortune);
-            setDrawState('result');
-        }, 1500);
-    };
-
-    const handleTie = () => {
-        if (result) {
-            tieFortune(result.id);
-            onClose();
-        }
-    };
-
-    const handleKeep = () => {
-        if (onKeep && result) {
-            onKeep(result);
-        } else {
-            onClose();
-        }
-    };
-
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <AnimatePresence mode="wait">
-                {drawState !== 'result' ? (
-                    <motion.div
-                        key="box"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        className="bg-white rounded-2xl w-full max-w-sm overflow-hidden text-center p-8 shadow-2xl relative"
-                    >
-                        <button
-                            onClick={onClose}
-                            className="absolute top-4 right-4 p-2 text-gray-400 hover:bg-gray-100 rounded-full"
-                        >
-                            <X size={20} />
-                        </button>
-
-                        <div className="mb-6 flex justify-center">
-                            <motion.div
-                                animate={drawState === 'shaking' ? {
-                                    rotate: [0, -10, 10, -10, 10, 0],
-                                    y: [0, -5, 5, -5, 0]
-                                } : {}}
-                                transition={{ duration: 0.5, repeat: drawState === 'shaking' ? Infinity : 0 }}
-                                className="text-6xl filter drop-shadow-md"
-                            >
-                                ⛩️
-                            </motion.div>
-                        </div>
-
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Fortune Draw</h2>
-                        <p className="text-gray-500 mb-8 leading-relaxed">
-                            {drawState === 'shaking'
-                                ? 'Drawing your fortune...'
-                                : 'Draw your daily fortune to reveal what the universe has in store for you.'}
-                        </p>
-
-                        {drawState === 'intro' && (
-                            <button
-                                onClick={handleDraw}
-                                className="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-black transition-transform active:scale-95 flex items-center justify-center gap-2"
-                            >
-                                <Sparkles size={18} className="text-yellow-400" />
-                                Draw Fortune
-                            </button>
-                        )}
-                    </motion.div>
-                ) : (
-                    <motion.div
-                        key="result"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        className="w-full max-w-sm relative max-h-[85vh] overflow-y-auto hide-scrollbar p-1"
-                    >
-                        {/* Close Button (Floating) */}
-                        <button
-                            onClick={onClose}
-                            className="sticky top-2 ml-auto block z-10 p-2 bg-black/20 text-white backdrop-blur-md rounded-full hover:bg-black/30 mb-2"
-                        >
-                            <X size={20} />
-                        </button>
-
-                        <FortuneCard fortune={result} />
-
-                        {/* AI Suggestion Section (Outside Card) */}
-                        {result.ai_advice && (
-                            <div className="mt-4">
-                                <AISuggestion suggestion={result.ai_advice} />
-                            </div>
-                        )}
-
-                        {/* Actions */}
-                        <div className="mt-4 flex gap-3 pb-4">
-                            <button
-                                onClick={handleKeep}
-                                className="flex-1 bg-white text-gray-900 py-3 rounded-xl font-bold shadow-lg hover:bg-gray-50"
-                            >
-                                Keep Fortune
-                            </button>
-
-                            {(result?.level === '凶' || result?.level === '大凶') && (
-                                <button
-                                    onClick={handleTie}
-                                    className="flex-1 bg-red-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-red-900/20 hover:bg-red-700"
-                                >
-                                    Tie to Shrine
-                                </button>
-                            )}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
-    );
-};
 
 // Fortune Trigger Button Bubble
 const FortuneTriggerBubble = ({ onClick }) => (
     <div className="flex justify-center mb-6 mt-2 animate-in zoom-in-95 duration-500">
         <button
             onClick={onClick}
-            className="group relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-[1px] shadow-lg transition-transform active:scale-95"
+            className="group relative overflow-hidden rounded-2xl shadow-xl transition-transform active:scale-95 w-[85%] max-w-[320px]"
         >
-            <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl px-6 py-4 flex items-center gap-3 group-hover:bg-white/20 transition-colors">
-                <div className="bg-white/20 p-2 rounded-full">
-                    <Sparkles size={20} className="text-yellow-300 animate-pulse" />
+            {/* Main Gradient Background */}
+            <div
+                className="absolute inset-0 group-hover:scale-105 transition-transform duration-700"
+                style={{ background: 'linear-gradient(135deg, #F4AA1C 0%, #EE3424 75%)' }}
+            ></div>
+
+            {/* Content */}
+            <div className="relative p-4 flex items-center justify-center text-center">
+                <div>
+                    <h3 className="text-white font-bold text-lg leading-tight tracking-tight">Daily Fortune</h3>
+                    <p className="text-white/90 text-xs font-medium opacity-90">Reveal your destiny</p>
                 </div>
-                <div className="text-left">
-                    <h3 className="text-white font-bold text-sm leading-tight">Daily Fortune Draw</h3>
-                    <p className="text-purple-100 text-[10px] uppercase tracking-wider font-medium">Click to Reveal</p>
-                </div>
-                <Gift size={18} className="text-white ml-2 opacity-80" />
             </div>
 
-            {/* Shimmer effect */}
-            <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
+            {/* Shimmer Overlay */}
+            <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-20" />
         </button>
     </div>
 );
@@ -269,6 +132,7 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
         return <VoiceMessageBubble duration={message.duration} time={message.time} />;
     }
 
+    // Legacy support or standalone trigger if needed (though we are merging it)
     if (message.type === 'fortune_trigger') {
         return <FortuneTriggerBubble onClick={() => onFortuneClick(message.id)} />;
     }
@@ -313,7 +177,7 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
                 ? 'bg-gray-900 text-white rounded-br-md'
                 : 'bg-white border border-gray-100 text-gray-900 rounded-bl-md shadow-sm'
                 }`}>
-                <p className="text-sm">{message.text}</p>
+                <p className="text-sm leading-relaxed font-medium">{message.text}</p>
                 {message.suggestion && (
                     <div className="mt-2 p-2 bg-orange-50 rounded-lg border border-orange-100">
                         <div className="flex items-center gap-2 text-orange-600 mb-1">
@@ -323,6 +187,33 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
                         <p className="text-xs text-gray-700">{message.suggestion}</p>
                     </div>
                 )}
+
+                {/* Embedded Draw Fortune Action */}
+                {message.action === 'draw_fortune' && (
+                    <div className="mt-2 w-full">
+                        <button
+                            onClick={() => onFortuneClick(message.id)}
+                            className="w-full relative overflow-hidden rounded-xl shadow-sm transition-transform active:scale-95 group border border-orange-100"
+                        >
+                            {/* Gradient Background */}
+                            <div
+                                className="absolute inset-0 group-hover:scale-105 transition-transform duration-700"
+                                style={{ background: 'linear-gradient(135deg, #F4AA1C 0%, #EE3424 75%)' }}
+                            ></div>
+
+                            {/* Shimmer Overlay */}
+                            <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-20" />
+
+                            <div className="relative p-3 flex items-center justify-center text-center">
+                                <div>
+                                    <h3 className="text-white font-bold text-sm leading-tight tracking-tight">Daily Fortune</h3>
+                                    <p className="text-white/90 text-[10px] font-medium opacity-90">Reveal your destiny</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                )}
+
                 <p className={`text-[10px] mt-1 ${isUser ? 'text-gray-400' : 'text-gray-400'} font-medium tracking-tight`}>
                     {message.time}
                 </p>
@@ -331,120 +222,16 @@ const MessageBubble = ({ message, isUser, onFortuneClick, onNavigate }) => {
     );
 };
 
-// Chat Diary AI responses
-const getAIResponse = (userMessage, language = 'en') => {
-    const lowerMessage = userMessage.toLowerCase();
-    const now = new Date();
-    const hour = now.getHours();
 
-    // Localized Greetings
-    let greeting = '';
-    if (language === 'ja') {
-        if (hour < 12) greeting = 'おはようございます！ ☀️';
-        else if (hour < 18) greeting = 'こんにちは！ 🌤️';
-        else greeting = 'こんばんは！ 🌙';
-    } else {
-        if (hour < 12) greeting = 'Good morning! ☀️';
-        else if (hour < 18) greeting = 'Good afternoon! 🌤️';
-        else greeting = 'Good evening! 🌙';
-    }
-
-    // Dynamic Weather/Season Logic for Walking Tips
-    if (lowerMessage.includes('walking') || lowerMessage.includes('walk') || lowerMessage.includes('tips') || lowerMessage.includes('đi bộ') || lowerMessage.includes('ウォーキング') || lowerMessage.includes('散歩')) {
-        const microseason = getCurrentMicroseason(now);
-        const seasonName = language === 'ja' ? microseason.name_ja : microseason.name_en;
-
-        // Mock Weather (In a real app, fetch from API)
-        const weathers = language === 'ja'
-            ? ['晴れ ☀️', '曇り ☁️', '涼しい 🍃', '霧 🌫️']
-            : ['Sunny ☀️', 'Cloudy ☁️', 'Cool 🍃', 'Misty 🌫️'];
-        const currentWeather = weathers[Math.floor(Math.random() * weathers.length)];
-
-        // Mock Locations
-        const locations = language === 'ja'
-            ? ['近くの公園 🌳', '静かな神社 ⛩️', '川沿い 🌊', 'カフェ ☕']
-            : ['the nearby park 🌳', 'a quiet shrine ⛩️', 'the riverbank 🌊', 'a local cafe ☕'];
-        const location = locations[Math.floor(Math.random() * locations.length)];
-
-        // Random Steps (5000 - 8000)
-        const steps = Math.floor(Math.random() * (8000 - 5000 + 1)) + 5000;
-
-        const text = language === 'ja'
-            ? `今の天気は${currentWeather}です。「${seasonName}」の季節を感じながら、${location}まで約${steps.toLocaleString()}歩、歩いてみませんか？`
-            : `With ${currentWeather} weather, during the "${seasonName}", you should walk about ${steps.toLocaleString()} steps to ${location}.`;
-
-        return {
-            type: 'walking_proposal',
-            text: text
-        };
-    }
-
-    if (lowerMessage.includes('fortune') || lowerMessage.includes('luck') || lowerMessage.includes('vận may')) {
-        return {
-            text: language === 'ja'
-                ? "✨ 今日の運勢はあなたに味方しています！"
-                : "✨ The cosmic energies are flowing in your favor today!",
-            fortune: language === 'ja'
-                ? "おみくじを1回引けます！ここをタップして今日の運勢を占い、特別な報酬を受け取りましょう。"
-                : "You have 1 Fortune Draw available! Tap here to reveal your daily omikuji fortune and unlock special rewards.",
-        };
-    }
-
-    if (lowerMessage.includes('tired') || lowerMessage.includes('mệt') || lowerMessage.includes('疲れた')) {
-        return {
-            text: language === 'ja'
-                ? "無理はしないでくださいね。小さな一歩でも大切です。継続は力なり！ 🌟"
-                : "I understand. Even small steps matter. Remember, consistency beats intensity! 🌟",
-            suggestion: language === 'ja'
-                ? "軽い運動: 家やオフィスの周りを10分だけゆっくり歩いてみましょう。"
-                : "Light activity: Just a 10-min gentle walk around your home or office. Every step counts toward your streak!",
-        };
-    }
-
-    if (lowerMessage.includes('goal') || lowerMessage.includes('mục tiêu')) {
-        return {
-            text: language === 'ja'
-                ? "目標設定は素晴らしいですね！あなたのペースで進みましょう。 🎯"
-                : "Setting intentions is powerful! Your walking journey is unique to you. 🎯",
-            suggestion: language === 'ja'
-                ? "今日の目標: 5,000歩。朝(2000)、昼(1500)、夜(1500)に分けてみましょう。"
-                : "Today's personalized goal: 5,000 steps. Break it into 3 sessions - morning (2000), lunch (1500), evening (1500).",
-        };
-    }
-
-    const responses = [
-        {
-            text: language === 'ja'
-                ? `${greeting} 今日の気分はいかがですか？`
-                : `${greeting} How are you feeling today? Share your thoughts and I'll guide your walking journey!`,
-            fortune: language === 'ja'
-                ? "🎴 デイリーリマインダー: おみくじが待っています！今日の運勢をチェックしましょう。"
-                : "🎴 Daily reminder: You have 1 Fortune Draw waiting! Don't miss today's special blessing.",
-        },
-        {
-            text: language === 'ja'
-                ? "あなたの健康をサポートします！今日の予定や、ウォーキングの相談など、何でも話してください。 🚶‍♀️"
-                : "I'm here to support your wellness journey! Tell me about your day or ask for walking suggestions. 🚶‍♀️",
-            suggestion: language === 'ja'
-                ? "ヒント: 今日は少し遠くに駐車するか、階段を使ってみましょう。小さな積み重ねが大切です！"
-                : "Quick tip: Park farther away or take stairs today. Small choices, big impact!",
-        },
-        {
-            text: language === 'ja'
-                ? "一歩一歩が健康への道です！何か考え事ですか？ 💭"
-                : "Every step you take is a step toward better health! What's on your mind? 💭",
-        },
-    ];
-
-    return responses[Math.floor(Math.random() * responses.length)];
-};
 
 const ChatDiaryScreen = () => {
+    // ... hooks ...
     const navigate = useNavigate();
-    const { getTodaysFortune, addEntry, bloodType, isLoading, chatMessages, setChatMessages } = useDiary();
+    const { getTodaysFortune, addEntry, bloodType, isLoading, chatMessages, setChatMessages, userProfile, updateUserProfile } = useDiary();
     const { t, language } = useLanguage();
     const [inputText, setInputText] = useState('');
     const [showFortuneModal, setShowFortuneModal] = useState(false);
+    const [showBloodTypeModal, setShowBloodTypeModal] = useState(false);
     const [activeTriggerId, setActiveTriggerId] = useState(null);
     const [isRecording, setIsRecording] = useState(false);
 
@@ -453,6 +240,19 @@ const ChatDiaryScreen = () => {
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Check for Blood Type on Mount
+    useEffect(() => {
+        if (!isLoading && !userProfile.bloodType) {
+            setShowBloodTypeModal(true);
+        }
+    }, [isLoading, userProfile]);
+
+    const handleBloodTypeSelect = (type) => {
+        updateUserProfile({ bloodType: type });
+        setShowBloodTypeModal(false);
+        // Could optionally add a system message here acknowledging the update
     };
 
     // Initialize Chat Content
@@ -481,27 +281,28 @@ const ChatDiaryScreen = () => {
                 greetingText = insight.text;
             }
 
-            initialMessages.push({
+            // Create the main greeting message
+            const greetingMsg = {
                 id: `greeting-${Date.now()}`,
                 text: greetingText,
                 isUser: false,
                 time: timeStr,
                 timestamp: now.toISOString()
-            });
+            };
 
-            // 2. Add Fortune Trigger if not drawn, or Result if drawn
+            // 2. Attach Fortune Action if not drawn
+            if (!todayFortune) {
+                greetingMsg.action = 'draw_fortune';
+            }
+
+            initialMessages.push(greetingMsg);
+
+            // 3. Add Fortune Result if already drawn (optional, maybe just show it in history/timeline instead?)
             if (todayFortune) {
                 initialMessages.push({
                     id: `fortune-${Date.now()}`,
                     type: 'fortune_result',
                     data: todayFortune,
-                    time: timeStr,
-                    timestamp: now.toISOString()
-                });
-            } else {
-                initialMessages.push({
-                    id: `trigger-${Date.now()}`,
-                    type: 'fortune_trigger',
                     time: timeStr,
                     timestamp: now.toISOString()
                 });
@@ -548,17 +349,12 @@ const ChatDiaryScreen = () => {
 
             // Check if response has fortune trigger
             if (aiMessage.fortune) {
-                const introMsg = { ...aiMessage, fortune: undefined };
-                setChatMessages(prev => [...prev, introMsg]);
-
-                setTimeout(() => {
-                    setChatMessages(prev => [...prev, {
-                        id: `trigger-${Date.now()}`,
-                        type: 'fortune_trigger',
-                        time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
-                        timestamp: new Date().toISOString()
-                    }]);
-                }, 500);
+                const mergedMsg = {
+                    ...aiMessage,
+                    fortune: undefined, // Remove the raw text property
+                    action: 'draw_fortune' // Use the action flag
+                };
+                setChatMessages(prev => [...prev, mergedMsg]);
             } else {
                 setChatMessages(prev => [...prev, aiMessage]);
             }
@@ -618,6 +414,10 @@ const ChatDiaryScreen = () => {
         }, 1200);
     };
 
+    const handleDrawFortune = () => {
+        setShowFortuneModal(true);
+    };
+
     const handleFortuneClick = (msgId) => {
         setActiveTriggerId(msgId);
         setShowFortuneModal(true);
@@ -627,21 +427,44 @@ const ChatDiaryScreen = () => {
         const now = new Date();
         const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
-        // 1. Replace the Trigger Button with the Fortune Card Result
-        setChatMessages(prev => prev.map(msg => {
-            if (msg.id === activeTriggerId) {
-                return {
-                    ...msg,
+        setChatMessages(prev => {
+            // Check if activeTriggerId corresponds to a standalone "fortune_trigger" or a merged message "action"
+            const triggerIdx = prev.findIndex(msg => msg.id === activeTriggerId);
+            if (triggerIdx === -1) return prev;
+
+            const triggerMsg = prev[triggerIdx];
+
+            if (triggerMsg.type === 'fortune_trigger') {
+                // Standalone: Replace with Result
+                const newMessages = [...prev];
+                newMessages[triggerIdx] = {
+                    ...triggerMsg,
                     type: 'fortune_result',
                     data: fortune,
                     time: timeStr,
                     timestamp: now.toISOString()
                 };
+                return newMessages;
+            } else if (triggerMsg.action === 'draw_fortune') {
+                // Merged Bubble: Remove action from bubble, append Result message
+                const newMessages = [...prev];
+                // 1. Remove action
+                newMessages[triggerIdx] = {
+                    ...triggerMsg,
+                    action: undefined // Hide button
+                };
+                // 2. Append Fortune Card
+                newMessages.push({
+                    id: `fortune-result-${Date.now()}`,
+                    type: 'fortune_result',
+                    data: fortune,
+                    time: timeStr,
+                    timestamp: now.toISOString()
+                });
+                return newMessages;
             }
-            return msg;
-        }));
-
-        // No AI follow-ups.
+            return prev;
+        });
 
         setShowFortuneModal(false);
         setActiveTriggerId(null);
@@ -671,13 +494,22 @@ const ChatDiaryScreen = () => {
                         <p className="text-xs text-green-500">● {t('chat.online')}</p>
                     </div>
                 </div>
-                <button
-                    onClick={() => navigate('/diary/history')}
-                    className="ml-auto p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all"
-                    title="Chat History"
-                >
-                    <History size={22} />
-                </button>
+                <div className="ml-auto flex items-center gap-1">
+                    <button
+                        onClick={() => navigate('/video-call')}
+                        className="p-2 text-purple-600 hover:bg-purple-50 rounded-full transition-all"
+                        title="Video Call"
+                    >
+                        <Video size={22} />
+                    </button>
+                    <button
+                        onClick={() => navigate('/diary/history')}
+                        className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all"
+                        title="Chat History"
+                    >
+                        <History size={22} />
+                    </button>
+                </div>
             </div>
 
             {/* Messages */}
@@ -710,12 +542,6 @@ const ChatDiaryScreen = () => {
             {/* Input Area */}
             <div className="px-4 py-3 bg-white border-t border-gray-100 flex-shrink-0">
                 <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => setIsRecording(true)}
-                        className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
-                    >
-                        <Mic size={20} />
-                    </button>
                     <input
                         type="text"
                         value={inputText}
@@ -749,6 +575,12 @@ const ChatDiaryScreen = () => {
                 isOpen={showFortuneModal}
                 onClose={() => setShowFortuneModal(false)}
                 onKeep={handleKeepFortune}
+            />
+
+            {/* User Onboarding: Blood Type */}
+            <BloodTypeModal
+                isOpen={showBloodTypeModal}
+                onSelect={handleBloodTypeSelect}
             />
         </div>
     );

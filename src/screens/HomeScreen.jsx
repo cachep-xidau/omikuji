@@ -3,6 +3,7 @@ import TodayFocus from '../components/TodayFocus';
 import FeatureSection from '../components/FeatureSection';
 import DiscoverSection from '../components/DiscoverSection';
 import NavBar from '../components/NavBar';
+import DynamicIsland from '../components/DynamicIsland';
 import { Sun, Feather } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { missions } from '../data/mockData';
@@ -14,16 +15,6 @@ import { useSubscription } from '../contexts/SubscriptionContext';
 import { useState, useRef } from 'react';
 import { useDiary } from '../data/DiaryContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { X } from 'lucide-react';
-
-// Module-level variable is unreliable in some hot-reload/chunk loading scenarios
-// Use window object to ensure persistence until refresh
-const checkTooltipState = () => {
-  if (typeof window !== 'undefined') {
-    return !window.hasClosedHomeTooltip;
-  }
-  return true;
-};
 
 const HomeScreen = () => {
   const navigate = useNavigate();
@@ -32,17 +23,8 @@ const HomeScreen = () => {
   const { t } = useLanguage();
   const hasFortune = getTodaysFortune();
 
-  // Initialize state from window variable
-  const [showTooltip, setShowTooltip] = useState(checkTooltipState);
   const [isFabVisible, setIsFabVisible] = useState(true);
   const lastScrollY = useRef(0);
-
-  const handleCloseTooltip = () => {
-    if (typeof window !== 'undefined') {
-      window.hasClosedHomeTooltip = true;
-    }
-    setShowTooltip(false);
-  };
 
   const handleScroll = (e) => {
     const currentScrollY = e.target.scrollTop;
@@ -64,14 +46,20 @@ const HomeScreen = () => {
   const todayMission = missions[0];
 
   return (
-    <div className="relative h-full bg-white flex flex-col">
-      {/* Scrollable Content */}
+    <div className="relative w-full h-full bg-white overflow-hidden">
+      {/* Dynamic Island - Fixed at absolute top */}
+      <DynamicIsland />
+
+      {/* Fixed Header Elements - Absolute Top */}
+      <div className="absolute top-0 left-0 right-0 z-50 bg-white pt-[12px]">
+        <StatusBar />
+      </div>
+
+      {/* Scrollable Content - Absolute Full Fill with Top Padding */}
       <div
-        className="flex-1 overflow-y-auto pb-24"
+        className="absolute inset-0 overflow-y-auto pt-[60px] pb-24"
         onScroll={handleScroll}
       >
-        <StatusBar />
-
         {/* Header */}
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
@@ -88,30 +76,11 @@ const HomeScreen = () => {
                 </p>
               </div>
             </div>
-            {/* Account Button with Tooltip */}
+            {/* Account Button */}
             <div className="relative z-50">
               <Link to="/account" className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 hover:border-gray-300 transition-colors block relative z-50 bg-white">
                 <img src={getImagePath('/images/user_avatar.jpg')} alt="Account" className="w-full h-full object-cover" />
               </Link>
-
-              {/* Tooltip Overlay */}
-              {showTooltip && (
-                <div className="absolute top-12 right-0 w-64 bg-[#181818]/90 text-white text-xs p-3 rounded-xl shadow-xl backdrop-blur-sm z-50 animate-in fade-in slide-in-from-top-2 duration-500">
-                  <div className="relative">
-                    <p className="pr-4 leading-relaxed font-light text-gray-200">
-                      {t('home.tooltip')}
-                    </p>
-                    <button
-                      onClick={handleCloseTooltip}
-                      className="absolute -top-1 -right-1 p-1 text-gray-400 hover:text-white transition-colors"
-                    >
-                      <X size={14} />
-                    </button>
-                    {/* Arrow */}
-                    <div className="absolute -top-[18px] right-3 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[8px] border-b-[#181818]/90"></div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -168,10 +137,10 @@ const HomeScreen = () => {
         <DiscoverSection />
       </div>
 
-      {/* Floating Diary Button */}
+      {/* Floating Diary Button - Fixed Absolute */}
       <Link
         to="/chat-diary"
-        className={`absolute bottom-28 right-6 w-14 h-14 rounded-full bg-[linear-gradient(135deg,#F4AA1C_0%,#EE3424_75%)] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 z-10 ${isFabVisible ? 'scale-100 translate-y-0' : 'scale-[0.6] translate-y-8 opacity-80'
+        className={`absolute bottom-28 right-6 w-14 h-14 rounded-full bg-[linear-gradient(135deg,#F4AA1C_0%,#EE3424_75%)] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 z-50 ${isFabVisible ? 'scale-100 translate-y-0' : 'scale-[0.6] translate-y-8 opacity-80'
           } hover:scale-105 active:scale-95`}
       >
         <Feather size={24} className="text-white" />
@@ -182,7 +151,7 @@ const HomeScreen = () => {
         )}
       </Link>
 
-      {/* Fixed NavBar */}
+      {/* Fixed NavBar - Absolute Bottom */}
       <NavBar />
     </div>
   );

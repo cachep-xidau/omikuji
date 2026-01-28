@@ -9,6 +9,7 @@ import { getCurrentMicroseason } from '../data/microseasons';
 import BloodTypeSelection from '../components/BloodTypeSelection';
 import FortuneDrawModal from '../components/FortuneDrawModal';
 import StatusBar from '../components/StatusBar';
+import DynamicIsland from '../components/DynamicIsland';
 import LanguageToggle from '../components/LanguageToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
@@ -163,7 +164,7 @@ const DiaryScreen = () => {
             </AnimatePresence>
 
             {/* --- FIXED HEAD SECTION --- */}
-            <div className="flex-none bg-white z-10 shadow-sm">
+            <div className="absolute top-0 left-0 right-0 bg-white z-40 shadow-sm">
                 <StatusBar />
 
                 {/* Navigation Header */}
@@ -187,7 +188,7 @@ const DiaryScreen = () => {
             </div>
 
             {/* --- SCROLLABLE CONTENT SECTION --- */}
-            <div className="flex-1 overflow-y-auto px-6 pb-24 pt-4 space-y-6">
+            <div className="flex-1 overflow-y-auto px-6 pb-24 pt-[200px] space-y-6">
 
                 {/* COMBINED CULTURAL CONTEXT CARD (Fortune) */}
                 <motion.div

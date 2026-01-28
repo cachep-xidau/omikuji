@@ -3,14 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles } from 'lucide-react';
 import FortuneCard from './FortuneCard';
 import AISuggestion from './AISuggestion';
+import OmikujiShaker from './OmikujiShaker'; // Import new component
 import { useDiary } from '../data/DiaryContext';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const FortuneDrawModal = ({ isOpen, onClose }) => {
+const FortuneDrawModal = ({ isOpen, onClose, onKeep }) => {
     const { drawFortune, tieFortune } = useDiary();
     const { t } = useLanguage();
 
-    // States: 'intro', 'shaking', 'revealing', 'result'
+    // States: 'intro', 'shaking', 'dispensing', 'result'
     const [drawState, setDrawState] = useState('intro');
     const [result, setResult] = useState(null);
 
@@ -24,18 +25,25 @@ const FortuneDrawModal = ({ isOpen, onClose }) => {
 
     const handleDraw = () => {
         setDrawState('shaking');
-        // Simulate animation delay
-        setTimeout(() => {
-            const fortune = drawFortune();
-            setResult(fortune);
-            setDrawState('result'); // Simplified: skip 'revealing' specific step for now
-        }, 1500); // 1.5s shake/draw time
+        // Animation flow is now controlled by callbacks from OmikujiShaker
+        // 1. Shaking starts
+        // 2. onShakeComplete -> set 'dispensing'
+        // 3. onDispenseComplete -> Draw fortune and show result
+    };
+
+    const handleShakeComplete = () => {
+        setDrawState('dispensing');
+    };
+
+    const handleDispenseComplete = () => {
+        const fortune = drawFortune();
+        setResult(fortune);
+        setDrawState('result');
     };
 
     const handleTie = () => {
         if (result) {
             tieFortune(result.id);
-            // Show toast or feedback? For now just close or update UI
             onClose();
         }
     };
@@ -46,39 +54,36 @@ const FortuneDrawModal = ({ isOpen, onClose }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <AnimatePresence mode="wait">
                 {drawState !== 'result' ? (
-                    /* --- INTRO / SHAKING STATE --- */
+                    /* --- INTRO / SHAKING / DISPENSING STATE --- */
                     <motion.div
                         key="box"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
-                        className="bg-white rounded-2xl w-full max-w-sm overflow-hidden text-center p-8 shadow-2xl relative"
+                        className="bg-white rounded-2xl w-full max-w-sm overflow-hidden text-center p-8 shadow-2xl relative flex flex-col items-center"
                     >
-                        <button
-                            onClick={onClose}
-                            className="absolute top-4 right-4 p-2 text-gray-400 hover:bg-gray-100 rounded-full"
-                        >
-                            <X size={20} />
-                        </button>
-
-                        <div className="mb-6 flex justify-center">
-                            <motion.div
-                                animate={drawState === 'shaking' ? {
-                                    rotate: [0, -10, 10, -10, 10, 0],
-                                    y: [0, -5, 5, -5, 0]
-                                } : {}}
-                                transition={{ duration: 0.5, repeat: drawState === 'shaking' ? Infinity : 0 }}
-                                className="text-6xl filter drop-shadow-md"
+                        {drawState === 'intro' && (
+                            <button
+                                onClick={onClose}
+                                className="absolute top-4 right-4 p-2 text-gray-400 hover:bg-gray-100 rounded-full z-10"
                             >
-                                ⛩️
-                            </motion.div>
+                                <X size={20} />
+                            </button>
+                        )}
+
+                        <div className="mb-6 flex justify-center min-h-[250px] items-center">
+                            <OmikujiShaker
+                                state={drawState}
+                                onShakeComplete={handleShakeComplete}
+                                onDispenseComplete={handleDispenseComplete}
+                            />
                         </div>
 
                         <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('fortune.title')}</h2>
                         <p className="text-gray-500 mb-8 leading-relaxed">
-                            {drawState === 'shaking'
-                                ? t('fortune.subtitle.drawing')
-                                : t('fortune.subtitle.intro')}
+                            {drawState === 'intro' && t('fortune.subtitle.intro')}
+                            {drawState === 'shaking' && t('fortune.subtitle.drawing')}
+                            {drawState === 'dispensing' && "Here comes your fortune..."}
                         </p>
 
                         {drawState === 'intro' && (
@@ -120,7 +125,7 @@ const FortuneDrawModal = ({ isOpen, onClose }) => {
                         {/* Actions */}
                         <div className="mt-4 flex gap-3 pb-4">
                             <button
-                                onClick={onClose}
+                                onClick={() => onKeep ? onKeep(result) : onClose()}
                                 className="flex-1 bg-white text-gray-900 py-3 rounded-xl font-bold shadow-lg hover:bg-gray-50"
                             >
                                 {t('fortune.button.keep')}

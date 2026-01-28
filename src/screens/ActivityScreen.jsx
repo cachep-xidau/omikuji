@@ -1,8 +1,9 @@
 import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
+import DynamicIsland from '../components/DynamicIsland';
 import { ChevronRight, Footprints, Flame, Moon, Heart, Timer, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { SimpleLineChart, SimpleBarChart, DonutChart, CandleChart } from '../components/ActivityCharts';
+import { DonutChart } from '../components/ActivityCharts';
 
 // Activity Ring Component with Gradient Support
 const ActivityRing = ({ progress, gradientId, size = 120, strokeWidth = 12, opacity = 1 }) => {
@@ -40,31 +41,111 @@ const ActivityRing = ({ progress, gradientId, size = 120, strokeWidth = 12, opac
     );
 };
 
-// Metric Card Component
-// MetricCard Component with Chart Support
-const MetricCard = ({ label, value, unit, trend, trendColor, chart }) => (
-    <div className="bg-white rounded-2xl p-4 border border-[#E6E3E3] flex flex-col justify-between h-[215px]">
+// Weekly Bar Chart Component (7 Days)
+const WeeklyBarChart = ({ data, color, height = 100 }) => {
+    const maxVal = Math.max(...data, 1);
+    const bars = 7;
+    // Calculate width percentages for even spacing
+    const viewWidth = 100;
+    const barWidth = 6;
+    const gap = (viewWidth - (bars * barWidth)) / (bars - 1);
+
+    const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+    return (
+        <svg width="100%" height={height} viewBox={`0 0 ${viewWidth} ${height}`} className="overflow-visible">
+            {data.map((d, i) => {
+                const barHeight = (d / maxVal) * (height * 0.75); // Max height 75%
+                const x = i * (barWidth + gap);
+                const y = height - barHeight - 15;
+
+                return (
+                    <g key={i}>
+                        {/* Background subtle track */}
+                        <rect x={x} y={0} width={barWidth} height={height - 15} fill={color} fillOpacity="0.05" rx="3" />
+
+                        {/* Value bar */}
+                        {d > 0 && (
+                            <rect
+                                x={x}
+                                y={y}
+                                width={barWidth}
+                                height={barHeight}
+                                fill={color}
+                                fillOpacity="1"
+                                rx="3"
+                            />
+                        )}
+
+                        {/* Day Labels */}
+                        <text
+                            x={x + barWidth / 2}
+                            y={height}
+                            fill="#9CA3AF"
+                            fontSize="10"
+                            textAnchor="middle"
+                            fontFamily="Switzer"
+                            fontWeight="500"
+                        >
+                            {days[i]}
+                        </text>
+                    </g>
+                );
+            })}
+        </svg>
+    );
+};
+
+// Apple Style Metric Card (Light Mode)
+const AppleMetricCard = ({ title, value, unit, color, data, chart, subtitle = "Last 7 Days", className = "", height = "h-[215px]", chartHeight = "h-[100px]" }) => (
+    <div className={`bg-white rounded-2xl p-4 border border-[#E6E3E3] flex flex-col justify-between ${height} ${className}`}>
         <div>
-            <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm font-semibold text-gray-900">{label}</span>
+            <div className="flex justify-between items-start mb-1">
+                <span className="text-[16px] font-['Switzer'] font-semibold text-gray-900">{title}</span>
+                <div className="bg-gray-100 p-1 rounded-full">
+                    <ChevronRight size={14} className="text-gray-400" />
+                </div>
             </div>
-            <div className="flex items-baseline gap-1 mb-2">
-                <span className="text-2xl font-bold text-gray-900">{value}</span>
-                <span className="text-sm text-gray-400">{unit}</span>
+
+            <div className="mb-4">
+                <span className="text-xs font-medium text-gray-500 block mb-1">{subtitle}</span>
+                <div className="flex items-baseline gap-1">
+                    <span
+                        className="text-[20px] font-['Switzer'] font-semibold"
+                        style={{ color: color }}
+                    >
+                        {value}
+                    </span>
+                    <span className="text-sm font-medium text-gray-500">{unit}</span>
+                </div>
             </div>
         </div>
 
-        {/* Render Chart if available, otherwise trend */}
-        {chart ? (
-            <div className="mt-2 text-xs w-full">
+        <div className={`w-full ${chartHeight} flex items-end justify-center`}>
+            {chart ? chart : <WeeklyBarChart data={data} color={color} height={80} />}
+        </div>
+    </div>
+);
+
+// Wide Metric Card Component (Avg Time in Bed / Heart Rate)
+const WideMetricCard = ({ icon, label, value, unit, chart }) => (
+    <div className="bg-white rounded-2xl p-4 border border-[#E6E3E3] flex flex-col justify-between h-[128px] col-span-2">
+        <div className="flex justify-between items-start">
+            <div className="flex items-center gap-2">
+                {icon}
+                <span className="text-[16px] font-['Switzer'] font-semibold text-gray-900">{label}</span>
+            </div>
+            <ChevronRight size={20} className="text-gray-400" />
+        </div>
+        <div className="flex items-end justify-between w-full">
+            <div className="flex items-baseline gap-1 mb-1">
+                <span className="text-4xl font-bold text-[#EE3424]">{value}</span>
+                <span className="text-lg text-gray-400 font-medium">{unit}</span>
+            </div>
+            <div className="w-[120px] h-[60px] flex items-end justify-end">
                 {chart}
             </div>
-        ) : trend && (
-            <div className={`flex items-center gap-1 mt-2 ${trendColor}`}>
-                <TrendingUp size={14} />
-                <span className="text-xs">{trend}</span>
-            </div>
-        )}
+        </div>
     </div>
 );
 
@@ -93,6 +174,12 @@ const ActivityScreen = () => {
         heartRate: { value: '72', unit: 'bpm', trend: 'Resting' },
     };
 
+    // Mock weekly data (7 days)
+    const stepsWeekly = [4500, 6200, 8100, 5400, 9200, 11000, 8432];
+    const distWeekly = [3.2, 4.5, 6.1, 4.0, 7.2, 8.5, 6.2];
+    const paceWeekly = [8.5, 8.2, 8.0, 7.8, 8.3, 8.1, 8.4];
+    const sleepWeekly = [7.0, 6.5, 8.0, 7.2, 7.5, 8.5, 7.7];
+
     const walkHistory = [
         { title: 'Outdoor Walk', distance: '2.1 km', duration: '28 min', date: 'Today' },
         { title: 'Evening Walk', distance: '1.8 km', duration: '22 min', date: 'Yesterday' },
@@ -101,11 +188,17 @@ const ActivityScreen = () => {
     ];
 
     return (
-        <div className="relative h-full bg-gray-50 flex flex-col">
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto pb-24">
-                <StatusBar />
+        <div className="relative w-full h-full bg-gray-50 overflow-hidden">
+            {/* Dynamic Island - Fixed at absolute top */}
+            <DynamicIsland />
 
+            {/* Fixed Header Elements - Absolute Top */}
+            <div className="absolute top-0 left-0 right-0 z-50 bg-gray-50 border-b border-gray-200/50 pt-[12px]">
+                <StatusBar />
+            </div>
+
+            {/* Scrollable Content - Absolute Full Fill with Top Padding */}
+            <div className="absolute inset-0 overflow-y-auto pt-[60px] pb-24">
                 {/* Header */}
                 <div className="px-6 py-4">
                     <h1 className="text-2xl font-bold text-gray-900">Activity</h1>
@@ -178,87 +271,86 @@ const ActivityScreen = () => {
                 {/* Metrics Grid */}
                 <section className="px-6 py-2">
                     <div className="grid grid-cols-2 gap-3">
-                        {/* Pace - Line Chart */}
-                        <MetricCard
-                            label="Pace"
+                        {/* Avg. Pace - Apple Style Card */}
+                        <AppleMetricCard
+                            title="Avg. Pace"
                             value={activityData.pace.value}
                             unit={activityData.pace.unit}
-                            trend={activityData.pace.trend}
-                            trendColor="text-green-500"
-                            chart={<SimpleLineChart data={[8.5, 8.2, 8.0, 7.8, 8.3, 8.1, 7.9]} height={80} />}
+                            color="#EE3424" // Brand Red
+                            data={paceWeekly}
                         />
 
-                        {/* Steps - Bar Chart */}
-                        <MetricCard
-                            label="Steps"
+                        {/* Steps - Apple Style Card */}
+                        <AppleMetricCard
+                            title="Steps"
                             value={activityData.steps.value}
                             unit=""
-                            trend={activityData.steps.trend}
-                            trendColor="text-green-500"
-                            chart={<SimpleBarChart data={[4000, 6000, 7500, 8432, 5000, 9000, 8200]} solidColor="#EE3424" height={80} />}
+                            color="#EE3424" // Brand Red
+                            data={stepsWeekly}
                         />
 
-                        {/* Distance - Big Number (No Chart, Just Text Emphasis) */}
-                        <div className="bg-white rounded-2xl p-4 border border-[#E6E3E3] flex flex-col justify-between h-[215px]">
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm font-semibold text-gray-900">Distance</span>
-                            </div>
-                            <div className="flex-1 flex flex-col justify-center items-center">
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-5xl font-extrabold text-black">{activityData.distance.value}</span>
-                                    <span className="text-base font-medium text-gray-400">{activityData.distance.unit}</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-1 text-gray-500">
-                                <TrendingUp size={14} />
-                                <span className="text-xs">{activityData.distance.trend}</span>
-                            </div>
-                        </div>
+                        {/* Distance - Apple Style Card */}
+                        <AppleMetricCard
+                            title="Distance"
+                            value={activityData.distance.value}
+                            unit={activityData.distance.unit}
+                            color="#EE3424" // Brand Red
+                            data={distWeekly}
+                        />
 
-                        {/* Calories - Donut Chart */}
-                        <MetricCard
-                            label="Calories"
+                        {/* Calories - Apple Style Card (Donut) */}
+                        <AppleMetricCard
+                            title="Calories"
                             value={activityData.calories.value}
                             unit={activityData.calories.unit}
-                            trendColor="text-red-500"
+                            color="#EE3424" // Brand Red
+                            subtitle="Today"
                             chart={
-                                <div className="flex flex-col items-center gap-3">
+                                <div className="flex flex-col items-center gap-2 pb-2">
                                     <DonutChart value={324} total={500} size={80} />
-                                    <span className="text-xs text-red-500 font-medium">+45 kcal Today</span>
+                                    <span className="text-[10px] text-red-500 font-medium">+45 kcal</span>
                                 </div>
                             }
                         />
 
-                        {/* Time in Bed - Candle Chart */}
-                        <MetricCard
-                            label="Sleep"
-                            value={activityData.sleep.value}
-                            unit={activityData.sleep.unit}
+                        {/* Avg Time in Bed - Wide Card (Restored with WeeklyBarChart) */}
+                        <WideMetricCard
+                            label="Avg. Time in Bed"
+                            value="7.7"
+                            unit="hr"
+                            icon={<Moon size={20} className="text-gray-900" />}
                             chart={
-                                <div className="mt-1">
-                                    <CandleChart
-                                        solidColor="#EE3424"
-                                        height={80}
-                                        data={[
-                                            { open: 7, close: 8, high: 9, low: 6 },
-                                            { open: 6.5, close: 7.5, high: 8, low: 6 },
-                                            { open: 7.5, close: 7, high: 8.5, low: 6.5 },
-                                            { open: 7, close: 8, high: 8.5, low: 6 },
-                                            { open: 7.2, close: 7.8, high: 8.2, low: 7 },
-                                            { open: 6.8, close: 8.2, high: 8.5, low: 6.5 },
-                                            { open: 7.5, close: 8, high: 9, low: 7 },
-                                        ]}
-                                    />
+                                <div className="w-full pl-2">
+                                    <WeeklyBarChart data={sleepWeekly} color="#EE3424" height={80} />
                                 </div>
                             }
                         />
 
-                        {/* Heart Rate - Line Chart */}
-                        <MetricCard
-                            label="Heart Rate"
-                            value={activityData.heartRate.value}
-                            unit={activityData.heartRate.unit}
-                            chart={<SimpleLineChart data={[65, 68, 72, 70, 75, 72, 68]} height={80} />}
+                        {/* Avg Heart Rate - Wide Card (Old Style) */}
+                        <WideMetricCard
+                            label="Avg. Heart Rate"
+                            value="80"
+                            unit="bpm"
+                            icon={<Heart size={20} className="text-gray-900" />}
+                            chart={
+                                <svg width="100%" height="80" viewBox="0 0 120 80" className="overflow-visible">
+                                    <defs>
+                                        <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stopColor="#F4AA1C" />
+                                            <stop offset="100%" stopColor="#EE3424" />
+                                        </linearGradient>
+                                    </defs>
+                                    <polyline
+                                        points="0,60 20,50 40,55 60,40 80,45 100,20"
+                                        fill="none"
+                                        stroke="url(#line-gradient)"
+                                        strokeWidth="3"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <circle cx="100" cy="20" r="4" fill="#EE3424" />
+                                </svg>
+                            }
                         />
                     </div>
                 </section>
@@ -287,7 +379,7 @@ const ActivityScreen = () => {
                 </section>
             </div>
 
-            {/* Fixed NavBar */}
+            {/* Fixed NavBar - Absolute Bottom */}
             <NavBar />
         </div>
     );

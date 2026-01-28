@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
+import DynamicIsland from '../components/DynamicIsland';
 import { ChevronRight, ChevronLeft, Gift, Ticket, CheckCircle2, Flame, Calendar, Image, Video, Trophy } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -107,11 +108,11 @@ const StreakBadge = ({ currentDay, targetDays }) => {
                             style={{ left: positions[index] }}
                         >
                             {/* Calendar Icon */}
-                            <div className={`w-11 h-11 rounded-xl border-2 flex flex-col items-center justify-center bg-white overflow-hidden ${isActive ? 'border-gray-900' : isReached ? 'border-orange-400' : 'border-gray-200'
+                            <div className={`w-8 h-8 rounded-lg border-2 flex flex-col items-center justify-center bg-white overflow-hidden ${isActive ? 'border-gray-900' : isReached ? 'border-orange-400' : 'border-gray-200'
                                 }`}>
-                                <div className={`w-full h-1.5 ${isActive ? 'bg-gray-900' : isReached ? 'bg-orange-400' : 'bg-gray-200'
+                                <div className={`w-full h-1 ${isActive ? 'bg-gray-900' : isReached ? 'bg-orange-400' : 'bg-gray-200'
                                     }`} />
-                                <span className={`text-sm font-bold ${isActive || isReached ? 'text-gray-900' : 'text-gray-400'
+                                <span className={`text-xs font-bold ${isActive || isReached ? 'text-gray-900' : 'text-gray-400'
                                     }`}>
                                     {day}
                                 </span>
@@ -318,10 +319,16 @@ const QuestScreen = () => {
 
     return (
         <div className="relative h-full bg-gray-50 flex flex-col">
+            {/* Dynamic Island - Fixed at absolute top */}
+            <DynamicIsland />
+
+            {/* Fixed Header with StatusBar */}
+            <div className="bg-gray-50 pt-[12px]">
+                <StatusBar />
+            </div>
+
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto pb-24">
-                <StatusBar />
-
                 {/* Header */}
                 <div className="px-6 py-4">
                     <h1 className="text-2xl font-bold text-gray-900">{t('quest.title')}</h1>

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, MapPin } from 'lucide-react';
 import { getImagePath } from '../utils/imagePath';
+import aiPartnerBanner from '../assets/ai_partner_banner.png';
 
 const DiscoverSection = () => {
     const navigate = useNavigate();
@@ -32,8 +33,9 @@ const DiscoverSection = () => {
     return (
         <section className="px-6 py-4 pb-8">
             {/* Header */}
-            <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-black">Location</h3>
+            {/* Header */}
+            <div className="flex justify-between items-center mb-2">
+                <h3 className="text-xl font-semibold text-black">Discover</h3>
                 <button
                     onClick={() => navigate('/activity/walking-route')}
                     className="flex items-center gap-1 text-gray-500 text-sm"
@@ -42,6 +44,9 @@ const DiscoverSection = () => {
                     <ChevronRight size={16} />
                 </button>
             </div>
+
+            {/* Sub-header */}
+            <h4 className="text-lg font-semibold text-black mb-3">Explore</h4>
 
             {/* Horizontal Scroll Locations */}
             <div className="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide snap-x snap-mandatory">
@@ -84,6 +89,31 @@ const DiscoverSection = () => {
                         </div>
                     </div>
                 ))}
+                ))}
+            </div>
+
+            {/* AI Partner Section */}
+            <div className="mt-3">
+                <h4 className="text-lg font-semibold text-black mb-3">AI Partner</h4>
+                <div className="rounded-2xl overflow-hidden shadow-sm relative">
+                    <img
+                        src={aiPartnerBanner}
+                        alt="AI Partner Banner"
+                        className="w-full h-[140px] object-cover"
+                    />
+                    <div className="absolute inset-0 p-4 pl-5 flex flex-col justify-center items-start">
+                        <h3 className="text-[20px] font-['Switzer'] font-normal text-black leading-tight">Sakura Aoyama</h3>
+                        <p className="text-sm text-black/80 mt-1 mb-3 max-w-[70%] leading-snug">
+                            Gentle, graceful, and warmly approachable
+                        </p>
+                        <button
+                            onClick={() => navigate('/video-call')}
+                            className="bg-black text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
+                        >
+                            Create Avatar
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
     );

@@ -337,7 +337,31 @@ export const DiaryProvider = ({ children }) => {
             generateWeeklyReview,
             generateAutoAIEntry,
             chatMessages,
-            setChatMessages
+            setChatMessages,
+            addChatMessage: (text, isUser = true) => {
+                const newMessage = {
+                    id: crypto.randomUUID(),
+                    text,
+                    isUser,
+                    time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+                    timestamp: new Date().toISOString()
+                };
+                setChatMessages(prev => [...prev, newMessage]);
+                return newMessage;
+            },
+            addVideoCallMessages: (messages) => {
+                // messages is array of { text, isUser }
+                const now = new Date();
+                const formattedMessages = messages.map((msg, index) => ({
+                    id: crypto.randomUUID(),
+                    text: msg.text,
+                    isUser: msg.isUser,
+                    isVideoCall: true,
+                    time: now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+                    timestamp: new Date(now.getTime() + index * 1000).toISOString() // Stagger timestamps
+                }));
+                setChatMessages(prev => [...prev, ...formattedMessages]);
+            }
         }}>
             {children}
         </DiaryContext.Provider>

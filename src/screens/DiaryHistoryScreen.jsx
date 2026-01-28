@@ -64,36 +64,30 @@ const DiaryHistoryScreen = () => {
 
     return (
         <div className="h-full flex flex-col bg-white">
-            {/* Fake Dynamic Island */}
-            <div className="absolute top-[12px] left-1/2 -translate-x-1/2 z-[60] pointer-events-none">
-                <div className="w-[126px] h-[37px] bg-black rounded-full flex items-center justify-center">
-                    <div className="w-[10px] h-[10px] bg-[#1a1a1a] rounded-full mr-2"></div>
+            {/* Fixed Header Section */}
+            <div className="absolute top-0 left-0 right-0 z-40 bg-white border-b border-gray-100 shadow-sm">
+                <StatusBar />
+
+                {/* Header */}
+                <div className="px-6 py-3 flex items-center gap-4">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+                    >
+                        <ChevronLeft size={24} className="text-gray-900" />
+                    </button>
+
+                    <h1 className="text-xl font-bold text-gray-900">{t('history.archive')}</h1>
+                </div>
+
+                {/* Sticky Calendar Component */}
+                <div className="px-4 pb-2">
+                    <WeeklyCalendar selectedDate={selectedDate} onDateSelect={handleDateSelect} />
                 </div>
             </div>
 
-            <div className="bg-white">
-                <StatusBar />
-            </div>
-
-            {/* Header */}
-            <div className="px-6 py-3 flex items-center gap-4 bg-white z-10 relative">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                    <ChevronLeft size={24} className="text-gray-900" />
-                </button>
-
-                <h1 className="text-xl font-bold text-gray-900">{t('history.archive')}</h1>
-            </div>
-
-            {/* Sticky Calendar Component */}
-            <div className="bg-white px-4 border-b border-gray-100 shadow-sm sticky top-0 z-20">
-                <WeeklyCalendar selectedDate={selectedDate} onDateSelect={handleDateSelect} />
-            </div>
-
             {/* Content Area */}
-            <div className="flex-1 overflow-hidden relative">
+            <div className="flex-1 overflow-hidden relative pt-[180px]">
                 <VerticalFeedView
                     groups={groupedItems}
                     t={t}

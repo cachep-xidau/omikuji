@@ -37,7 +37,7 @@ const FeatureSection = () => {
                     return (
                         <div
                             key={feature.id}
-                            className={`rounded-2xl bg-gradient-to-br ${feature.gradient} p-4 relative overflow-hidden cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-end h-[100px]`}
+                            className={`rounded-2xl bg-gradient-to-br ${feature.gradient} p-4 relative overflow-hidden cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-end h-[100px] shadow-md border border-white/50`}
                         >
                             {/* Text */}
                             <h4 className={`text-sm font-semibold ${feature.titleColor}`}>{feature.title}</h4>

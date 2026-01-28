@@ -15,6 +15,8 @@ const AccountScreen = () => {
 
     const clearFortune = () => {
         localStorage.removeItem('kokoro_fortune_history');
+        localStorage.removeItem('kokoro_chat_messages');
+        localStorage.removeItem('kokoro_user_profile'); // Clear profile to test onboarding
         window.location.reload();
     };
 

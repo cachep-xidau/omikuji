@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
+import DynamicIsland from '../components/DynamicIsland';
 import { TrendingUp, Award, Calendar, ChevronRight, Activity } from 'lucide-react';
 
 // Recap Section Component
@@ -142,10 +143,16 @@ const WalkHabitSection = () => {
 const InsightScreen = () => {
     return (
         <div className="relative h-full bg-gray-50 flex flex-col">
+            {/* Dynamic Island - Fixed at absolute top of screen */}
+            <DynamicIsland />
+
+            {/* Fixed Header with StatusBar */}
+            <div className="bg-gray-50 pt-[12px]">
+                <StatusBar />
+            </div>
+
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto pb-24">
-                <StatusBar />
-
                 {/* Header */}
                 <div className="px-6 py-4">
                     <h1 className="text-2xl font-bold text-gray-900">Insight</h1>

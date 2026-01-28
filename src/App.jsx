@@ -20,6 +20,8 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { SubscriptionProvider } from './contexts/SubscriptionContext';
 import DiaryEntryScreen from './screens/DiaryEntryScreen';
 import PaywallScreen from './screens/PaywallScreen';
+import VideoCallScreen from './screens/VideoCallScreen';
+
 
 function App() {
   return (
@@ -49,6 +51,7 @@ function App() {
                   <Route path="/chat-diary" element={<ChatDiaryScreen />} />
 
                   {/* Other Routes */}
+                  <Route path="/video-call" element={<VideoCallScreen />} />
                   <Route path="/paywall" element={<PaywallScreen />} />
                 </Routes>
               </AnimatePresence>

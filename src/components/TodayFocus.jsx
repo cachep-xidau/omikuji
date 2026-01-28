@@ -1,52 +1,16 @@
-import { Settings, Heart } from 'lucide-react';
-import iconAvgPace from '../assets/icon_avg_pace.png';
+import { Settings, Heart, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
 import iconAdvice from '../assets/icon_advice.png';
 import iconSteps from '../assets/icon_steps.png';
 import iconDistance from '../assets/icon_distance.png';
 import iconCalories from '../assets/icon_calories.png';
 
-// Simple circular display for pace
-const PaceGauge = ({ value, unit }) => {
-    return (
-        <div className="relative w-[120px] h-[120px] mx-auto">
-            {/* Background Ring */}
-            <svg className="w-full h-full" viewBox="0 0 120 120">
-                <circle
-                    cx="60"
-                    cy="60"
-                    r="54"
-                    stroke="#E5E7EB"
-                    strokeWidth="6"
-                    fill="none"
-                />
-                {/* Progress arc */}
-                <circle
-                    cx="60"
-                    cy="60"
-                    r="54"
-                    stroke="#EE3424"
-                    strokeWidth="6"
-                    fill="none"
-                    strokeDasharray="339"
-                    strokeDashoffset="100"
-                    strokeLinecap="round"
-                    transform="rotate(-90 60 60)"
-                />
-            </svg>
 
-            {/* Centered Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <img src={iconAvgPace} alt="Speedometer" className="w-5 h-5 object-contain mb-0.5" />
-                <span className="text-xs text-gray-500">Avg. pace</span>
-                <span className="text-xl font-semibold text-black tracking-tight">{value}</span>
-                <span className="text-xs text-gray-400">{unit}</span>
-            </div>
-        </div>
-    );
-};
 
 
 const TodayFocus = () => {
+    const navigate = useNavigate();
     // Mock data for today
     const todayData = {
         avgPace: '3.4',
@@ -62,16 +26,16 @@ const TodayFocus = () => {
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-semibold text-black">Today Focus</h3>
-                <button className="flex items-center gap-1 text-gray-500 text-sm">
-                    <span>Setting</span>
-                    <Settings size={14} />
+                <button
+                    onClick={() => navigate('/activity')}
+                    className="flex items-center gap-1 text-gray-500 text-sm hover:text-gray-900 transition-colors"
+                >
+                    <span>View Activity</span>
+                    <ChevronRight size={16} />
                 </button>
             </div>
 
-            {/* Pace Gauge */}
-            <div className="mb-5 flex justify-center">
-                <PaceGauge value={todayData.avgPace} unit={todayData.paceUnit} />
-            </div>
+
 
             {/* Metrics Grid */}
             <div className="grid grid-cols-4 gap-2">
