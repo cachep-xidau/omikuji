@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import StatusBar from '../components/StatusBar';
-import { ChevronLeft, Heart, MapPin, Circle } from 'lucide-react';
+import { ChevronLeft, Heart, MapPin, Circle, CalendarPlus } from 'lucide-react';
 
 const WalkingRouteScreen = () => {
     const navigate = useNavigate();
@@ -14,7 +14,8 @@ const WalkingRouteScreen = () => {
         route: {
             start: 'Sakura-dori, Shibuya-ku',
             end: 'Aoyama-dori, Minato-ku'
-        }
+        },
+        image: null
     };
 
     const record = location.state?.record || defaultRecord;
@@ -24,11 +25,17 @@ const WalkingRouteScreen = () => {
             <StatusBar />
 
             {/* Header */}
-            <div className="px-4 py-4 flex items-center gap-3 flex-shrink-0 bg-white z-10">
-                <button onClick={() => navigate(-1)} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
-                    <ChevronLeft size={24} className="text-gray-900" />
-                </button>
-                <h1 className="text-xl font-semibold text-gray-900">Walking Route</h1>
+            <div className="px-4 py-4 flex items-center justify-between flex-shrink-0 bg-white z-10">
+                <div className="flex items-center gap-3">
+                    <button onClick={() => navigate(-1)} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
+                        <ChevronLeft size={24} className="text-gray-900" />
+                    </button>
+                    <h1 className="text-xl font-semibold text-gray-900 truncate max-w-[150px]">
+                        {record.title}
+                    </h1>
+                </div>
+
+
             </div>
 
             {/* Map Area */}
@@ -77,10 +84,27 @@ const WalkingRouteScreen = () => {
                     </svg>
                 </div>
 
-                {/* Favorite button */}
-                <button className="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform active:scale-95">
-                    <Heart size={24} className="text-gray-400 hover:text-red-500 transition-colors" />
-                </button>
+                {/* Event Preview Image (Top Right of Map) */}
+                {record.image && (
+                    <div className="absolute top-4 right-4 w-24 h-16 rounded-xl border-2 border-white shadow-lg overflow-hidden z-20">
+                        <img
+                            src={record.image}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                )}
+
+                {/* Floating Action Buttons */}
+                <div className="absolute bottom-4 right-4 flex flex-col gap-3">
+                    <button className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform active:scale-95" title="Add to Calendar">
+                        <CalendarPlus size={24} className="text-gray-600 hover:text-blue-500 transition-colors" />
+                    </button>
+
+                    <button className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform active:scale-95">
+                        <Heart size={24} className="text-gray-400 hover:text-red-500 transition-colors" />
+                    </button>
+                </div>
             </div>
 
             {/* Bottom Info Card */}
