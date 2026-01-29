@@ -3,8 +3,11 @@ import { ChevronRight, MapPin } from 'lucide-react';
 import { getImagePath } from '../utils/imagePath';
 import aiPartnerBanner from '../assets/ai_partner_banner.png';
 
+import { useSubscription } from '../contexts/SubscriptionContext';
+
 const DiscoverSection = () => {
     const navigate = useNavigate();
+    const { checkFeatureAccess, openPaywall } = useSubscription();
 
     const locations = [
         {
@@ -107,9 +110,16 @@ const DiscoverSection = () => {
                             Gentle, graceful, and warmly approachable
                         </p>
                         <button
-                            onClick={() => navigate('/video-call')}
-                            className="bg-black text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
+                            onClick={() => {
+                                if (checkFeatureAccess('video_call')) {
+                                    navigate('/video-call');
+                                } else {
+                                    openPaywall();
+                                }
+                            }}
+                            className="bg-black text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-gray-800 transition-colors flex items-center gap-2"
                         >
+                            {!checkFeatureAccess('video_call') && <span className="text-yellow-400 text-[10px] font-bold">PREMIUM</span>}
                             Create Avatar
                         </button>
                     </div>

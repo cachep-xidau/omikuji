@@ -5,12 +5,30 @@ import { useVoiceInteraction } from '../hooks/useVoiceInteraction';
 import { getClaudeResponse } from '../services/claudeService';
 import { getImagePath } from '../utils/imagePath';
 import { useDiary } from '../data/DiaryContext';
+import { useSubscription } from '../contexts/SubscriptionContext';
 
 const VideoCallScreen = () => {
     const navigate = useNavigate();
     const videoRef = useRef(null);
     const isProcessingRef = useRef(false); // Prevent double processing
     const { addVideoCallMessages } = useDiary();
+    const { checkFeatureAccess, openPaywall } = useSubscription();
+
+    // Protect Route
+    useEffect(() => {
+        if (!checkFeatureAccess('video_call')) {
+            openPaywall();
+            navigate('/'); // Go back home if accessed directly? Or just show modal over black screen? 
+            // Better to go back home so modal shows over home.
+            // Actually, if I navigate away, the modal might close if it's tied to route? 
+            // No, modal is in App.jsx. But if I navigate, the screen unmounts.
+            // If user accesses /video-call directly, they see black screen + modal.
+            // Let's redirect to HOME and THEN open modal.
+            navigate('/');
+            setTimeout(() => openPaywall(), 100);
+        }
+    }, [checkFeatureAccess, navigate, openPaywall]);
+
     const {
         status,
         setStatus,

@@ -9,6 +9,8 @@ import AccountScreen from './screens/AccountScreen';
 import WalkingRecordScreen from './screens/WalkingRecordScreen';
 import RewardScreen from './screens/RewardScreen';
 import WalkingRouteScreen from './screens/WalkingRouteScreen';
+import PremiumModal from './components/PremiumModal';
+import IAPSheet from './components/IAPSheet';
 
 import DiaryLoadingScreen from './screens/DiaryLoadingScreen';
 import DiaryScreen from './screens/DiaryScreen';
@@ -30,6 +32,8 @@ function App() {
         <DiaryProvider>
           <Router>
             <IPhoneFrame>
+              <PremiumModal />
+              <IAPSheet />
               <AnimatePresence mode="wait">
                 <Routes>
                   {/* Main Navigation */}

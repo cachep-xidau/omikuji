@@ -36,11 +36,12 @@ const HomeScreen = () => {
     lastScrollY.current = currentScrollY;
   };
 
-  useEffect(() => {
-    if (status === 'expired' && !hasSkipped) {
-      navigate('/paywall');
-    }
-  }, [status, hasSkipped, navigate]);
+  // Removed automatic paywall redirection logic
+  // useEffect(() => {
+  //   if (status === 'expired' && !hasSkipped) {
+  //     navigate('/paywall');
+  //   }
+  // }, [status, hasSkipped, navigate]);
 
   // Show only the first mission
   const todayMission = missions[0];

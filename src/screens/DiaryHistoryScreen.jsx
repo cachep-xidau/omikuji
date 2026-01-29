@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Sparkles, Footprints } from 'lucide-react';
+import { ChevronLeft, Sparkles, Footprints, Lock } from 'lucide-react';
 import { useDiary } from '../data/DiaryContext';
 import { getCurrentMicroseason } from '../data/microseasons';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,6 +10,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { getImagePath } from '../utils/imagePath';
 import WeeklyCalendar from '../components/WeeklyCalendar';
 import StatusBar from '../components/StatusBar';
+import { useSubscription } from '../contexts/SubscriptionContext';
 
 
 const DiaryHistoryScreen = () => {
@@ -104,6 +105,7 @@ const DiaryHistoryScreen = () => {
 const VerticalFeedView = ({ groups, t, onDateVisible, isInternalScroll }) => {
     const navigate = useNavigate();
     const { formatDate } = useLanguage();
+    const { checkFeatureAccess, openPaywall } = useSubscription();
     const observerRef = useRef(null);
     const scrollContainerRef = useRef(null);
 
@@ -217,6 +219,8 @@ const VerticalFeedView = ({ groups, t, onDateVisible, isInternalScroll }) => {
                                     const isInsight = item.type === 'mirror_insight';
                                     const isAIEntry = item.type === 'ai_entry';
 
+                                    const isLocked = !checkFeatureAccess('ai_journalist');
+
                                     return (
                                         <div key={item.id} className="relative group">
                                             <div className="absolute -left-[21px] top-2 w-2.5 h-2.5 rounded-full bg-purple-400 border-2 border-white" />
@@ -224,25 +228,50 @@ const VerticalFeedView = ({ groups, t, onDateVisible, isInternalScroll }) => {
                                                 {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 <span className="bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">AI</span>
                                             </p>
-                                            <div className="bg-white border border-gray-100 shadow-sm rounded-xl p-4 text-base leading-relaxed mr-4">
-                                                <div className="flex items-center gap-2 mb-2 text-purple-600">
-                                                    <Sparkles size={14} />
-                                                    <span className="text-[10px] font-bold uppercase tracking-wider">
-                                                        {isInsight ? 'Mirror Insight' : (isAIEntry ? 'The Mirror' : 'AI Companion')}
-                                                    </span>
+                                            {/* AI Card Container - Clickable if Locked */}
+                                            <div
+                                                onClick={() => isLocked && openPaywall()}
+                                                className={`bg-white border border-gray-100 shadow-sm rounded-xl p-4 text-base leading-relaxed mr-4 relative overflow-hidden transition-all ${isLocked ? 'cursor-pointer active:scale-[0.98] hover:border-purple-200' : ''}`}
+                                            >
+                                                {/* Header */}
+                                                <div className="flex items-center justify-between mb-2 text-purple-600">
+                                                    <div className="flex items-center gap-2">
+                                                        <Sparkles size={14} />
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider">
+                                                            {isInsight ? 'Mirror Insight' : (isAIEntry ? 'The Mirror' : 'AI Companion')}
+                                                        </span>
+                                                    </div>
+                                                    {isLocked && <div className="bg-purple-50 p-1.5 rounded-full"><Lock size={12} /></div>}
                                                 </div>
-                                                <p className="text-gray-900 leading-relaxed font-medium">
-                                                    {isInsight ? item.data.text : (item.text || item.content)}
-                                                </p>
-                                                {isProposal && (
-                                                    <div className="mt-3">
-                                                        <button
-                                                            onClick={() => navigate('/activity/walking-route')}
-                                                            className="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-xl text-xs font-bold hover:bg-green-100 transition-colors w-full justify-center border border-green-100"
-                                                        >
-                                                            <Footprints size={14} />
-                                                            Explore Route
-                                                        </button>
+
+                                                {/* Content with Blur if Locked */}
+                                                <div className={isLocked ? "blur-[5px] select-none opacity-50 transition-all duration-300" : ""}>
+                                                    <p className="text-gray-900 leading-relaxed font-medium line-clamp-4">
+                                                        {isInsight ? item.data.text : (item.text || item.content)}
+                                                    </p>
+                                                    {isProposal && (
+                                                        <div className="mt-3">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    navigate('/activity/walking-route');
+                                                                }}
+                                                                className="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-xl text-xs font-bold hover:bg-green-100 transition-colors w-full justify-center border border-green-100"
+                                                            >
+                                                                <Footprints size={14} />
+                                                                Explore Route
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Minimal Lock Overlay (Omikuji Style) */}
+                                                {isLocked && (
+                                                    <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                                                        <div className="flex flex-col items-center gap-2 text-purple-600/90 bg-white/40 backdrop-blur-[2px] px-4 py-2 rounded-xl">
+                                                            <Lock size={18} />
+                                                            <span className="text-xs font-bold tracking-wide">Tap to view details</span>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
@@ -276,10 +305,10 @@ const VerticalFeedView = ({ groups, t, onDateVisible, isInternalScroll }) => {
                                 );
                             })}
                         </div>
-                    </div>
+                    </div >
                 ))
             )}
-        </motion.div>
+        </motion.div >
     );
 };
 

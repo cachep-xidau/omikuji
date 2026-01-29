@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, Star, Shield, Cloud, Clock, Sparkles, X, Scroll } from 'lucide-react';
+import { Check, Star, Shield, Cloud, Clock, Sparkles, X, Scroll, Video } from 'lucide-react';
 import { useSubscription } from '../contexts/SubscriptionContext';
 
 const PaywallScreen = () => {
@@ -10,10 +10,10 @@ const PaywallScreen = () => {
     const [billingCycle, setBillingCycle] = useState('yearly'); // 'monthly' | 'yearly'
 
     const features = [
-        { icon: Sparkles, text: "Cultural AI (Microseasons, Omikuji, Blood Type)" },
+        { icon: Video, text: "Unlimited AI Video Calls" },
+        { icon: Sparkles, text: "Deep AI Journaling Insights" },
+        { icon: Star, text: "Cultural AI (Microseasons, Omikuji)" },
         { icon: Cloud, text: "5GB Cloud Backup" },
-        { icon: Shield, text: "Priority Support" },
-        { icon: Star, text: "Exclusive Seasonal Themes" },
         { icon: Clock, text: "Live fortune teller connect" },
         { icon: Scroll, text: "Unlimited Fortune History" }
     ];
@@ -39,19 +39,14 @@ const PaywallScreen = () => {
 
             {/* Header */}
             <div className="p-6 pt-12 text-center relative">
-                {status === 'trial' && (
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="absolute top-0 right-6 p-2 bg-gray-100 rounded-full text-gray-400 hover:text-gray-600"
-                    >
-                        <X size={20} />
-                    </button>
-                )}
+                <button
+                    onClick={() => navigate(-1)}
+                    className="absolute top-0 right-6 p-2 bg-gray-100 rounded-full text-gray-400 hover:text-gray-600 transition-colors z-10"
+                >
+                    <X size={20} />
+                </button>
 
-                <div className="inline-flex items-center justify-center p-3 bg-purple-100 rounded-full text-purple-600 mb-4 shadow-sm">
-                    <Star size={24} fill="currentColor" />
-                </div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Upgrade to Plus</h1>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2 mt-8">Upgrade to Plus</h1>
                 <p className="text-gray-500 text-sm px-8">
                     Unlock the full potential of your daily journey with A2V functionality.
                 </p>
@@ -112,17 +107,7 @@ const PaywallScreen = () => {
                     {billingCycle === 'yearly' && <span className="text-sm font-normal opacity-80">/yr</span>}
                 </button>
 
-                {status !== 'trial' && (
-                    <button
-                        onClick={() => {
-                            skipPaywall();
-                            navigate('/');
-                        }}
-                        className="w-full py-3 text-gray-400 font-semibold text-sm hover:text-gray-900 transition-colors mb-2"
-                    >
-                        Maybe Later
-                    </button>
-                )}
+
 
                 <p className="text-center text-[11px] text-gray-400 leading-normal">
                     Recurring billing. Cancel anytime.

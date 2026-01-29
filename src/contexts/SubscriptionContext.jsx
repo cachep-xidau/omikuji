@@ -12,7 +12,18 @@ export const SubscriptionProvider = ({ children }) => {
     const [status, setStatus] = useState('loading'); // loading, trial, active, expired
     const [trialStartDate, setTrialStartDate] = useState(null);
     const [subscription, setSubscription] = useState(null); // null, 'monthly', 'yearly'
+    const [isPaywallOpen, setIsPaywallOpen] = useState(false);
+    const [isIAPOpen, setIsIAPOpen] = useState(false);
     const [hasSkipped, setHasSkipped] = useState(false);
+
+    const openPaywall = () => setIsPaywallOpen(true);
+    const closePaywall = () => setIsPaywallOpen(false);
+
+    const openIAP = () => {
+        closePaywall(); // Ensure Premium modal is closed
+        setIsIAPOpen(true);
+    };
+    const closeIAP = () => setIsIAPOpen(false);
 
     useEffect(() => {
         // Load state from localStorage
@@ -86,25 +97,23 @@ export const SubscriptionProvider = ({ children }) => {
     const isPremium = status === 'trial' || status === 'active';
 
     const checkFeatureAccess = (featureId) => {
-        // All features unlocked during trial or if subscribed
-        // Specific gating logic can be added here if we have "partial" free features
+        // Feature Locking Logic:
+        // 1. If Trial or Active Subscription: ALL UNLOCKED
+        // 2. If Expired (Freemium ended): RESTRICT Premium Features
+
         if (status === 'trial' || status === 'active') return true;
 
-        // Define specifically free features here if any
-        // For now, prompt implies Freemium Trial -> All features. 
-        // Then Expired -> Block Premium.
-
-        const PREMIUM_FEATURES = [
+        const PREMIUM_ONLY_FEATURES = [
+            'video_call',      // "Xem video" 
+            'ai_journalist',   // "Xem AI journalist"
             'cultural_ai',
-            'cloud_backup',
-            'priority_support',
-            'seasonal_themes',
-            'time_capsule',
             'fortune_history_unlimited'
         ];
 
-        if (PREMIUM_FEATURES.includes(featureId)) {
-            return false;
+        if (status === 'expired') {
+            if (PREMIUM_ONLY_FEATURES.includes(featureId)) {
+                return false;
+            }
         }
 
         return true;
@@ -121,7 +130,13 @@ export const SubscriptionProvider = ({ children }) => {
             checkFeatureAccess,
             skipPaywall,
             hasSkipped,
-            plan: subscription
+            plan: subscription,
+            isPaywallOpen,
+            openPaywall,
+            closePaywall,
+            isIAPOpen,
+            openIAP,
+            closeIAP
         }}>
             {children}
         </SubscriptionContext.Provider>
