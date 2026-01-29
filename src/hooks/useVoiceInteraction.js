@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { generateSpeech } from '../services/elevenLabsService';
 
 export const useVoiceInteraction = () => {
     const [status, setStatus] = useState('IDLE'); // IDLE, LISTENING, PROCESSING, SPEAKING
@@ -7,14 +8,14 @@ export const useVoiceInteraction = () => {
     const [error, setError] = useState(null);
 
     const recognition = useRef(null);
-    const synthesis = useRef(window.speechSynthesis);
+    const audioRef = useRef(new Audio());
 
     useEffect(() => {
         // Initialize Speech Recognition
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (SpeechRecognition) {
             recognition.current = new SpeechRecognition();
-            recognition.current.continuous = false; // Stop after one sentence for turn-taking
+            recognition.current.continuous = true; // Allow pauses without stopping
             recognition.current.interimResults = true;
             recognition.current.lang = 'en-US';
 
@@ -24,26 +25,25 @@ export const useVoiceInteraction = () => {
             };
 
             recognition.current.onresult = (event) => {
-                const current = event.resultIndex;
-                const transcriptText = event.results[current][0].transcript;
+                // Combine all results for continuous recognition
+                const transcriptText = Array.from(event.results)
+                    .map(result => result[0].transcript)
+                    .join('');
                 setTranscript(transcriptText);
             };
 
             recognition.current.onerror = (event) => {
                 console.error("Speech Rec Error:", event.error);
                 if (event.error === 'no-speech') {
-                    // Just restart or go to idle
-                    setStatus('IDLE');
+                    // Ignore no-speech in continuous mode or let it stay idle
                 } else {
                     setError(event.error);
-                    setStatus('IDLE');
                 }
             };
 
-            // Don't auto-restart in this simple hook, let the component handle logic
             recognition.current.onend = () => {
-                // If we were strictly listening and it stopped without processing (e.g. silence), go to IDLE
-                // Component will handle the transition to PROCESSING if transcript exists
+                // In continuous mode, if it stops, it might be due to user action or error.
+                // We typically just stay IDLE until restarted.
             };
         } else {
             setError("Browser doesn't support Speech Recognition");
@@ -53,60 +53,76 @@ export const useVoiceInteraction = () => {
             if (recognition.current) {
                 recognition.current.stop();
             }
-            if (synthesis.current) {
-                synthesis.current.cancel();
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.src = "";
             }
         };
     }, []);
 
     const startListening = () => {
-        if (recognition.current && status !== 'LISTENING') {
+        if (recognition.current) {
             try {
-                setTranscript('');
+                // Stop any playing audio if user interrupts
+                if (audioRef.current && !audioRef.current.paused) {
+                    audioRef.current.pause();
+                    audioRef.current.currentTime = 0;
+                }
+
+                // If it's already started (but status got out of sync), we might get an error
+                // asking to start again. Safe to abort first to ensure fresh start?
+                // recognition.current.abort(); 
+                // actually, let's just try start.
+
                 recognition.current.start();
             } catch (e) {
-                console.log("Already started", e);
+                console.log("Start Listening Error:", e);
+                // If error is "SpeechRecognition is already started", we should sync status
+                if (e.name === 'InvalidStateError' || e.message?.includes('already started')) {
+                    setStatus('LISTENING');
+                }
             }
         }
     };
 
     const stopListening = () => {
         if (recognition.current) {
-            recognition.current.stop();
+            // abort() stops immediately and doesn't fire onresult/onend in some browsers, 
+            // but keeps things cleaner than stop() which tries to return final result.
+            // For this flow (turn-taking), abort is safer to strictly "cut mic".
+            recognition.current.abort();
+            setStatus('IDLE');
         }
     };
 
-    const speak = (text, onEndCallback) => {
-        if (!synthesis.current) return;
-
-        // Cancel previous speech
-        synthesis.current.cancel();
-
-        setStatus('SPEAKING');
+    const speak = async (text, onEndCallback) => {
+        setStatus('PROCESSING'); // Show processing while fetching audio
         setAiResponse(text);
 
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        // Attempt to select a female voice if available
-        const voices = synthesis.current.getVoices();
-        const femaleVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google US English'));
-        if (femaleVoice) utterance.voice = femaleVoice;
+        try {
+            const audioUrl = await generateSpeech(text);
 
-        // Adjust pitch/rate for cute anime effect
-        utterance.pitch = 1.2;
-        utterance.rate = 1.1;
+            if (audioRef.current) {
+                audioRef.current.src = audioUrl;
+                audioRef.current.onplay = () => {
+                    setStatus('SPEAKING');
+                };
+                audioRef.current.onended = () => {
+                    setStatus('IDLE');
+                    if (onEndCallback) onEndCallback();
+                };
+                audioRef.current.onerror = (e) => {
+                    console.error("Audio Playback Error", e);
+                    setStatus('IDLE');
+                };
 
-        utterance.onend = () => {
+                await audioRef.current.play();
+            }
+        } catch (err) {
+            console.error("ElevenLabs TTS Error:", err);
+            setError("Voice Gen Error. Check Key.");
             setStatus('IDLE');
-            if (onEndCallback) onEndCallback();
-        };
-
-        utterance.onerror = (e) => {
-            console.error("TTS Error", e);
-            setStatus('IDLE');
-        };
-
-        synthesis.current.speak(utterance);
+        }
     };
 
     const clearTranscript = () => {

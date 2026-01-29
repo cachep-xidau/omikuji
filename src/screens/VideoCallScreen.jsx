@@ -72,7 +72,6 @@ const VideoCallScreen = () => {
             isProcessingRef.current = false;
             if (!isMuted) {
                 setTimeout(() => {
-                    setStatus('LISTENING');
                     startListening();
                 }, 500); // 500ms delay to avoid catching TTS echo
             } else {
@@ -99,6 +98,16 @@ const VideoCallScreen = () => {
             videoRef.current.play().catch(e => console.log("Autoplay blocked:", e));
             videoRef.current.loop = true;
         }
+    }, []);
+
+    // Auto-start listening on mount
+    useEffect(() => {
+        startListening();
+
+        // Cleanup on unmount
+        return () => {
+            stopListening();
+        };
     }, []);
 
     // Manual Start
