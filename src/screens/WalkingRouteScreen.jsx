@@ -35,7 +35,26 @@ const WalkingRouteScreen = () => {
                     </h1>
                 </div>
 
+                {/* Right Side: Calendar & Preview */}
+                <div className="flex items-center gap-3">
+                    <button
+                        className="p-2 bg-gray-50 rounded-full hover:bg-gray-100 transition-colors"
+                        title="Add to Calendar"
+                        onClick={() => console.log('Add to calendar clicked')}
+                    >
+                        <CalendarPlus size={20} className="text-gray-700" />
+                    </button>
 
+                    {record.image && (
+                        <div className="w-10 h-10 rounded-full border border-gray-100 shadow-sm overflow-hidden">
+                            <img
+                                src={record.image}
+                                alt="Preview"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Map Area */}
@@ -84,23 +103,8 @@ const WalkingRouteScreen = () => {
                     </svg>
                 </div>
 
-                {/* Event Preview Image (Top Right of Map) */}
-                {record.image && (
-                    <div className="absolute top-4 right-4 w-24 h-16 rounded-xl border-2 border-white shadow-lg overflow-hidden z-20">
-                        <img
-                            src={record.image}
-                            alt="Preview"
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                )}
-
                 {/* Floating Action Buttons */}
                 <div className="absolute bottom-4 right-4 flex flex-col gap-3">
-                    <button className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform active:scale-95" title="Add to Calendar">
-                        <CalendarPlus size={24} className="text-gray-600 hover:text-blue-500 transition-colors" />
-                    </button>
-
                     <button className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform active:scale-95">
                         <Heart size={24} className="text-gray-400 hover:text-red-500 transition-colors" />
                     </button>

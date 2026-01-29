@@ -2,6 +2,7 @@ import { useState } from 'react';
 import StatusBar from '../components/StatusBar';
 import NavBar from '../components/NavBar';
 import { ChevronLeft, ChevronRight, Heart, Lock, Filter, Ticket } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Ticket Card Component
 const TicketCard = ({ type, count, icon }) => (
@@ -70,6 +71,7 @@ const CollectionCard = ({ image, avatar, progress, total, name, isLocked, isFavo
 // Collection Modal with Rarity Sections
 const CollectionModal = ({ onClose, cards }) => {
     const [activeTab, setActiveTab] = useState('discover');
+    const { t } = useLanguage();
 
     const rarities = ['Common', 'Rare', 'Epic', 'Legendary', 'Mythical'];
 
@@ -83,7 +85,7 @@ const CollectionModal = ({ onClose, cards }) => {
                     <button onClick={onClose} className="p-1">
                         <ChevronLeft size={24} className="text-gray-900" />
                     </button>
-                    <h1 className="text-xl font-semibold text-gray-900">Collection</h1>
+                    <h1 className="text-xl font-semibold text-gray-900">{t('reward.collection')}</h1>
                 </div>
                 <button className="p-2">
                     <Filter size={20} className="text-gray-600" />
@@ -96,20 +98,20 @@ const CollectionModal = ({ onClose, cards }) => {
                     <button
                         onClick={() => setActiveTab('discover')}
                         className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'discover'
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-500'
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-500'
                             }`}
                     >
-                        Discover
+                        {t('reward.discover')}
                     </button>
                     <button
                         onClick={() => setActiveTab('myAssets')}
                         className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-all ${activeTab === 'myAssets'
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-500'
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-500'
                             }`}
                     >
-                        My Assets
+                        {t('reward.myAssets')}
                     </button>
                 </div>
             </div>
@@ -135,6 +137,7 @@ const CollectionModal = ({ onClose, cards }) => {
 
 const RewardScreen = () => {
     const [showCollection, setShowCollection] = useState(false);
+    const { t } = useLanguage();
 
     // Mock collection data with images
     const collectionCards = [
@@ -165,18 +168,18 @@ const RewardScreen = () => {
 
                 {/* Header */}
                 <div className="px-6 py-4">
-                    <h1 className="text-2xl font-bold text-gray-900">Gacha</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('reward.title')}</h1>
                 </div>
 
                 {/* Ticket Cards */}
                 <div className="px-4 flex gap-3">
                     <TicketCard
-                        type="Regular ticket"
+                        type={t('reward.regularTicket')}
                         count={0}
                         icon={<div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center"><Ticket size={16} className="text-blue-500" /></div>}
                     />
                     <TicketCard
-                        type="Premium ticket"
+                        type={t('reward.premiumTicket')}
                         count={0}
                         icon={<div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center"><Ticket size={16} className="text-red-500" /></div>}
                     />
@@ -185,7 +188,7 @@ const RewardScreen = () => {
                 {/* Open Gacha Tickets Button */}
                 <div className="px-4 mt-4">
                     <button className="w-full py-4 bg-orange-50 rounded-2xl flex items-center justify-between px-4 hover:bg-orange-100 transition-colors">
-                        <span className="text-base font-medium text-gray-900">Open Gacha Tickets</span>
+                        <span className="text-base font-medium text-gray-900">{t('reward.openGacha')}</span>
                         <ChevronRight size={20} className="text-gray-400" />
                     </button>
                 </div>
@@ -203,7 +206,7 @@ const RewardScreen = () => {
                                 <rect x="3" y="14" width="7" height="7" rx="1" />
                                 <rect x="14" y="14" width="7" height="7" rx="1" />
                             </svg>
-                            <span className="text-base font-medium text-gray-900">My cards</span>
+                            <span className="text-base font-medium text-gray-900">{t('reward.myCards')}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-gray-500">23</span>
@@ -215,12 +218,12 @@ const RewardScreen = () => {
                 {/* Collection Section */}
                 <div className="px-4 mt-6">
                     <div className="flex items-center justify-between mb-2">
-                        <h2 className="text-lg font-semibold text-gray-900">Collection</h2>
+                        <h2 className="text-lg font-semibold text-gray-900">{t('reward.collection')}</h2>
                         <button onClick={() => setShowCollection(true)}>
                             <ChevronRight size={20} className="text-gray-400" />
                         </button>
                     </div>
-                    <p className="text-sm text-gray-500 mb-4">Collect 3 cards to unlock a Video</p>
+                    <p className="text-sm text-gray-500 mb-4">{t('reward.collectHint')}</p>
 
                     {/* Featured Cards Carousel */}
                     <div className="flex gap-3 overflow-x-auto pb-2">

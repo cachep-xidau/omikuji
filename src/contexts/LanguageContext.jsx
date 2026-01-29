@@ -181,6 +181,57 @@ export const LanguageProvider = ({ children }) => {
 
         // Quest Screen Extra
         'quest.day': { ja: '日目', en: 'Day' },
+        'quest.recapTitle': { ja: 'ミッションまとめ', en: 'Mission Recap' },
+        'quest.weekAchieve': { ja: '今週の成果', en: "This Week's Achievements" },
+        'quest.missions': { ja: 'ミッション', en: 'Missions' },
+        'quest.completed': { ja: '完了', en: 'Completed' },
+        'quest.ticketsLabel': { ja: 'チケット', en: 'Tickets' },
+        'quest.aiImageSum': { ja: 'AI画像サマリー', en: 'AI Image Summary' },
+        'quest.aiImageDesc': { ja: '今週のビジュアルまとめ', en: 'Visual recap of your week' },
+        'quest.aiVideoSum': { ja: 'AIショート動画サマリー', en: 'AI Short Video Summary' },
+        'quest.aiVideoDesc': { ja: '成果のアニメーションハイライト', en: 'Animated highlights of your achievements' },
+        'quest.completedList': { ja: '完了したミッション', en: 'Completed Missions' },
+
+        // Activity Screen
+        'activity.title': { ja: 'アクティビティ', en: 'Activity' },
+        'activity.move': { ja: 'ムーブ', en: 'Move' },
+        'activity.exercise': { ja: 'エクササイズ', en: 'Exercise' },
+        'activity.stand': { ja: 'スタンド', en: 'Stand' },
+        'activity.avgPace': { ja: '平均ペース', en: 'Avg. Pace' },
+        'activity.steps': { ja: '歩数', en: 'Steps' },
+        'activity.distance': { ja: '距離', en: 'Distance' },
+        'activity.calories': { ja: 'カロリー', en: 'Calories' },
+        'activity.last7Days': { ja: '過去7日間', en: 'Last 7 Days' },
+        'activity.today': { ja: '今日', en: 'Today' },
+        'activity.avgTimeInBed': { ja: '平均就寝時間', en: 'Avg. Time in Bed' },
+        'activity.avgHeartRate': { ja: '平均心拍数', en: 'Avg. Heart Rate' },
+        'activity.walkHistory': { ja: 'ウォーキング履歴', en: 'Walk History' },
+        'activity.showMore': { ja: 'もっと見る', en: 'Show More' },
+
+        // Insight Screen
+        'insight.title': { ja: 'インサイト', en: 'Insight' },
+        'insight.analysis': { ja: 'アクティビティ分析', en: 'Your activity analysis' },
+        'insight.recap': { ja: 'まとめ', en: 'Recap' },
+        'insight.thisWeek': { ja: '今週', en: 'This Week' },
+        'insight.weeklyProgress': { ja: '週間進捗', en: 'Weekly Progress' },
+        'insight.walkingHighlight': { ja: 'ウォーキングハイライト', en: 'Walking Highlight' },
+        'insight.walkHabit': { ja: 'ウォーキング習慣', en: 'Walk Habit' },
+        'insight.consistencyScore': { ja: '継続スコア', en: 'Consistency Score' },
+        'insight.details': { ja: '詳細', en: 'Details' },
+        // Simple replacements for dynamic parts
+        'insight.steps': { ja: '歩数', en: 'Steps' }, // Reuse activity.steps if preferred but fine to have specific
+        'insight.duration': { ja: '時間', en: 'Duration' },
+
+        // Reward Screen (Gacha)
+        'reward.title': { ja: 'ガチャ', en: 'Gacha' },
+        'reward.regularTicket': { ja: '通常チケット', en: 'Regular ticket' },
+        'reward.premiumTicket': { ja: 'プレミアムチケット', en: 'Premium ticket' },
+        'reward.openGacha': { ja: 'ガチャを回す', en: 'Open Gacha Tickets' },
+        'reward.myCards': { ja: 'マイカード', en: 'My cards' },
+        'reward.collection': { ja: 'コレクション', en: 'Collection' },
+        'reward.collectHint': { ja: 'カードを3枚集めて動画をアンロック', en: 'Collect 3 cards to unlock a Video' },
+        'reward.discover': { ja: '見つける', en: 'Discover' },
+        'reward.myAssets': { ja: 'マイアセット', en: 'My Assets' },
     };
 
     const t = (key) => {

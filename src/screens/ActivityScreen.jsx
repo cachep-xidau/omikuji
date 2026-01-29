@@ -4,6 +4,7 @@ import DynamicIsland from '../components/DynamicIsland';
 import { ChevronRight, Footprints, Flame, Moon, Heart, Timer, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DonutChart } from '../components/ActivityCharts';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Activity Ring Component with Gradient Support
 const ActivityRing = ({ progress, gradientId, size = 120, strokeWidth = 12, opacity = 1 }) => {
@@ -164,6 +165,7 @@ const WalkHistoryItem = ({ title, distance, duration, date, icon }) => (
 );
 
 const ActivityScreen = () => {
+    const { t, formatDate } = useLanguage();
     // Mock data
     const activityData = {
         pace: { value: '8:24', unit: 'min/km', trend: '+12% this week' },
@@ -201,8 +203,8 @@ const ActivityScreen = () => {
             <div className="absolute inset-0 overflow-y-auto pt-[60px] pb-24">
                 {/* Header */}
                 <div className="px-6 py-4">
-                    <h1 className="text-2xl font-bold text-gray-900">Activity</h1>
-                    <p className="text-sm text-gray-500 mt-1">Monday, January 27</p>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('activity.title')}</h1>
+                    <p className="text-sm text-gray-500 mt-1">{formatDate(new Date())}</p>
                 </div>
 
                 {/* Activity Rings Section */}
@@ -245,21 +247,21 @@ const ActivityScreen = () => {
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 rounded-full bg-brand-gradient" />
                                     <div>
-                                        <p className="text-xs text-gray-500">Move</p>
+                                        <p className="text-xs text-gray-500">{t('activity.move')}</p>
                                         <p className="text-sm font-semibold text-gray-900">324/500 <span className="text-gray-400 font-normal">CAL</span></p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 rounded-full bg-blue-500 opacity-70" />
                                     <div>
-                                        <p className="text-xs text-gray-500">Exercise</p>
+                                        <p className="text-xs text-gray-500">{t('activity.exercise')}</p>
                                         <p className="text-sm font-semibold text-gray-900">28/30 <span className="text-gray-400 font-normal">MIN</span></p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-3 h-3 rounded-full bg-green-500 opacity-40" />
                                     <div>
-                                        <p className="text-xs text-gray-500">Stand</p>
+                                        <p className="text-xs text-gray-500">{t('activity.stand')}</p>
                                         <p className="text-sm font-semibold text-gray-900">10/12 <span className="text-gray-400 font-normal">HRS</span></p>
                                     </div>
                                 </div>
@@ -273,38 +275,41 @@ const ActivityScreen = () => {
                     <div className="grid grid-cols-2 gap-3">
                         {/* Avg. Pace - Apple Style Card */}
                         <AppleMetricCard
-                            title="Avg. Pace"
+                            title={t('activity.avgPace')}
                             value={activityData.pace.value}
                             unit={activityData.pace.unit}
                             color="#EE3424" // Brand Red
                             data={paceWeekly}
+                            subtitle={t('activity.last7Days')}
                         />
 
                         {/* Steps - Apple Style Card */}
                         <AppleMetricCard
-                            title="Steps"
+                            title={t('activity.steps')}
                             value={activityData.steps.value}
                             unit=""
                             color="#EE3424" // Brand Red
                             data={stepsWeekly}
+                            subtitle={t('activity.last7Days')}
                         />
 
                         {/* Distance - Apple Style Card */}
                         <AppleMetricCard
-                            title="Distance"
+                            title={t('activity.distance')}
                             value={activityData.distance.value}
                             unit={activityData.distance.unit}
                             color="#EE3424" // Brand Red
                             data={distWeekly}
+                            subtitle={t('activity.last7Days')}
                         />
 
                         {/* Calories - Apple Style Card (Donut) */}
                         <AppleMetricCard
-                            title="Calories"
+                            title={t('activity.calories')}
                             value={activityData.calories.value}
                             unit={activityData.calories.unit}
                             color="#EE3424" // Brand Red
-                            subtitle="Today"
+                            subtitle={t('activity.today')}
                             chart={
                                 <div className="flex flex-col items-center gap-2 pb-2">
                                     <DonutChart value={324} total={500} size={80} />
@@ -315,7 +320,7 @@ const ActivityScreen = () => {
 
                         {/* Avg Time in Bed - Wide Card (Restored with WeeklyBarChart) */}
                         <WideMetricCard
-                            label="Avg. Time in Bed"
+                            label={t('activity.avgTimeInBed')}
                             value="7.7"
                             unit="hr"
                             icon={<Moon size={20} className="text-gray-900" />}
@@ -328,7 +333,7 @@ const ActivityScreen = () => {
 
                         {/* Avg Heart Rate - Wide Card (Old Style) */}
                         <WideMetricCard
-                            label="Avg. Heart Rate"
+                            label={t('activity.avgHeartRate')}
                             value="80"
                             unit="bpm"
                             icon={<Heart size={20} className="text-gray-900" />}
@@ -358,9 +363,9 @@ const ActivityScreen = () => {
                 {/* Walk History */}
                 <section className="px-6 py-4">
                     <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold text-gray-900">Walk History</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">{t('activity.walkHistory')}</h3>
                         <Link to="/activity/walking-record" className="flex items-center gap-1 text-gray-500 text-sm">
-                            <span>Show More</span>
+                            <span>{t('activity.showMore')}</span>
                             <ChevronRight size={16} />
                         </Link>
                     </div>

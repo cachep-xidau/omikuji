@@ -198,96 +198,99 @@ const StreakCalendar = ({ streakDays }) => {
 };
 
 // Mission Recap Modal
-const MissionRecapModal = ({ onClose }) => (
-    <div className="absolute inset-0 z-50 bg-gray-50 flex flex-col h-full">
-        <StatusBar />
+const MissionRecapModal = ({ onClose }) => {
+    const { t } = useLanguage();
+    return (
+        <div className="absolute inset-0 z-50 bg-gray-50 flex flex-col h-full">
+            <StatusBar />
 
-        {/* Header */}
-        <div className="px-4 py-4 flex items-center gap-3 bg-white border-b border-gray-100 flex-shrink-0">
-            <button onClick={onClose} className="p-1">
-                <ChevronLeft size={24} className="text-gray-900" />
-            </button>
-            <h1 className="text-xl font-semibold text-gray-900">Mission Recap</h1>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {/* Weekly Summary */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">This Week's Achievements</h3>
-                <div className="grid grid-cols-3 gap-3 text-center">
-                    <div className="bg-gray-50 rounded-xl p-3">
-                        <p className="text-2xl font-bold text-gray-900">12</p>
-                        <p className="text-xs text-gray-500">Missions</p>
-                    </div>
-                    <div className="bg-gray-50 rounded-xl p-3">
-                        <p className="text-2xl font-bold text-green-500">8</p>
-                        <p className="text-xs text-gray-500">Completed</p>
-                    </div>
-                    <div className="bg-gray-50 rounded-xl p-3">
-                        <p className="text-2xl font-bold text-orange-500">5</p>
-                        <p className="text-xs text-gray-500">Tickets</p>
-                    </div>
-                </div>
+            {/* Header */}
+            <div className="px-4 py-4 flex items-center gap-3 bg-white border-b border-gray-100 flex-shrink-0">
+                <button onClick={onClose} className="p-1">
+                    <ChevronLeft size={24} className="text-gray-900" />
+                </button>
+                <h1 className="text-xl font-semibold text-gray-900">{t('quest.recapTitle')}</h1>
             </div>
 
-            {/* AI Image Summary */}
-            <button className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center">
-                        <Image size={24} className="text-white" />
-                    </div>
-                    <div className="text-left">
-                        <h3 className="text-base font-semibold text-gray-900">AI Image Summary</h3>
-                        <p className="text-sm text-gray-500">Visual recap of your week</p>
-                    </div>
-                </div>
-                <ChevronRight size={20} className="text-gray-400" />
-            </button>
-
-            {/* AI Video Summary */}
-            <button className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
-                        <Video size={24} className="text-white" />
-                    </div>
-                    <div className="text-left">
-                        <h3 className="text-base font-semibold text-gray-900">AI Short Video Summary</h3>
-                        <p className="text-sm text-gray-500">Animated highlights of your achievements</p>
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {/* Weekly Summary */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('quest.weekAchieve')}</h3>
+                    <div className="grid grid-cols-3 gap-3 text-center">
+                        <div className="bg-gray-50 rounded-xl p-3">
+                            <p className="text-2xl font-bold text-gray-900">12</p>
+                            <p className="text-xs text-gray-500">{t('quest.missions')}</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-3">
+                            <p className="text-2xl font-bold text-green-500">8</p>
+                            <p className="text-xs text-gray-500">{t('quest.completed')}</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-3">
+                            <p className="text-2xl font-bold text-orange-500">5</p>
+                            <p className="text-xs text-gray-500">{t('quest.ticketsLabels') || 'Tickets'}</p>
+                        </div>
                     </div>
                 </div>
-                <ChevronRight size={20} className="text-gray-400" />
-            </button>
 
-            {/* Completed Missions List */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Completed Missions</h3>
-                <div className="space-y-3">
-                    {[
-                        { title: 'Walk 1,500 steps', date: 'Today', tickets: 1 },
-                        { title: 'Morning exercise 10 min', date: 'Today', tickets: 1 },
-                        { title: 'Complete 3 daily missions', date: 'Yesterday', tickets: 2 },
-                        { title: 'Walk 5,000 steps', date: 'Jan 25', tickets: 1 },
-                    ].map((mission, i) => (
-                        <div key={i} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                            <div className="flex items-center gap-3">
-                                <CheckCircle2 size={20} className="text-green-500" />
-                                <div>
-                                    <p className="text-sm font-medium text-gray-900">{mission.title}</p>
-                                    <p className="text-xs text-gray-400">{mission.date}</p>
+                {/* AI Image Summary */}
+                <button className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center">
+                            <Image size={24} className="text-white" />
+                        </div>
+                        <div className="text-left">
+                            <h3 className="text-base font-semibold text-gray-900">{t('quest.aiImageSum')}</h3>
+                            <p className="text-sm text-gray-500">{t('quest.aiImageDesc')}</p>
+                        </div>
+                    </div>
+                    <ChevronRight size={20} className="text-gray-400" />
+                </button>
+
+                {/* AI Video Summary */}
+                <button className="w-full flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
+                            <Video size={24} className="text-white" />
+                        </div>
+                        <div className="text-left">
+                            <h3 className="text-base font-semibold text-gray-900">{t('quest.aiVideoSum')}</h3>
+                            <p className="text-sm text-gray-500">{t('quest.aiVideoDesc')}</p>
+                        </div>
+                    </div>
+                    <ChevronRight size={20} className="text-gray-400" />
+                </button>
+
+                {/* Completed Missions List */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('quest.completedList')}</h3>
+                    <div className="space-y-3">
+                        {[
+                            { title: 'Walk 1,500 steps', date: 'Today', tickets: 1 },
+                            { title: 'Morning exercise 10 min', date: 'Today', tickets: 1 },
+                            { title: 'Complete 3 daily missions', date: 'Yesterday', tickets: 2 },
+                            { title: 'Walk 5,000 steps', date: 'Jan 25', tickets: 1 },
+                        ].map((mission, i) => (
+                            <div key={i} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                                <div className="flex items-center gap-3">
+                                    <CheckCircle2 size={20} className="text-green-500" />
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">{mission.title}</p>
+                                        <p className="text-xs text-gray-400">{mission.date}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-1 text-orange-500">
+                                    <Ticket size={14} />
+                                    <span className="text-sm font-medium">{mission.tickets}</span>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-1 text-orange-500">
-                                <Ticket size={14} />
-                                <span className="text-sm font-medium">{mission.tickets}</span>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 const QuestScreen = () => {
     const [showRecap, setShowRecap] = useState(false);
