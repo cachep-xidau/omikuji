@@ -8,11 +8,11 @@ const NavBar = () => {
   const { t } = useLanguage();
 
   const navItems = [
-    { path: '/', icon: Star, label: t('nav.today') },
-    { path: '/activity', icon: Activity, label: t('nav.activity') },
-    { path: '/insight', icon: Sparkles, label: t('nav.insight') },
-    { path: '/quest', icon: Target, label: t('nav.quest') },
-    { path: '/reward', icon: Gift, label: t('nav.reward') },
+    { path: '/', iconImg: getImagePath('/src/assets/nav_today.png'), label: t('nav.today') },
+    { path: '/activity', iconImg: getImagePath('/src/assets/nav_activity.png'), label: t('nav.activity') },
+    { path: '/insight', icon: Sparkles, label: t('nav.insight') }, // Center button (unchanged)
+    { path: '/quest', iconImg: getImagePath('/src/assets/nav_quest.png'), label: t('nav.quest') },
+    { path: '/reward', iconImg: getImagePath('/src/assets/nav_reward.png'), label: t('nav.reward') },
   ];
 
   return (
